@@ -22,9 +22,9 @@ async function selectUserEmail(connection, email) {
 // userId 회원 조회
 async function selectUserId(connection, userId) {
   const selectUserIdQuery = `
-                 SELECT id, email, nickname 
-                 FROM UserInfo 
-                 WHERE id = ?;
+                 SELECT user_id, nickname 
+                 FROM Users
+                 WHERE user_id = ?;
                  `;
   const [userRow] = await connection.query(selectUserIdQuery, userId);
   return userRow;
@@ -80,6 +80,28 @@ async function updateUserInfo(connection, id, nickname) {
   return updateUserRow[0];
 }
 
+// 유저가 특정 포인트에 좋아요 표시
+async function insertUserPoint(connection, userId, pointId) {
+  const insertUserPointQuery = `
+  INSERT INTO User_point_likes(user_id, point_id)
+      VALUES (?, ?);
+  `
+  const updateUserRow = await connection.query(insertUserPointQuery, [userId, pointId]);
+  return updateUserRow[0];
+}
+
+// 유저가 특정 포인트에 좋아요 표시했는지에 대해 체크
+async function selectUserPointLike(connection, userId, pointId) {
+  const selectUserPointLikeQuery = `
+        SELECT user_point_like_id, status
+        FROM User_point_likes 
+        WHERE user_id = ? and point_id = ?;`;
+  const [selectUserPointLikeRow] = await connection.query(
+      selectUserPointLikeQuery,
+      [userId, pointId]
+  );
+  return selectUserPointLikeRow;
+}
 
 module.exports = {
   selectUser,
@@ -89,4 +111,6 @@ module.exports = {
   selectUserPassword,
   selectUserAccount,
   updateUserInfo,
+  insertUserPoint,
+  selectUserPointLike
 };

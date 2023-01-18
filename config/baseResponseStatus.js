@@ -2,6 +2,7 @@ module.exports = {
 
     // Success
     SUCCESS : { "isSuccess": true, "code": 1000, "message":"성공" },
+    USER_POINT_SUCCESS : {"isSuccess": true, "code": 11, "message":"포인트에 좋아요 누르기 성공"},
 
     // Common
     TOKEN_EMPTY : { "isSuccess": false, "code": 2000, "message":"JWT 토큰을 입력해주세요." },
@@ -31,10 +32,14 @@ module.exports = {
     USER_NICKNAME_EMPTY : { "isSuccess": false, "code": 2017, "message": "변경할 닉네임 값을 입력해주세요" },
 
     USER_STATUS_EMPTY : { "isSuccess": false, "code": 2018, "message": "회원 상태값을 입력해주세요" },
-
+    
+    
     POINT_POINTID_EMPTY : { "isSuccess": false, "code": 2019, "message": "pointId를 입력해주세요." },
     POINT_FILE_EMPTY : { "isSuccess": false, "code": 2020, "message": "file를 선택해주세요." },
-    
+    POINT_POINTID_NOT_EXIST : { "isSuccess": false, "code": 2021, "message": "해당 포인트가 존재하지 않습니다." },
+
+    LIKE_USERID_POINTID_EXIST : { "isSuccess": false, "code": 2022, "message": "해당 유저가 이미 해당 포인트에 좋아요를 눌렀습니다." },
+
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
     SIGNUP_REDUNDANT_NICKNAME : { "isSuccess": false, "code": 3002, "message":"중복된 닉네임입니다." },

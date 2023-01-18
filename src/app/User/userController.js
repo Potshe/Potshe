@@ -139,7 +139,28 @@ exports.patchUsers = async function (req, res) {
     }
 };
 
+/**
+ * API No. 11
+ * API Name : 특정 포인트에 좋아요 표시
+ * [POST] /app/users/likes/:userId/:pointId
+ * path variable : userId, pointId
+ */
+exports.postUserLikes = async function (req, res) {
 
+    const { userId, pointId } = req.params;
+    
+    // userId가 없는 경우
+    if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+    
+    // pointId가 없는 경우
+    if (!pointId) return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
+
+    const pointLikeResponse = await userService.userPointLike(userId, pointId);
+
+    return res.send(pointLikeResponse);
+
+
+};
 
 
 
