@@ -41,6 +41,13 @@ module.exports = {
 
     LIKE_USERID_POINTID_EXIST : { "isSuccess": false, "code": 2022, "message": "해당 유저가 이미 해당 포인트에 좋아요를 눌렀습니다." },
     LIKE_USERID_POINTID_NOT_EXIST : { "isSuccess": false, "code": 2023, "message": "해당 유저가 해당 포인트에 좋아요를 누르지 않았습니다." },
+    POINT_TITLE_EMPTY : { "isSuccess" : false, "code" : 2024, "message" : "포인트에 제목을 입력해주세요." },
+    POINT_CONTENT_EMPTY : { "isSuccess" : false, "code" : 2025, "message" : "포인트에 자세한 내용(ex. 시간, 장소, 요령 등)을 입력해주세요." },
+    POINT_TYPE_EMPTY : { "isSuccess" : false, "code" : 2026, "message" : "포인트에 활동(ex.맨손 해루질, 통발, 스킨 해루질 등)을 입력해주세요." },
+    POINT_LOCATION_EMPTY : { "isSuccess" : false, "code" : 2027, "message" : "포인트에 위치를 입력해주세요." },
+    POINT_CREATURE_EMPTY : { "isSuccess" : false, "code" : 2028, "message" : "포인트에 조과내용을 입력해주세요." },
+    POINT_DATE_EMPTY : { "isSuccess" : false, "code" : 2029, "message" : "포인트에 해루질 한 날짜를 입력해주세요." },
+
 
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
