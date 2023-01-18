@@ -19,10 +19,11 @@ exports.retrievePoint = async function (keyword) {
 
     } else {
         const connection = await pool.getConnection(async (conn) => conn);
-        const pointListResultByKeyword = await pointDao.selectPointsByKeyword(connection, keyword);
+        const keywordParams = [keyword, keyword, keyword, keyword, keyword]
+        const pointListResultByKeyword = await pointDao.selectPointsByKeyword(connection, keywordParams);
         connection.release();
 
-        return response(baseResponse.SUCCESS, pointListResultByKeyword);
+        return response(baseResponse.POINT_SUCCESS_BY_KEYWORD, pointListResultByKeyword);
     }
 };
 

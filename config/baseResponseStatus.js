@@ -5,6 +5,7 @@ module.exports = {
     USER_POINT_LIKE_SUCCESS : {"isSuccess": true, "code": 11, "message":"포인트에 좋아요 누르기 성공"},
     USER_POINT_LIKE_CANCEL_SUCCESS : {"isSuccess": true, "code": 12, "message":"포인트 좋아요 취소 성공"},
     POINT_SUCCESS : {"isSuccess": true, "code": 14, "message":"모든 포인트 조회 성공" },
+    POINT_SUCCESS_BY_KEYWORD : {"isSuccess": true, "code": 14, "message":"특정 포인트 키워드 기반 검색 성공" },
 
     // Common
     TOKEN_EMPTY : { "isSuccess": false, "code": 2000, "message":"JWT 토큰을 입력해주세요." },
