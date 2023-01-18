@@ -7,6 +7,32 @@ const {response, errResponse} = require("../../../config/response");
 const regexEmail = require("regex-email");
 const {emit} = require("nodemon");
 
+const passport = require('passport')
+const KakaoStrategy = require('passport-kakao').Strategy
+
+/* 
+passport.use('kakao-login',
+    new KakaoStrategy(
+       {
+        clientID: '',                                                                   // !!!!!!!!!!!! client ID 수정 필요 (.env에 저장하기)
+        callbackURL: '/auth/kakao/callback',
+       },
+       
+        // clientID에 카카오 앱 아이디 추가
+        // callbackURL: 카카오 로그인 후 카카오가 결과를 전송해줄 URL
+        // accessToken, refreshToken: 로그인 성공 후 카카오가 보내준 토큰
+        // profile: 카카오가 보내준 유저 정보. profile의 정보를 바탕으로 회원가입
+        
+       async (accessToken, refreshToken, profile, done) => {
+          console.log('kakao profile', profile.id);                     // 카카오 계정 식별 아이디 출력
+       },
+    ),
+ );
+ */
+
+
+
+
 /**
  * API No. 0
  * API Name : 테스트 API

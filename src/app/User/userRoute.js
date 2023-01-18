@@ -1,6 +1,20 @@
 module.exports = function(app){
     const user = require('./userController');
     const jwtMiddleware = require('../../../config/jwtMiddleware');
+    const passport = require('passport');
+/* 
+    // 1. 카카오톡 로그인 페이지 이동
+    app.get('/auth/kakao', passport.authenticate('kakao-login'));               // 환경변수 수정 필요 
+
+    // 2. User 정보 수신
+    app.get('/auth/kakao/callback', passport.authenticate('kakao-login', {
+        failureRedirect: '/',
+    }), (req, res) => {
+        res.redirect('/');
+    });
+*/
+
+
 
     // 0. 테스트 API
     app.get('/app/test', user.getTest)
