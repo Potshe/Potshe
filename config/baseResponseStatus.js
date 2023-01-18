@@ -2,7 +2,8 @@ module.exports = {
 
     // Success
     SUCCESS : { "isSuccess": true, "code": 1000, "message":"성공" },
-    USER_POINT_SUCCESS : {"isSuccess": true, "code": 11, "message":"포인트에 좋아요 누르기 성공"},
+    USER_POINT_LIKE_SUCCESS : {"isSuccess": true, "code": 11, "message":"포인트에 좋아요 누르기 성공"},
+    USER_POINT_LIKE_CANCEL_SUCCESS : {"isSuccess": true, "code": 12, "message":"포인트 좋아요 취소 성공"},
 
     // Common
     TOKEN_EMPTY : { "isSuccess": false, "code": 2000, "message":"JWT 토큰을 입력해주세요." },
@@ -39,6 +40,7 @@ module.exports = {
     POINT_POINTID_NOT_EXIST : { "isSuccess": false, "code": 2021, "message": "해당 포인트가 존재하지 않습니다." },
 
     LIKE_USERID_POINTID_EXIST : { "isSuccess": false, "code": 2022, "message": "해당 유저가 이미 해당 포인트에 좋아요를 눌렀습니다." },
+    LIKE_USERID_POINTID_NOT_EXIST : { "isSuccess": false, "code": 2023, "message": "해당 유저가 해당 포인트에 좋아요를 누르지 않았습니다." },
 
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },
