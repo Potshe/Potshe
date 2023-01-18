@@ -1,3 +1,4 @@
+const user = require("./userController");
 module.exports = function(app){
     const user = require('./userController');
     const jwtMiddleware = require('../../../config/jwtMiddleware');
@@ -13,6 +14,9 @@ module.exports = function(app){
 
     // 3. 특정 유저 조회 API
     app.get('/app/users/:userId', user.getUserById);
+
+    // 11. 특정 포인트에 좋아요 표시
+    app.post('/app/users/:userId/likes/:pointId', user.postUserLikes);
 
 
     // TODO: After 로그인 인증 방법 (JWT)

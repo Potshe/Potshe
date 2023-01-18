@@ -28,7 +28,7 @@ exports.retrieveUser = async function (userId) {
 
   connection.release();
 
-  return userResult[0];
+  return userResult;
 };
 
 exports.emailCheck = async function (email) {
@@ -55,4 +55,14 @@ exports.accountCheck = async function (email) {
   connection.release();
 
   return userAccountResult;
+};
+
+// 특정 유저가 좋아요한 특정 포인트 결과 반환
+exports.retrieveUserPointLike = async function (userId, pointId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userPointLikeResult = await userDao.selectUserPointLike(connection, userId, pointId);
+
+  connection.release();
+
+  return userPointLikeResult;
 };
