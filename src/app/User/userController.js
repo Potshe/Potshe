@@ -145,15 +145,17 @@ exports.patchUsers = async function (req, res) {
  * [POST] /app/users/likes/:userId/:pointId
  * path variable : userId, pointId
  */
-exports.postUserLikes = async function (req, res) {
+exports.postUserLike = async function (req, res) {
 
     const { userId, pointId } = req.params;
+    console.log('userId', userId)
+    console.log('pointId', pointId)
     
     // userId가 없는 경우
-    if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+    if (userId === ":userId") return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
     
     // pointId가 없는 경우
-    if (!pointId) return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
+    if (pointId === ":pointId") return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
 
     const pointLikeResponse = await userService.userPointLike(userId, pointId);
 
@@ -162,7 +164,28 @@ exports.postUserLikes = async function (req, res) {
 
 };
 
+/**
+ * API No. 12
+ * API Name : 특정 포인트에 좋아요 취소
+ * [DELETE] /app/users/likes/:userId/:pointId
+ * path variable : userId, pointId
+ */
+exports.deleteUserLike = async function (req, res) {
 
+    const { userId, pointId } = req.params;
+
+    // userId가 없는 경우
+    if (userId === ":userId") return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    // pointId가 없는 경우
+    if (pointId === ":pointId") return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
+
+    const pointLikeCancelResponse = await userService.userPointLikeCancel(userId, pointId);
+
+    return res.send(pointLikeCancelResponse);
+
+
+};
 
 
 

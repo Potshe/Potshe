@@ -81,7 +81,7 @@ async function updateUserInfo(connection, id, nickname) {
 }
 
 // 유저가 특정 포인트에 좋아요 표시
-async function insertUserPoint(connection, userId, pointId) {
+async function insertUserPointLike(connection, userId, pointId) {
   const insertUserPointQuery = `
   INSERT INTO User_point_likes(user_id, point_id)
       VALUES (?, ?);
@@ -103,6 +103,19 @@ async function selectUserPointLike(connection, userId, pointId) {
   return selectUserPointLikeRow;
 }
 
+// 유저가 특정 포인트 좋아요 취소
+async function deleteUserPointLike(connection, userId, pointId) {
+  const deleteUserPointLikeQuery = `
+        DELETE 
+        FROM User_point_likes 
+        WHERE user_id = ? and point_id = ?;`;
+  const deleteUserPointLikeRow = await connection.query(
+      deleteUserPointLikeQuery,
+      [userId, pointId]
+  );
+  return deleteUserPointLikeRow;
+}
+
 module.exports = {
   selectUser,
   selectUserEmail,
@@ -111,6 +124,7 @@ module.exports = {
   selectUserPassword,
   selectUserAccount,
   updateUserInfo,
-  insertUserPoint,
-  selectUserPointLike
+  insertUserPointLike,
+  selectUserPointLike,
+  deleteUserPointLike,
 };
