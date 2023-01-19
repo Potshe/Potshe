@@ -33,17 +33,17 @@ exports.editUserProfile = async function (userId, nickname, imageUrl) {
   }
 };
 
-exports.createUserProfile = async function (nickname, imageUrl) {
+exports.createUserProfile = async function (nickname, filePath) {
   try {
-    const insertUserProfileParams = [nickname, imageUrl];
+    const insertUserProfileParams = [nickname, filePath];
     const connection = await pool.getConnection(async (conn) => conn);
-    const userIdResult = await userDao.insertUserInfo(
+    const createUserResult = await userDao.insertUserInfo(
       connection,
       insertUserProfileParams
     );
 
     // console.log(userIdResult);
-    console.log(`추가된 회원 : ${userIdResult[0].affectedRows}`);
+    console.log(`추가된 회원 : ${createUserResult[0].affectedRows}`);
 
     connection.release();
 
@@ -130,13 +130,6 @@ exports.userPointLikeCancel = async function (userId, pointId) {
   }
 };
 
-        return response(baseResponse.USER_POINT_LIKE_CANCEL_SUCCESS);
-
-    } catch (err) {
-        logger.error(`App - userPointLikeCancel Service error\n: ${err.message}`);
-        return errResponse(baseResponse.DB_ERROR);
-    }
-}
 
 exports.userImageUpdate = async function (userId, filePath) {
 

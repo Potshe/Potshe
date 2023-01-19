@@ -31,7 +31,7 @@ exports.getUserProfileById = async function (req, res) {
 
 /**
  * API No. 7
- * API Name : 사용자 프로필 수젇ㅇ
+ * API Name : 사용자 프로필 수정
  * [PUT] /users/:userId
  */
 exports.editUserProfile = async function (req, res) {
@@ -53,13 +53,24 @@ exports.editUserProfile = async function (req, res) {
  * [POST] /users
  */
 exports.createUserProfile = async function (req, res) {
-  const { nickname, imageUrl } = req.body;
-  const signupResponse = await userService.createUserProfile(
-    nickname,
-    imageUrl
+  const { nickname } = req.body;
+  const filePath = req.file.location;
+
+    // nickname이 없는 경우
+    if(!nickname){
+        return res.send(baseResponse.SIGNUP_NICKNAME_EMPTY);
+    }
+
+    // 유효하지 않은 파일 경로일 경우
+    if(!filePath){
+        return res.send(baseResponse.FILE_INVALID_PATH);
+    }
+
+  const createUserResponse = await userService.createUserProfile(
+    nickname, filePath
   );
 
-  return res.send(response(signupResponse));
+  return res.send(response(createUserResponse));
 };
 
 /**
@@ -136,9 +147,6 @@ exports.updateImage = async function (req, res) {
 
 
 };
-
-
-
 
 
 

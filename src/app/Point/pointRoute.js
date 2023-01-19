@@ -1,5 +1,5 @@
 const upload = require("../../../config/imageUploader")
-const controller = require("../../../pointController")
+
 module.exports = function(app){
     const point = require('./pointController');
     const jwtMiddleware = require('../../../config/jwtMiddleware');
@@ -13,10 +13,11 @@ module.exports = function(app){
     // app.post('/app/points/fileUpload/:pointId', imageUploader.single('image'), point.postImage);
 
     // 14. 모든 포인트 조회 API + 22. 키워드로 포인트 검색 API
-    app.get('/app/points', point.getPoints)
+    // app.get('/app/points', point.getPoints)
 
     // 16. point post API
-    app.post('/app/points', checkLoggedIn, controller.postPoint);
+    // app.post('/app/points', checkLoggedIn, point.postPoint);
+
     // 23. 포인트 이미지 파일 S3 업로드
 
 
