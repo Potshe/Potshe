@@ -10,3 +10,22 @@ const {errResponse} = require("../../../config/response");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const {connect} = require("http2");
+
+exports.creatPoint = async function (title, content, type, location, creature, date) {
+    try{
+        const point = new Point({
+            title,
+            content,
+            type,
+            location,
+            creature,
+            date,
+            writer : response.locals.user_id
+
+        })
+
+    } catch(err) {
+        logger.error(`App - createPoint Service error\n: ${error.messge}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+}
