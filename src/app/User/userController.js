@@ -71,7 +71,7 @@ exports.editUserProfile = async function (req, res) {
       filePath
   );
 
-  return res.send(response(baseResponse.SUCCESS, editUserProfileInfo));
+  return res.send(editUserProfileInfo);
 };
 
 /**

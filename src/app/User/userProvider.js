@@ -26,7 +26,7 @@ exports.retrieveUser = async function (userId) {
 
   connection.release();
 
-  return userResult[0];
+  return userResult;
 };
 
 // 특정 유저가 좋아요한 특정 포인트 결과 반환

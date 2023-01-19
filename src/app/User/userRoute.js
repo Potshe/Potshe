@@ -12,7 +12,7 @@ module.exports = function (app) {
   app.get("/app/users/:userId", user.getUserProfileById);
 
   // 7. PUT /users/:userId 사용자 프로필 수정
-  app.put("/app/users/:userId", user.editUserProfile);
+  app.put("/app/users/:userId", imageUploader.single('image'), user.editUserProfile);
 
   // 8. POST /users 회원가입 시 사용자 프로필 생성
   app.post("/app/users", imageUploader.single('image'), user.createUserProfile);
