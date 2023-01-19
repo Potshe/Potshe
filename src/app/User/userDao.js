@@ -70,6 +70,19 @@ async function deleteUserPointLike(connection, userId, pointId) {
   return deleteUserPointLikeRow;
 }
 
+// 유저가 특정 포인트 좋아요 취소
+async function updateUserProfile(connection, userId, filePath) {
+  const updateUserProfileQuery = `
+        UPDATE Users 
+        SET image_url = ?
+        WHERE user_id = ?;`;
+  const updateUserProfileRow = await connection.query(
+      updateUserProfileQuery,
+      [filePath, userId]
+  );
+  return updateUserProfileRow;
+}
+
 module.exports = {
   selectUser,
   selectUserId,
@@ -78,4 +91,5 @@ module.exports = {
   insertUserPointLike,
   selectUserPointLike,
   deleteUserPointLike,
+  updateUserProfile
 };

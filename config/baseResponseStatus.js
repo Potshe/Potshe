@@ -6,7 +6,8 @@ module.exports = {
     USER_POINT_LIKE_CANCEL_SUCCESS : {"isSuccess": true, "code": 12, "message":"포인트 좋아요 취소 성공"},
     POINT_SUCCESS : {"isSuccess": true, "code": 14, "message":"모든 포인트 조회 성공" },
     POINT_SUCCESS_BY_KEYWORD : {"isSuccess": true, "code": 14, "message":"특정 포인트 키워드 기반 검색 성공" },
-
+    USER_PROFILE_IMAGE_SUCCESS : {"isSuccess": true, "code": 15, "message":"유저 이미지 수정 완료"},
+    
     // Common
     TOKEN_EMPTY : { "isSuccess": false, "code": 2000, "message":"JWT 토큰을 입력해주세요." },
     TOKEN_VERIFICATION_FAILURE : { "isSuccess": false, "code": 3000, "message":"JWT 토큰 검증 실패" },
@@ -49,7 +50,8 @@ module.exports = {
     POINT_LOCATION_EMPTY : { "isSuccess" : false, "code" : 2027, "message" : "포인트에 위치를 입력해주세요." },
     POINT_CREATURE_EMPTY : { "isSuccess" : false, "code" : 2028, "message" : "포인트에 조과내용을 입력해주세요." },
     POINT_DATE_EMPTY : { "isSuccess" : false, "code" : 2029, "message" : "포인트에 해루질 한 날짜를 입력해주세요." },
-
+    
+    FILE_INVALID_PATH : { "isSuccess" : false, "code" : 2030, "message" : "유효하지 않은 파일 경로 입니다." },
 
     // Response error
     SIGNUP_REDUNDANT_EMAIL : { "isSuccess": false, "code": 3001, "message":"중복된 이메일입니다." },

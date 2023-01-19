@@ -110,3 +110,43 @@ exports.deleteUserLike = async function (req, res) {
 
   return res.send(pointLikeCancelResponse);
 };
+
+/**
+ * API No. 13
+ * API Name : 유저 프로필 이미지 등록 및 수정 API
+ * [POST] /app/users/:userId/image
+ * path variable : userId
+ */
+exports.updateImage = async function (req, res) {
+
+    const { userId } = req.params;
+    const filePath = req.file.location;
+    
+    // userId가 없는 경우
+    if (userId === ":userId") return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    // 유효하지 않은 파일 경로일 경우
+    if(!filePath){
+        return res.send(baseResponse.FILE_INVALID_PATH);
+    }
+
+    const userImageUpdateResponse = await userService.userImageUpdate(userId, filePath);
+
+    return res.send(userImageUpdateResponse);
+
+
+};
+
+
+
+
+
+
+/** JWT 토큰 검증 API
+ * [GET] /app/auto-login
+ */
+exports.check = async function (req, res) {
+    const userIdResult = req.verifiedToken.userId;
+    console.log(userIdResult);
+    return res.send(response(baseResponse.TOKEN_VERIFICATION_SUCCESS));
+};

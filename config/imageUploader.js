@@ -16,7 +16,12 @@ const upload = multer({
         bucket: 'potshebucket',
         contentType: multerS3.AUTO_CONTENT_TYPE,
         key: function (req, file, cb) {
-            cb(null, `test/${Date.now()}_${file.originalname}`);
+            const req_path = req.path;
+
+            if(req_path.indexOf("users") != -1) {
+                cb(null, `user/${Date.now()}_${file.originalname}`);
+            }
+
         },
         acl: 'public-read-write',
     }),

@@ -17,6 +17,9 @@ module.exports = function(app){
 
     // 16. point post API
     app.post('/app/points', checkLoggedIn, controller.postPoint);
+    // 23. 포인트 이미지 파일 S3 업로드
+
+
 
 
 };
