@@ -25,7 +25,18 @@ exports.getUserProfile = async function (req, res) {
 exports.getUserProfileById = async function (req, res) {
   const userId = req.params.userId;
 
+  // userId가 없는 경우
+    if (userId === ":userId")
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
   const userByUserId = await userProvider.retrieveUser(userId);
+
+  // 찾고자 하는 유저가 없을 경우
+    if(!userByUserId){
+        return res.send(errResponse(baseResponse.USER_NOT_EXIST))
+    }
+
+
   return res.send(response(baseResponse.SUCCESS, userByUserId));
 };
 
@@ -35,13 +46,29 @@ exports.getUserProfileById = async function (req, res) {
  * [PUT] /users/:userId
  */
 exports.editUserProfile = async function (req, res) {
-  const userId = req.params.userId;
+    const userId = req.params.userId;
+    const { nickname } = req.body;
+    const filePath = req.file.location;
 
-  const { nickname, imageUrl } = req.body;
+    // userId가 없는 경우
+    if (userId === ":userId")
+        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+    // nickname이 없는 경우
+    if(!nickname){
+        return res.send(baseResponse.SIGNUP_NICKNAME_EMPTY);
+    }
+
+    // 유효하지 않은 파일 경로일 경우
+    if(!filePath){
+        return res.send(baseResponse.FILE_INVALID_PATH);
+    }
+
+
   const editUserProfileInfo = await userService.editUserProfile(
-    userId,
-    nickname,
-    imageUrl
+      userId,
+      nickname,
+      filePath
   );
 
   return res.send(response(baseResponse.SUCCESS, editUserProfileInfo));
