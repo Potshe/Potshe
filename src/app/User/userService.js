@@ -171,3 +171,25 @@ exports.userPointLikeCancel = async function (userId, pointId) {
         return errResponse(baseResponse.DB_ERROR);
     }
 }
+
+exports.userImageUpdate = async function (userId, filePath) {
+
+    // Users 테이블에 유저 존재 여부 확인
+    const userRows = await userProvider.retrieveUser(userId);
+    console.log('userRows', userRows)
+    if (userRows.length < 1) return errResponse(baseResponse.USER_USERID_NOT_EXIST);
+
+    try {
+        const connection = await pool.getConnection(async (conn) => conn);
+        const updateUserProfile = await userDao.updateUserProfile(connection, userId, filePath)
+        connection.release();
+
+        return response(baseResponse.USER_PROFILE_IMAGE_SUCCESS);
+
+    } catch (err) {
+        logger.error(`App - updateUserProfile Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+
+
+}

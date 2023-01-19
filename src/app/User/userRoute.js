@@ -1,4 +1,6 @@
 const user = require("./userController");
+const imageUploader = require('../../../config/imageUploader')
+
 module.exports = function(app){
     const user = require('./userController');
     const jwtMiddleware = require('../../../config/jwtMiddleware');
@@ -20,6 +22,9 @@ module.exports = function(app){
 
     // 12. 포인트 좋아요 취소
     app.delete('/app/users/:userId/likes/:pointId', user.deleteUserLike);
+
+    // 13. 유저 프로필 이미지 수정 API
+    app.post('/app/users/:userId/image', imageUploader.single('image'), user.updateImage);
 
 
     // TODO: After 로그인 인증 방법 (JWT)
