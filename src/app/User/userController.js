@@ -2,141 +2,64 @@ const jwtMiddleware = require("../../../config/jwtMiddleware");
 const userProvider = require("../../app/User/userProvider");
 const userService = require("../../app/User/userService");
 const baseResponse = require("../../../config/baseResponseStatus");
-const {response, errResponse} = require("../../../config/response");
+const { response, errResponse } = require("../../../config/response");
 
 const regexEmail = require("regex-email");
-const {emit} = require("nodemon");
-
-/**
- * API No. 0
- * API Name : 테스트 API
- * [GET] /app/test
- */
-exports.getTest = async function (req, res) {
-    return res.send(response(baseResponse.SUCCESS))
-}
-
-/**
- * API No. 1
- * API Name : 유저 생성 (회원가입) API
- * [POST] /app/users
- */
-exports.postUsers = async function (req, res) {
-
-    /**
-     * Body: email, password, nickname
-     */
-    const {email, password, nickname} = req.body;
-
-    // 빈 값 체크
-    if (!email)
-        return res.send(response(baseResponse.SIGNUP_EMAIL_EMPTY));
-
-    // 길이 체크
-    if (email.length > 30)
-        return res.send(response(baseResponse.SIGNUP_EMAIL_LENGTH));
-
-    // 형식 체크 (by 정규표현식)
-    if (!regexEmail.test(email))
-        return res.send(response(baseResponse.SIGNUP_EMAIL_ERROR_TYPE));
-
-    // 기타 등등 - 추가하기
-
-
-    const signUpResponse = await userService.createUser(
-        email,
-        password,
-        nickname
-    );
-
-    return res.send(signUpResponse);
-};
-
-/**
- * API No. 2
- * API Name : 유저 조회 API (+ 이메일로 검색 조회)
- * [GET] /app/users
- */
-exports.getUsers = async function (req, res) {
-
-    /**
-     * Query String: email
-     */
-    const email = req.query.email;
-
-    if (!email) {
-        // 유저 전체 조회
-        const userListResult = await userProvider.retrieveUserList();
-        return res.send(response(baseResponse.SUCCESS, userListResult));
-    } else {
-        // 유저 검색 조회
-        const userListByEmail = await userProvider.retrieveUserList(email);
-        return res.send(response(baseResponse.SUCCESS, userListByEmail));
-    }
-};
-
-/**
- * API No. 3
- * API Name : 특정 유저 조회 API
- * [GET] /app/users/{userId}
- */
-exports.getUserById = async function (req, res) {
-
-    /**
-     * Path Variable: userId
-     */
-    const userId = req.params.userId;
-
-    if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-
-    const userByUserId = await userProvider.retrieveUser(userId);
-    return res.send(response(baseResponse.SUCCESS, userByUserId));
-};
-
-
-// TODO: After 로그인 인증 방법 (JWT)
-/**
- * API No. 4
- * API Name : 로그인 API
- * [POST] /app/login
- * body : email, passsword
- */
-exports.login = async function (req, res) {
-
-    const {email, password} = req.body;
-
-    // TODO: email, password 형식적 Validation
-
-    const signInResponse = await userService.postSignIn(email, password);
-
-    return res.send(signInResponse);
-};
-
+const { emit } = require("nodemon");
 
 /**
  * API No. 5
- * API Name : 회원 정보 수정 API + JWT + Validation
- * [PATCH] /app/users/:userId
- * path variable : userId
- * body : nickname
+ * API Name : 모든 사용자 조회
+ * [GET] /users
  */
-exports.patchUsers = async function (req, res) {
+exports.getUserProfile = async function (req, res) {
+  const userList = await userProvider.retrieveUserList();
+  return res.send(response(baseResponse.SUCCESS, userList));
+};
 
-    // jwt - userId, path variable :userId
+/**
+ * API No. 6
+ * API Name : 사용자 프로필 조회
+ * [GET] /users/:userId
+ */
+exports.getUserProfileById = async function (req, res) {
+  const userId = req.params.userId;
 
-    const userIdFromJWT = req.verifiedToken.userId
+  const userByUserId = await userProvider.retrieveUser(userId);
+  return res.send(response(baseResponse.SUCCESS, userByUserId));
+};
 
-    const userId = req.params.userId;
-    const nickname = req.body.nickname;
+/**
+ * API No. 7
+ * API Name : 사용자 프로필 수젇ㅇ
+ * [PUT] /users/:userId
+ */
+exports.editUserProfile = async function (req, res) {
+  const userId = req.params.userId;
 
-    if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
-    } else {
-        if (!nickname) return res.send(errResponse(baseResponse.USER_NICKNAME_EMPTY));
+  const { nickname, imageUrl } = req.body;
+  const editUserProfileInfo = await userService.editUserProfile(
+    userId,
+    nickname,
+    imageUrl
+  );
 
-        const editUserInfo = await userService.editUser(userId, nickname)
-        return res.send(editUserInfo);
-    }
+  return res.send(response(baseResponse.SUCCESS, editUserProfileInfo));
+};
+
+/**
+ * API No. 8
+ * API Name : 회원가입 시 사용자 프로필 생성
+ * [POST] /users
+ */
+exports.createUserProfile = async function (req, res) {
+  const { nickname, imageUrl } = req.body;
+  const signupResponse = await userService.createUserProfile(
+    nickname,
+    imageUrl
+  );
+
+  return res.send(response(signupResponse));
 };
 
 /**
@@ -146,22 +69,21 @@ exports.patchUsers = async function (req, res) {
  * path variable : userId, pointId
  */
 exports.postUserLike = async function (req, res) {
+  const { userId, pointId } = req.params;
+  console.log("userId", userId);
+  console.log("pointId", pointId);
 
-    const { userId, pointId } = req.params;
-    console.log('userId', userId)
-    console.log('pointId', pointId)
-    
-    // userId가 없는 경우
-    if (userId === ":userId") return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-    
-    // pointId가 없는 경우
-    if (pointId === ":pointId") return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
+  // userId가 없는 경우
+  if (userId === ":userId")
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
-    const pointLikeResponse = await userService.userPointLike(userId, pointId);
+  // pointId가 없는 경우
+  if (pointId === ":pointId")
+    return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
 
-    return res.send(pointLikeResponse);
+  const pointLikeResponse = await userService.userPointLike(userId, pointId);
 
-
+  return res.send(pointLikeResponse);
 };
 
 /**
@@ -171,33 +93,20 @@ exports.postUserLike = async function (req, res) {
  * path variable : userId, pointId
  */
 exports.deleteUserLike = async function (req, res) {
+  const { userId, pointId } = req.params;
 
-    const { userId, pointId } = req.params;
+  // userId가 없는 경우
+  if (userId === ":userId")
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
-    // userId가 없는 경우
-    if (userId === ":userId") return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+  // pointId가 없는 경우
+  if (pointId === ":pointId")
+    return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
 
-    // pointId가 없는 경우
-    if (pointId === ":pointId") return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
+  const pointLikeCancelResponse = await userService.userPointLikeCancel(
+    userId,
+    pointId
+  );
 
-    const pointLikeCancelResponse = await userService.userPointLikeCancel(userId, pointId);
-
-    return res.send(pointLikeCancelResponse);
-
-
-};
-
-
-
-
-
-
-
-/** JWT 토큰 검증 API
- * [GET] /app/auto-login
- */
-exports.check = async function (req, res) {
-    const userIdResult = req.verifiedToken.userId;
-    console.log(userIdResult);
-    return res.send(response(baseResponse.TOKEN_VERIFICATION_SUCCESS));
+  return res.send(pointLikeCancelResponse);
 };
