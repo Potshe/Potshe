@@ -39,9 +39,10 @@ exports.postImage = async function (req, res) {
  */
 exports.postPoints = async function (req, res) {
     /**
-     * Body : user_id, title, content, type, location, creature, date
+     * Body : userId, title, content, type, location, creature, date
      */
-    const {userId, title, content, type, location, creature, date} = req.body;
+    const { title, content, type, location, creature, date} = req.body;
+    const userId = /*"c0997af2-96ff-11ed-931f-069e6ea2831c"테스트할때 사용 아직 jwt 부분 없어서.. jwt 부분에 user_id 정보 남기기*/req.verifiedToken.userId;
 
     //빈 값 체크
     if (!title)
@@ -55,10 +56,11 @@ exports.postPoints = async function (req, res) {
         return res.send(response(baseResponse.POINT_LOCATION_EMPTY));
     if (!creature)
         return res.send(response(baseResponse.POINT_CREATURE_EMPTY));
-    if (!date)
-        return res.send(response(baseResponse.POINT_DATE_EMPTY));
+    // if (!date)
+    //     return res.send(response(baseResponse.POINT_DATE_EMPTY));
+    console.log(userId);
     const postResponse = await pointService.createPoint(
-        title, content, type, location, creature, date
+        userId, title, content, type, location, creature, date
 
     );
     return res.send(postResponse);

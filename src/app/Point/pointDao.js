@@ -58,10 +58,18 @@ async function selectPointsByKeyword(connection, keywordParams) {
     const [pointRowByKeyword] = await connection.query(selectPointsByKeywordQuery, keywordParams);
     return pointRowByKeyword;
 }
-
+async function insertPoint(connection, insertPointParams) {
+    const insertPointQuery = `
+    INSERT INTO Points(user_id, title, content, type, location, creature, date)
+        VALUES (?, ?, ?, ?, ?, ?, ?);
+    `;
+    const updatePointRow = await connection.query(insertPointQuery, insertPointParams);
+    return updatePointRow[0];
+  }
 
 module.exports = {
     selectPointId,
     selectPoints,
     selectPointsByKeyword,
+    insertPoint,
 };
