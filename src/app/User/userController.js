@@ -26,16 +26,15 @@ exports.getUserProfileById = async function (req, res) {
   const userId = req.params.userId;
 
   // userId가 없는 경우
-    if (userId === ":userId")
-        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+  if (userId === ":userId")
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
   const userByUserId = await userProvider.retrieveUser(userId);
 
   // 찾고자 하는 유저가 없을 경우
-    if(!userByUserId){
-        return res.send(errResponse(baseResponse.USER_NOT_EXIST))
-    }
-
+  if (!userByUserId) {
+    return res.send(errResponse(baseResponse.USER_NOT_EXIST));
+  }
 
   return res.send(response(baseResponse.SUCCESS, userByUserId));
 };
@@ -46,29 +45,29 @@ exports.getUserProfileById = async function (req, res) {
  * [PUT] /users/:userId
  */
 exports.editUserProfile = async function (req, res) {
-    const userId = req.params.userId;
-    const { nickname } = req.body;
-    const filePath = req.file.location;
+  const userId = req.params.userId;
+  const { nickname } = req.body;
+  const filePath = req.file.location;
 
-    // userId가 없는 경우
-    if (userId === ":userId")
-        return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+  // userId가 없는 경우
+  if (userId === ":userId") {
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+  }
 
-    // nickname이 없는 경우
-    if(!nickname){
-        return res.send(baseResponse.SIGNUP_NICKNAME_EMPTY);
-    }
+  // nickname이 없는 경우
+  if (!nickname) {
+    return res.send(baseResponse.SIGNUP_NICKNAME_EMPTY);
+  }
 
-    // 유효하지 않은 파일 경로일 경우
-    if(!filePath){
-        return res.send(baseResponse.FILE_INVALID_PATH);
-    }
-
+  // 유효하지 않은 파일 경로일 경우
+  if (!filePath) {
+    return res.send(baseResponse.FILE_INVALID_PATH);
+  }
 
   const editUserProfileInfo = await userService.editUserProfile(
-      userId,
-      nickname,
-      filePath
+    userId,
+    nickname,
+    filePath
   );
 
   return res.send(editUserProfileInfo);
@@ -83,21 +82,40 @@ exports.createUserProfile = async function (req, res) {
   const { nickname } = req.body;
   const filePath = req.file.location;
 
-    // nickname이 없는 경우
-    if(!nickname){
-        return res.send(baseResponse.SIGNUP_NICKNAME_EMPTY);
-    }
+  // nickname이 없는 경우
+  if (!nickname) {
+    return res.send(baseResponse.SIGNUP_NICKNAME_EMPTY);
+  }
 
-    // 유효하지 않은 파일 경로일 경우
-    if(!filePath){
-        return res.send(baseResponse.FILE_INVALID_PATH);
-    }
+  // 유효하지 않은 파일 경로일 경우
+  if (!filePath) {
+    return res.send(baseResponse.FILE_INVALID_PATH);
+  }
 
   const createUserResponse = await userService.createUserProfile(
-    nickname, filePath
+    nickname,
+    filePath
   );
 
   return res.send(response(createUserResponse));
+};
+
+/**
+ * API No. 9
+ * API Name : 사용자가 좋아요한 포인트 조회
+ * [POST] /users/:userId/likes
+ */
+exports.getUserLike = async function (req, res) {
+  const userId = req.params.userId;
+
+  // userId가 없는 경우
+  if (userId === ":userId") {
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+  }
+
+  const userLikeList = await userProvider.retrieveUserLikeList(userId);
+
+  res.send(response(baseResponse.SUCCESS, userLikeList));
 };
 
 /**
@@ -156,32 +174,31 @@ exports.deleteUserLike = async function (req, res) {
  * path variable : userId
  */
 exports.updateImage = async function (req, res) {
+  const { userId } = req.params;
+  const filePath = req.file.location;
 
-    const { userId } = req.params;
-    const filePath = req.file.location;
-    
-    // userId가 없는 경우
-    if (userId === ":userId") return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+  // userId가 없는 경우
+  if (userId === ":userId")
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
-    // 유효하지 않은 파일 경로일 경우
-    if(!filePath){
-        return res.send(baseResponse.FILE_INVALID_PATH);
-    }
+  // 유효하지 않은 파일 경로일 경우
+  if (!filePath) {
+    return res.send(baseResponse.FILE_INVALID_PATH);
+  }
 
-    const userImageUpdateResponse = await userService.userImageUpdate(userId, filePath);
+  const userImageUpdateResponse = await userService.userImageUpdate(
+    userId,
+    filePath
+  );
 
-    return res.send(userImageUpdateResponse);
-
-
+  return res.send(userImageUpdateResponse);
 };
-
-
 
 /** JWT 토큰 검증 API
  * [GET] /app/auto-login
  */
 exports.check = async function (req, res) {
-    const userIdResult = req.verifiedToken.userId;
-    console.log(userIdResult);
-    return res.send(response(baseResponse.TOKEN_VERIFICATION_SUCCESS));
+  const userIdResult = req.verifiedToken.userId;
+  console.log(userIdResult);
+  return res.send(response(baseResponse.TOKEN_VERIFICATION_SUCCESS));
 };

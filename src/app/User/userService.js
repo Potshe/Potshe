@@ -15,7 +15,6 @@ const { connect } = require("http2");
 // Service: Create, Update, Delete 비즈니스 로직 처리
 
 exports.editUserProfile = async function (userId, nickname, imageUrl) {
-
   // 존재하지 않는 유저면 error 메세지 return
   const userRows = await userProvider.retrieveUser(userId);
   console.log("userRows", userRows);
@@ -24,7 +23,7 @@ exports.editUserProfile = async function (userId, nickname, imageUrl) {
 
   try {
     const connection = await pool.getConnection(async (conn) => conn);
-    const editUserProfileResult = await userDao.updateUserProfileInfo(
+    const editUserProfileResult = await userDao.updateUserProfile(
       connection,
       userId,
       nickname,
@@ -44,7 +43,7 @@ exports.createUserProfile = async function (nickname, filePath) {
   try {
     const insertUserProfileParams = [nickname, filePath];
     const connection = await pool.getConnection(async (conn) => conn);
-    const createUserResult = await userDao.insertUserInfo(
+    const createUserResult = await userDao.insertUserProfile(
       connection,
       insertUserProfileParams
     );
@@ -137,25 +136,25 @@ exports.userPointLikeCancel = async function (userId, pointId) {
   }
 };
 
-
 exports.userImageUpdate = async function (userId, filePath) {
+  // Users 테이블에 유저 존재 여부 확인
+  const userRows = await userProvider.retrieveUser(userId);
+  console.log("userRows", userRows);
+  if (userRows.length < 1)
+    return errResponse(baseResponse.USER_USERID_NOT_EXIST);
 
-    // Users 테이블에 유저 존재 여부 확인
-    const userRows = await userProvider.retrieveUser(userId);
-    console.log('userRows', userRows)
-    if (userRows.length < 1) return errResponse(baseResponse.USER_USERID_NOT_EXIST);
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const updateUserProfile = await userDao.updateUserProfile(
+      connection,
+      userId,
+      filePath
+    );
+    connection.release();
 
-    try {
-        const connection = await pool.getConnection(async (conn) => conn);
-        const updateUserProfile = await userDao.updateUserProfile(connection, userId, filePath)
-        connection.release();
-
-        return response(baseResponse.USER_PROFILE_IMAGE_SUCCESS);
-
-    } catch (err) {
-        logger.error(`App - updateUserProfile Service error\n: ${err.message}`);
-        return errResponse(baseResponse.DB_ERROR);
-    }
-
-
-}
+    return response(baseResponse.USER_PROFILE_IMAGE_SUCCESS);
+  } catch (err) {
+    logger.error(`App - updateUserProfile Service error\n: ${err.message}`);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};

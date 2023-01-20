@@ -1,17 +1,17 @@
-// 모든 유저 조회
-async function selectUser(connection) {
+// 모든 유저 프로필 조회
+async function selectUserProfile(connection) {
   const selectUserListQuery = "SELECT * FROM Users";
   const [userRows] = await connection.query(selectUserListQuery);
   return userRows;
 }
 
-async function selectUserId(connection, userId) {
+async function selectUserProfileById(connection, userId) {
   const selectUserIdQuery = "SELECT * FROM Users WHERE user_id = ?";
   const [userRow] = await connection.query(selectUserIdQuery, userId);
   return userRow;
 }
 
-async function updateUserProfileInfo(connection, userId, nickname, imageUrl) {
+async function updateUserProfile(connection, userId, nickname, imageUrl) {
   const updateUserQuery = `UPDATE Users SET nickname = ?, image_url = ? WHERE user_id=?;`;
   const updateUserRow = await connection.query(updateUserQuery, [
     nickname,
@@ -21,7 +21,7 @@ async function updateUserProfileInfo(connection, userId, nickname, imageUrl) {
   return updateUserRow[0];
 }
 
-async function insertUserInfo(connection, insertUserProfileParams) {
+async function insertUserProfile(connection, insertUserProfileParams) {
   const insertUserProfileQuery = `INSERT INTO Users(nickname, image_url) VALUES (?, ?);`;
   const insertUserProfileInfoRow = await connection.query(
     insertUserProfileQuery,
@@ -29,6 +29,18 @@ async function insertUserInfo(connection, insertUserProfileParams) {
   );
 
   return insertUserProfileInfoRow;
+}
+
+async function selectUserLike(connection, userId) {
+  const selectUserLikeQuery = `
+  SELECT Points.title, Points.content, Points.location, Points.creature, Points.date, Points.created_at 
+  from Points 
+  LEFT JOIN User_point_likes 
+  on Points.point_id=User_point_likes.point_id 
+  WHERE User_point_likes.user_id = ?;
+  `;
+  const [userLikeRows] = await connection.query(selectUserLikeQuery, userId);
+  return userLikeRows;
 }
 
 // 유저가 특정 포인트에 좋아요 표시
@@ -71,25 +83,26 @@ async function deleteUserPointLike(connection, userId, pointId) {
 }
 
 // 유저가 특정 포인트 좋아요 취소
-async function updateUserProfile(connection, userId, filePath) {
+async function updateUserPointLike(connection, userId, filePath) {
   const updateUserProfileQuery = `
         UPDATE Users 
         SET image_url = ?
         WHERE user_id = ?;`;
-  const updateUserProfileRow = await connection.query(
-      updateUserProfileQuery,
-      [filePath, userId]
-  );
+  const updateUserProfileRow = await connection.query(updateUserProfileQuery, [
+    filePath,
+    userId,
+  ]);
   return updateUserProfileRow;
 }
 
 module.exports = {
-  selectUser,
-  selectUserId,
-  updateUserProfileInfo,
-  insertUserInfo,
+  selectUserProfile,
+  selectUserProfileById,
+  updateUserProfile,
+  insertUserProfile,
+  selectUserLike,
   insertUserPointLike,
   selectUserPointLike,
   deleteUserPointLike,
-  updateUserProfile
+  updateUserPointLike,
 };
