@@ -5,6 +5,12 @@ async function selectUserProfile(connection) {
   return userRows;
 }
 
+async function selectUserProfileByNickname(connection, nickname) {
+  const selectUserListQuery = "SELECT * FROM Users WHERE nickname = ?;";
+  const [userRows] = await connection.query(selectUserListQuery, nickname);
+  return userRows;
+}
+
 async function selectUserProfileById(connection, userId) {
   const selectUserIdQuery = "SELECT * FROM Users WHERE user_id = ?";
   const [userRow] = await connection.query(selectUserIdQuery, userId);
@@ -97,6 +103,7 @@ async function updateUserPointLike(connection, userId, filePath) {
 
 module.exports = {
   selectUserProfile,
+  selectUserProfileByNickname,
   selectUserProfileById,
   updateUserProfile,
   insertUserProfile,

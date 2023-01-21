@@ -8,13 +8,22 @@ const regexEmail = require("regex-email");
 const { emit } = require("nodemon");
 
 /**
- * API No. 5
- * API Name : 모든 사용자 조회
- * [GET] /users
+ * API No. 5 & 10
+ * API Name : 모든 사용자 조회 & 닉네임 중복 여부 확인
+ * [GET] /users + (/?nickname="?")
  */
 exports.getUserProfile = async function (req, res) {
-  const userList = await userProvider.retrieveUserList();
-  return res.send(response(baseResponse.SUCCESS, userList));
+  const nickname = req.query.nickname;
+
+  if (!nickname) {
+    // 모든 사용자 조회
+    const userList = await userProvider.retrieveUserList();
+    return res.send(response(baseResponse.SUCCESS, userList));
+  } else {
+    // 닉네임 중복 여부 확인
+    const userListByNickname = await userProvider.retrieveUserList(nickname);
+    return res.send(response(baseResponse.SUCCESS, userListByNickname));
+  }
 };
 
 /**

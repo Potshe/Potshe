@@ -1,12 +1,17 @@
+// const dotenv = require("dotenv");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 const aws = require("aws-sdk");
 const secret_config = require("./secret");
 
+// dotenv.config();
+
 aws.config.update({
   region: "ap-northeast-2",
   accessKeyId: secret_config["s3-access-key-id"],
   secretAccessKey: secret_config["s3-secret-access-key"],
+  // accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  // secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
 });
 
 const s3 = new aws.S3();
