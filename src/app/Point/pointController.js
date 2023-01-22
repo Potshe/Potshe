@@ -34,8 +34,13 @@ exports.postImage = async function (req, res) {
  * API No. 16
  * API Name : 포인트 등록
  * [POST] /app/points
- * path variable : pointId
- * body : file
+ * body : userId
+    title
+    content
+    type
+    location
+    creature
+    date
  */
 exports.postPoints = async function (req, res) {
     /**
@@ -64,4 +69,22 @@ exports.postPoints = async function (req, res) {
 
     );
     return res.send(postResponse);
+}
+/**
+ * API No. 17
+ * API Name : 특정 포인트 수정
+ * [POST] /app/points/:pointId
+ * path variable : pointId
+ * body : 
+ */
+exports.putPoint = async function (req, res) {
+    //포인트의 userId와 jwt에 userId가 같은지 확인
+    const userIdFromJwt = req.verifiedToken.userId;
+    const pointId = req.params.pointId;
+    const userIdFromPoint = pointProvider.getUserIdFromPoint(pointId);
+    if (userIdFromJwt != userIdFromPoint) {
+        res.send(errResponse());
+    } else {
+        const editPointInfo = await pointService.editPoint(userIdFromJwt,pointId);
+    }
 }

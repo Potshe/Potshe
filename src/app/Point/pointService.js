@@ -15,17 +15,16 @@ const { error } = require("winston");
 
 exports.createPoint = async function (userId, title, content, type, location, creature, date) {
     try{
-        console.log("1");
+
         const insertPointParams = [userId, title, content, type, location, creature, date];
         
         const connection = await pool.getConnection(async (conn) => conn);
-        console.log("2");
+
         console.log(insertPointParams);
         const createPointResult = await pointDao.insertPoint(
             connection,
             insertPointParams
         );
-      console.log("3");
       //console.log(`추가된 포인트 : ${createPointResult[0].affectedRows}`);
   
       connection.release();
@@ -37,3 +36,4 @@ exports.createPoint = async function (userId, title, content, type, location, cr
         return errResponse(baseResponse.DB_ERROR);//왜인지 데이터베이스 에러가 뜨지만 추가는 됩니다... 뭘까용..
     }
 }
+
