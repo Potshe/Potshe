@@ -65,15 +65,7 @@ async function insertPoint(connection, insertPointParams) {
     `;
     const updatePointRow = await connection.query(insertPointQuery, insertPointParams);
     return updatePointRow[0];
-}
-async function selectUserIdFromPoint(connection, pointId) {
-    const selectUserIdFromPointQuery = ` SELECT user_id
-    From Points
-    Where point_id = ?;`;
-    const selectedUserId = await connection.query(selectUserIdFromPointQuery, pointId);
-    return selectedUserId;
-}
-
+  }
 
 module.exports = {
     selectPointId,

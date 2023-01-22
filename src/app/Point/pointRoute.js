@@ -16,10 +16,7 @@ module.exports = function(app){
     // app.get('/app/points', point.getPoints)
 
     // 16. point post API
-     //app.post('/app/points', /*upload.array('img'), */point.postPoints);
-
-    // 17. 포인트 수정
-    app.put('/app/points/:pointId', point.putPoint);
+     app.post('/app/points', /*upload.array('img'), */point.postPoints);
 
     // 23. 포인트 이미지 파일 S3 업로드
 
