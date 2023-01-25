@@ -12,8 +12,16 @@ const crypto = require("crypto");
 const {connect} = require("http2");
 const { USER_ID_NOT_MATCH } = require("../../../config/baseResponseStatus");
 const { error } = require("winston");
+const userProvider = require("../User/userProvider");
 
 exports.createPoint = async function (userId, title, content, type, location, creature, date) {
+
+    // 유저가 Users 테이블에 존재하는 유저인지 검사
+    const userRows = await userProvider.retrieveUser(userId);
+    console.log("userRows", userRows);
+    if (userRows.length < 1)
+        return errResponse(baseResponse.USER_USERID_NOT_EXIST);
+
     try{
 
         const insertPointParams = [userId, title, content, type, location, creature, date];
