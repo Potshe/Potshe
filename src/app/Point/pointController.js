@@ -63,7 +63,7 @@ exports.postPoints = async function (req, res) {
         return res.send(response(baseResponse.POINT_CREATURE_EMPTY));
     // if (!date)
     //     return res.send(response(baseResponse.POINT_DATE_EMPTY));
-    console.log(userId);
+
     const postResponse = await pointService.createPoint(
         userId, title, content, type, location, creature, date
 
@@ -78,13 +78,20 @@ exports.postPoints = async function (req, res) {
  * body : 
  */
 exports.putPoint = async function (req, res) {
+    const { title, content, type, location, creature, date} = req.body;
     //포인트의 userId와 jwt에 userId가 같은지 확인
     const userIdFromJwt = req.verifiedToken.userId;
     const pointId = req.params.pointId;
+    console.log(pointId);
     const userIdFromPoint = pointProvider.getUserIdFromPoint(pointId);
-    if (userIdFromJwt != userIdFromPoint) {
-        res.send(errResponse());
-    } else {
-        const editPointInfo = await pointService.editPoint(userIdFromJwt,pointId);
-    }
+    console.log(userIdFromPoint);
+    return res.send(userIdFromPoint);
+    // if (userIdFromJwt != userIdFromPoint) {
+    //     res.send(errResponse());
+    // } else {
+    //     const editPointInfo = await pointService.editPoint(userIdFromJwt,pointId);
+    // }
+    const editPointInfo = await pointService.editPoint({pointId}, {title, content, type, location, creature, date});
+
+
 }

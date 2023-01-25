@@ -37,3 +37,6 @@ exports.createPoint = async function (userId, title, content, type, location, cr
     }
 }
 
+exports.editPoint = async function({pointId}, {title, content, type, location, creature, date}){
+    
+}
