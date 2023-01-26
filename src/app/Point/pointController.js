@@ -34,15 +34,22 @@ exports.postImage = async function (req, res) {
  * API No. 16
  * API Name : 포인트 등록
  * [POST] /app/points
- * path variable : pointId
- * body : file
+ * body : userId
+    title
+    content
+    type
+    location
+    creature
+    date
  */
 exports.postPoints = async function (req, res) {
     /**
      * Body : userId, title, content, type, location, creature, date
      */
     const { title, content, type, location, creature, date} = req.body;
-    const userId = /*"c0997af2-96ff-11ed-931f-069e6ea2831c"테스트할때 사용 아직 jwt 부분 없어서.. jwt 부분에 user_id 정보 남기기*/req.verifiedToken.userId;
+    const userId = "c0997af2-96ff-11ed-931f-069e6ea2831c" //테스트할때 사용 아직 jwt 부분 없어서.. jwt 부분에 user_id 정보 남기기*/req.verifiedToken.userId;
+
+
 
     //빈 값 체크
     if (!title)
@@ -58,10 +65,34 @@ exports.postPoints = async function (req, res) {
         return res.send(response(baseResponse.POINT_CREATURE_EMPTY));
     // if (!date)
     //     return res.send(response(baseResponse.POINT_DATE_EMPTY));
-    console.log(userId);
+
     const postResponse = await pointService.createPoint(
         userId, title, content, type, location, creature, date
-
     );
     return res.send(postResponse);
+}
+/**
+ * API No. 17
+ * API Name : 특정 포인트 수정
+ * [POST] /app/points/:pointId
+ * path variable : pointId
+ * body : 
+ */
+exports.putPoint = async function (req, res) {
+    const { title, content, type, location, creature, date} = req.body;
+    //포인트의 userId와 jwt에 userId가 같은지 확인
+    const userIdFromJwt = req.verifiedToken.userId;
+    const pointId = req.params.pointId;
+    console.log(pointId);
+    const userIdFromPoint = pointProvider.getUserIdFromPoint(pointId);
+    console.log(userIdFromPoint);
+    return res.send(userIdFromPoint);
+    // if (userIdFromJwt != userIdFromPoint) {
+    //     res.send(errResponse());
+    // } else {
+    //     const editPointInfo = await pointService.editPoint(userIdFromJwt,pointId);
+    // }
+    const editPointInfo = await pointService.editPoint({pointId}, {title, content, type, location, creature, date});
+
+
 }

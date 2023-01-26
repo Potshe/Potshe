@@ -12,20 +12,27 @@ const crypto = require("crypto");
 const {connect} = require("http2");
 const { USER_ID_NOT_MATCH } = require("../../../config/baseResponseStatus");
 const { error } = require("winston");
+const userProvider = require("../User/userProvider");
 
 exports.createPoint = async function (userId, title, content, type, location, creature, date) {
+
+    // 유저가 Users 테이블에 존재하는 유저인지 검사
+    const userRows = await userProvider.retrieveUser(userId);
+    console.log("userRows", userRows);
+    if (userRows.length < 1)
+        return errResponse(baseResponse.USER_USERID_NOT_EXIST);
+
     try{
-        console.log("1");
+
         const insertPointParams = [userId, title, content, type, location, creature, date];
         
         const connection = await pool.getConnection(async (conn) => conn);
-        console.log("2");
+
         console.log(insertPointParams);
         const createPointResult = await pointDao.insertPoint(
             connection,
             insertPointParams
         );
-      console.log("3");
       //console.log(`추가된 포인트 : ${createPointResult[0].affectedRows}`);
   
       connection.release();
@@ -36,4 +43,8 @@ exports.createPoint = async function (userId, title, content, type, location, cr
         logger.error(`App - createPoint Service error\n: ${error.messge}`);
         return errResponse(baseResponse.DB_ERROR);//왜인지 데이터베이스 에러가 뜨지만 추가는 됩니다... 뭘까용..
     }
+}
+
+exports.editPoint = async function({pointId}, {title, content, type, location, creature, date}){
+    
 }

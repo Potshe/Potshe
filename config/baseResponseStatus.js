@@ -26,9 +26,64 @@ module.exports = {
     code: 15,
     message: "유저 이미지 수정 완료",
   },
-  USER_DELETE_SUCCESS: { isSuccess: true, code: 16, message: "회원 탈퇴 완료" },
+  POINT_EDIT_SUCCESS: {
+    isSuccess: true,
+    code: 16,
+    message: "포인트 수정 성공",
+  },
+  USER_DELETE_SUCCESS: { isSuccess: true, code: 17, message: "회원 탈퇴 완료" },
 
   // TOKEN
+  TOKEN_EMPTY: {
+    isSuccess: false,
+    code: 2000,
+    message: "JWT 토큰을 입력해주세요.",
+  },
+  TOKEN_VERIFICATION_FAILURE: {
+    isSuccess: false,
+    code: 3000,
+    message: "JWT 토큰 검증 실패",
+  },
+  TOKEN_VERIFICATION_SUCCESS: {
+    isSuccess: true,
+    code: 1001,
+    message: "JWT 토큰 검증 성공",
+  },
+
+  // Success
+  SUCCESS: { isSuccess: true, code: 1000, message: "성공" },
+  USER_POINT_LIKE_SUCCESS: {
+    isSuccess: true,
+    code: 11,
+    message: "포인트에 좋아요 누르기 성공",
+  },
+  USER_POINT_LIKE_CANCEL_SUCCESS: {
+    isSuccess: true,
+    code: 12,
+    message: "포인트 좋아요 취소 성공",
+  },
+  POINT_SUCCESS: {
+    isSuccess: true,
+    code: 13,
+    message: "모든 포인트 조회 성공",
+  },
+  POINT_SUCCESS_BY_KEYWORD: {
+    isSuccess: true,
+    code: 14,
+    message: "특정 포인트 키워드 기반 검색 성공",
+  },
+  USER_PROFILE_IMAGE_SUCCESS: {
+    isSuccess: true,
+    code: 15,
+    message: "유저 이미지 수정 완료",
+  },
+  POINT_EDIT_SUCCESS: {
+    isSuccess: true,
+    code: 16,
+    message: "포인트 수정 성공",
+  },
+
+  // Common
   TOKEN_EMPTY: {
     isSuccess: false,
     code: 2000,
