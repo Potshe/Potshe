@@ -1,13 +1,13 @@
-const upload = require("../../../config/imageUploader")
+const imageUploader = require("../../../config/imageUploader")
 
 module.exports = function(app){
     const point = require('./pointController');
     const jwtMiddleware = require('../../../config/jwtMiddleware');
 
     // 0. point img upload API - test
-    app.post('/app/points/fileUpload', upload.single('image'), (req, res) => {
-        return res.send(req.file.location)
-    });
+    // app.post('/app/points/fileUpload', upload.single('image'), (req, res) => {
+    //     return res.send(req.file.location)
+    // });
 
     // 1. point img upload API
     // app.post('/app/points/fileUpload/:pointId', imageUploader.single('image'), point.postImage);
@@ -16,7 +16,7 @@ module.exports = function(app){
     // app.get('/app/points', point.getPoints)
 
     // 16. point post API
-     app.post('/app/points', /*upload.array('img'), */point.postPoints);
+     app.post('/app/points', imageUploader.array("images", 5), point.postPoints);
 
     // 17. 포인트 수정
     app.put('/app/points/:pointId', point.putPoint);

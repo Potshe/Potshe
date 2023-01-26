@@ -39,7 +39,7 @@ async function insertUserProfile(connection, insertUserProfileParams) {
 
 async function selectUserLike(connection, userId) {
   const selectUserLikeQuery = `
-  SELECT Points.title, Points.content, Points.location, Points.creature, Points.date, Points.created_at 
+  SELECT Points.title, Points.content, Points.location, Points.creature, Points.point_date, Points.created_at 
   from Points 
   LEFT JOIN User_point_likes 
   on Points.point_id=User_point_likes.point_id 
