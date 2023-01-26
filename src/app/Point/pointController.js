@@ -3,6 +3,29 @@ const pointService = require("../../app/Point/pointService");
 const baseResponse = require("../../../config/baseResponseStatus");
 const {response, errResponse} = require("../../../config/response");
 const {post} = require("axios");
+const userProvider = require("../User/userProvider");
+/**
+ * API No. 14, 22
+ * API Name : 모든 포인트 조회 + 키워드 기반 포인트 조회
+ * [GET] /app/points
+ */
+exports.getPoints = async function (req, res) {
+
+    /**
+     * query string : keyword
+     */
+
+    const { keyword } = req.query
+
+    if(!keyword){
+        const pointsResult = await pointProvider.retrievePoint();
+        return res.send(pointsResult);
+    } else {
+        const pointsResultWithKeyword = await pointProvider.retrievePoint(keyword);
+        return res.send(pointsResultWithKeyword);
+    }
+
+}
 
 /**
  * API No. 16

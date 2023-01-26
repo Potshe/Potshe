@@ -82,6 +82,8 @@ exports.createPointImg = async function (pointId, imgUrl) {
     }
 }
 
+
+
 exports.editPoint = async function({pointId}, {title, content, type, location, creature, date}){
     
 }
