@@ -2,57 +2,68 @@ const { pool } = require("../../../config/database");
 const { logger } = require("../../../config/winston");
 
 const userDao = require("./userDao");
+const { errResponse } = require("../../../config/response");
+const baseResponse = require("../../../config/baseResponseStatus");
 
 // Provider: Read 비즈니스 로직 처리
 
-exports.retrieveUserList = async function (email) {
-  if (!email) {
+// 모든 사용자 조회 결과 반환
+exports.retrieveUserList = async function (nickname) {
+  if (!nickname) {
     const connection = await pool.getConnection(async (conn) => conn);
-    const userListResult = await userDao.selectUser(connection);
+    const userProfileListResult = await userDao.selectUserProfile(connection);
+
     connection.release();
 
-    return userListResult;
-
+    return userProfileListResult;
   } else {
     const connection = await pool.getConnection(async (conn) => conn);
-    const userListResult = await userDao.selectUserEmail(connection, email);
+    const userProfileListResult = await userDao.selectUserProfileByNickname(
+      connection,
+      nickname
+    );
+
     connection.release();
 
-    return userListResult;
+    return userProfileListResult;
   }
 };
 
+// 특정 사용자 프로필 조회 결과 반환
 exports.retrieveUser = async function (userId) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const userResult = await userDao.selectUserId(connection, userId);
-
-  connection.release();
-
-  return userResult[0];
-};
-
-exports.emailCheck = async function (email) {
-  const connection = await pool.getConnection(async (conn) => conn);
-  const emailCheckResult = await userDao.selectUserEmail(connection, email);
-  connection.release();
-
-  return emailCheckResult;
-};
-
-exports.passwordCheck = async function (selectUserPasswordParams) {
-  const connection = await pool.getConnection(async (conn) => conn);
-  const passwordCheckResult = await userDao.selectUserPassword(
-      connection,
-      selectUserPasswordParams
+  const userProfileResult = await userDao.selectUserProfileById(
+    connection,
+    userId
   );
+
   connection.release();
-  return passwordCheckResult[0];
+
+  return userProfileResult;
 };
 
-exports.accountCheck = async function (email) {
+// 닉네임 중복 여부 확인
+
+// 사용자가 좋아요한 포인트 결과 반환
+exports.retrieveUserLikeList = async function (userId) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const userAccountResult = await userDao.selectUserAccount(connection, email);
+  const userLikeListResult = await userDao.selectUserLike(connection, userId);
+
   connection.release();
 
-  return userAccountResult;
+  return userLikeListResult;
+};
+
+// 특정 유저가 좋아요한 특정 포인트 결과 반환
+exports.retrieveUserPointLike = async function (userId, pointId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const userPointLikeResult = await userDao.selectUserPointLike(
+    connection,
+    userId,
+    pointId
+  );
+
+  connection.release();
+
+  return userPointLikeResult;
 };

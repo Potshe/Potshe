@@ -2,158 +2,275 @@ const jwtMiddleware = require("../../../config/jwtMiddleware");
 const userProvider = require("../../app/User/userProvider");
 const userService = require("../../app/User/userService");
 const baseResponse = require("../../../config/baseResponseStatus");
-const {response, errResponse} = require("../../../config/response");
+const { response, errResponse } = require("../../../config/response");
+const axios = require('axios');
 
 const regexEmail = require("regex-email");
-const {emit} = require("nodemon");
-
-/**
- * API No. 0
- * API Name : 테스트 API
- * [GET] /app/test
- */
-exports.getTest = async function (req, res) {
-    return res.send(response(baseResponse.SUCCESS))
-}
-
-/**
- * API No. 1
- * API Name : 유저 생성 (회원가입) API
- * [POST] /app/users
- */
-exports.postUsers = async function (req, res) {
-
-    /**
-     * Body: email, password, nickname
-     */
-    const {email, password, nickname} = req.body;
-
-    // 빈 값 체크
-    if (!email)
-        return res.send(response(baseResponse.SIGNUP_EMAIL_EMPTY));
-
-    // 길이 체크
-    if (email.length > 30)
-        return res.send(response(baseResponse.SIGNUP_EMAIL_LENGTH));
-
-    // 형식 체크 (by 정규표현식)
-    if (!regexEmail.test(email))
-        return res.send(response(baseResponse.SIGNUP_EMAIL_ERROR_TYPE));
-
-    // 기타 등등 - 추가하기
+const { emit } = require("nodemon");
 
 
-    const signUpResponse = await userService.createUser(
-        email,
-        password,
-        nickname
-    );
+exports.kakaoLogin = async function (req, res) {
+  // console.log(req.user);
+  console.log(req.session);
+  const userByUserId = await userProvider.retrieveUser(req.user.id);      // 기존 회원 찾기
 
-    return res.send(signUpResponse);
+  if(!userByUserId[0])
+    return res.redirect('/join');       // 8번 수정 ???
+  
+  return res.redirect('/startPage');
 };
 
-/**
- * API No. 2
- * API Name : 유저 조회 API (+ 이메일로 검색 조회)
- * [GET] /app/users
- */
-exports.getUsers = async function (req, res) {
+exports.logout = async function (req, res) {
+  try {
+    const ACCESS_TOKEN = req.user.accessToken;
+    let logout = await axios({
+      method:'post',
+      url:'https://kapi.kakao.com/v1/user/logout',
+      headers:{
+        'Authorization': `Bearer ${ACCESS_TOKEN}`
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.json(error);
+  }
 
-    /**
-     * Query String: email
-     */
-    const email = req.query.email;
+  await req.logout(function(err) {
+    if (err) { return next(err); }
+  });
+  req.session.destroy();
+  return res.redirect('/');
 
-    if (!email) {
-        // 유저 전체 조회
-        const userListResult = await userProvider.retrieveUserList();
-        return res.send(response(baseResponse.SUCCESS, userListResult));
-    } else {
-        // 유저 검색 조회
-        const userListByEmail = await userProvider.retrieveUserList(email);
-        return res.send(response(baseResponse.SUCCESS, userListByEmail));
-    }
-};
-
-/**
- * API No. 3
- * API Name : 특정 유저 조회 API
- * [GET] /app/users/{userId}
- */
-exports.getUserById = async function (req, res) {
-
-    /**
-     * Path Variable: userId
-     */
-    const userId = req.params.userId;
-
-    if (!userId) return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-
-    const userByUserId = await userProvider.retrieveUser(userId);
-    return res.send(response(baseResponse.SUCCESS, userByUserId));
-};
-
-
-// TODO: After 로그인 인증 방법 (JWT)
-/**
- * API No. 4
- * API Name : 로그인 API
- * [POST] /app/login
- * body : email, passsword
- */
-exports.login = async function (req, res) {
-
-    const {email, password} = req.body;
-
-    // TODO: email, password 형식적 Validation
-
-    const signInResponse = await userService.postSignIn(email, password);
-
-    return res.send(signInResponse);
 };
 
 
 /**
- * API No. 5
- * API Name : 회원 정보 수정 API + JWT + Validation
- * [PATCH] /app/users/:userId
+ * API No. 5 & 10
+ * API Name : 모든 사용자 조회 & 닉네임 중복 여부 확인
+ * [GET] /users + (/?nickname="?")
+ */
+exports.getUserProfile = async function (req, res) {
+  const nickname = req.query.nickname;
+
+  if (!nickname) {
+    // 모든 사용자 조회
+    const userList = await userProvider.retrieveUserList();
+    return res.send(response(baseResponse.SUCCESS, userList));
+  } else {
+    // 닉네임 중복 여부 확인
+    const userListByNickname = await userProvider.retrieveUserList(nickname);
+    return res.send(response(baseResponse.SUCCESS, userListByNickname));
+  }
+};
+
+/**
+ * API No. 6
+ * API Name : 사용자 프로필 조회
+ * [GET] /users/:userId
+ */
+exports.getUserProfileById = async function (req, res) {
+  const userId = req.params.userId;
+
+  // userId가 없는 경우
+  if (userId === ":userId")
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+  const userByUserId = await userProvider.retrieveUser(userId);
+
+  // 찾고자 하는 유저가 없을 경우
+  if (!userByUserId) {
+    return res.send(errResponse(baseResponse.USER_NOT_EXIST));
+  }
+
+  return res.send(response(baseResponse.SUCCESS, userByUserId));
+};
+
+/**
+ * API No. 7
+ * API Name : 사용자 프로필 수정
+ * [PUT] /users/:userId
+ */
+exports.editUserProfile = async function (req, res) {
+  const userId = req.params.userId;
+  const { nickname } = req.body;
+  const filePath = req.file.location;
+
+  // userId가 없는 경우
+  if (userId === ":userId") {
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+  }
+
+  // nickname이 없는 경우
+  if (!nickname) {
+    return res.send(baseResponse.SIGNUP_NICKNAME_EMPTY);
+  }
+
+  // 유효하지 않은 파일 경로일 경우
+  if (!filePath) {
+    return res.send(baseResponse.FILE_INVALID_PATH);
+  }
+
+  const editUserProfileInfo = await userService.editUserProfile(
+    userId,
+    nickname,
+    filePath
+  );
+
+  return res.send(editUserProfileInfo);
+};
+
+/**
+ * API No. 8
+ * API Name : 회원가입 시 사용자 프로필 생성
+ * [POST] /users
+ */
+exports.createUserProfile = async function (req, res) {
+  const userId = req.session.passport.user;
+  const { nickname } = req.body;
+  const filePath = req.file.location;
+
+  // nickname이 없는 경우
+  if (!nickname) {
+    return res.send(baseResponse.SIGNUP_NICKNAME_EMPTY);
+  }
+
+  // 유효하지 않은 파일 경로일 경우
+  if (!filePath) {
+    return res.send(baseResponse.FILE_INVALID_PATH);
+  }
+
+  const createUserResponse = await userService.createUserProfile(
+    userId,
+    nickname,
+    filePath
+  );
+
+  return res.send(response(createUserResponse));
+};
+
+/*
+exports.createUserProfile = async function (req, res) {
+  const { nickname } = req.body;
+  const filePath = req.file.location;
+
+  // nickname이 없는 경우
+  if (!nickname) {
+    return res.send(baseResponse.SIGNUP_NICKNAME_EMPTY);
+  }
+
+  // 유효하지 않은 파일 경로일 경우
+  if (!filePath) {
+    return res.send(baseResponse.FILE_INVALID_PATH);
+  }
+
+  const createUserResponse = await userService.createUserProfile(
+    nickname,
+    filePath
+  );
+
+  return res.send(response(createUserResponse));
+};
+*/
+
+/**
+ * API No. 9
+ * API Name : 사용자가 좋아요한 포인트 조회
+ * [POST] /users/:userId/likes
+ */
+exports.getUserLike = async function (req, res) {
+  const userId = req.params.userId;
+
+  // userId가 없는 경우
+  if (userId === ":userId") {
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+  }
+
+  const userLikeList = await userProvider.retrieveUserLikeList(userId);
+
+  res.send(response(baseResponse.SUCCESS, userLikeList));
+};
+
+/**
+ * API No. 11
+ * API Name : 특정 포인트에 좋아요 표시
+ * [POST] /app/users/likes/:userId/:pointId
+ * path variable : userId, pointId
+ */
+exports.postUserLike = async function (req, res) {
+  const { userId, pointId } = req.params;
+  console.log("userId", userId);
+  console.log("pointId", pointId);
+
+  // userId가 없는 경우
+  if (userId === ":userId")
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+  // pointId가 없는 경우
+  if (pointId === ":pointId")
+    return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
+
+  const pointLikeResponse = await userService.userPointLike(userId, pointId);
+
+  return res.send(pointLikeResponse);
+};
+
+/**
+ * API No. 12
+ * API Name : 특정 포인트에 좋아요 취소
+ * [DELETE] /app/users/likes/:userId/:pointId
+ * path variable : userId, pointId
+ */
+exports.deleteUserLike = async function (req, res) {
+  const { userId, pointId } = req.params;
+
+  // userId가 없는 경우
+  if (userId === ":userId")
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+
+  // pointId가 없는 경우
+  if (pointId === ":pointId")
+    return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
+
+  const pointLikeCancelResponse = await userService.userPointLikeCancel(
+    userId,
+    pointId
+  );
+
+  return res.send(pointLikeCancelResponse);
+};
+
+/**
+ * API No. 13
+ * API Name : 유저 프로필 이미지 등록 및 수정 API
+ * [POST] /app/users/:userId/image
  * path variable : userId
- * body : nickname
  */
-exports.patchUsers = async function (req, res) {
+exports.updateImage = async function (req, res) {
+  const { userId } = req.params;
+  const filePath = req.file.location;
 
-    // jwt - userId, path variable :userId
+  // userId가 없는 경우
+  if (userId === ":userId")
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
 
-    const userIdFromJWT = req.verifiedToken.userId
+  // 유효하지 않은 파일 경로일 경우
+  if (!filePath) {
+    return res.send(baseResponse.FILE_INVALID_PATH);
+  }
 
-    const userId = req.params.userId;
-    const nickname = req.body.nickname;
+  const userImageUpdateResponse = await userService.userImageUpdate(
+    userId,
+    filePath
+  );
 
-    if (userIdFromJWT != userId) {
-        res.send(errResponse(baseResponse.USER_ID_NOT_MATCH));
-    } else {
-        if (!nickname) return res.send(errResponse(baseResponse.USER_NICKNAME_EMPTY));
-
-        const editUserInfo = await userService.editUser(userId, nickname)
-        return res.send(editUserInfo);
-    }
+  return res.send(userImageUpdateResponse);
 };
-
-
-
-
-
-
-
-
-
-
 
 /** JWT 토큰 검증 API
  * [GET] /app/auto-login
  */
 exports.check = async function (req, res) {
-    const userIdResult = req.verifiedToken.userId;
-    console.log(userIdResult);
-    return res.send(response(baseResponse.TOKEN_VERIFICATION_SUCCESS));
+  const userIdResult = req.verifiedToken.userId;
+  console.log(userIdResult);
+  return res.send(response(baseResponse.TOKEN_VERIFICATION_SUCCESS));
 };
