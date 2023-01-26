@@ -1,40 +1,54 @@
 // 모든 유저 프로필 조회
 async function selectUserProfile(connection) {
-  const selectUserListQuery = "SELECT * FROM Users";
-  const [userRows] = await connection.query(selectUserListQuery);
+  const selectUserProfileQuery = "SELECT * FROM Users";
+  const [userRows] = await connection.query(selectUserProfileQuery);
   return userRows;
 }
 
+// 닉네임으로 유저 프로필 조회
 async function selectUserProfileByNickname(connection, nickname) {
-  const selectUserListQuery = "SELECT * FROM Users WHERE nickname = ?;";
-  const [userRows] = await connection.query(selectUserListQuery, nickname);
+  const selectUserProfileByNicknameQuery =
+    "SELECT * FROM Users WHERE nickname = ?;";
+  const [userRows] = await connection.query(
+    selectUserProfileByNicknameQuery,
+    nickname
+  );
   return userRows;
 }
 
+// 아이디로 유저 프로필 조회
 async function selectUserProfileById(connection, userId) {
-  const selectUserIdQuery = "SELECT * FROM Users WHERE user_id = ?";
-  const [userRow] = await connection.query(selectUserIdQuery, userId);
-  return userRow;
+  const selectUserProfileByIdQuery = "SELECT * FROM Users WHERE user_id = ?";
+  const [userRows] = await connection.query(selectUserProfileByIdQuery, userId);
+  return userRows;
 }
 
+//
 async function updateUserProfile(connection, userId, nickname, imageUrl) {
-  const updateUserQuery = `UPDATE Users SET nickname = ?, image_url = ? WHERE user_id=?;`;
-  const updateUserRow = await connection.query(updateUserQuery, [
+  const updateUserProfileQuery = `UPDATE Users SET nickname = ?, image_url = ? WHERE user_id=?;`;
+  const userRows = await connection.query(updateUserProfileQuery, [
     nickname,
     imageUrl,
     userId,
   ]);
-  return updateUserRow[0];
+  return userRows[0];
 }
 
 async function insertUserProfile(connection, insertUserProfileParams) {
   const insertUserProfileQuery = `INSERT INTO Users(nickname, image_url) VALUES (?, ?);`;
-  const insertUserProfileInfoRow = await connection.query(
+  const userRows = await connection.query(
     insertUserProfileQuery,
     insertUserProfileParams
   );
 
-  return insertUserProfileInfoRow;
+  return userRows;
+}
+
+// 유저 프로필 삭제
+async function deleteUserProfile(connection, userId) {
+  const query = "UPDATE Users SET status = 'inactive' WHERE user_id = ?;";
+  const [result] = await connection.query(query, userId);
+  return result;
 }
 
 async function selectUserLike(connection, userId) {
@@ -106,6 +120,7 @@ module.exports = {
   selectUserProfileByNickname,
   selectUserProfileById,
   updateUserProfile,
+  deleteUserProfile,
   insertUserProfile,
   selectUserLike,
   insertUserPointLike,

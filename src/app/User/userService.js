@@ -98,6 +98,14 @@ exports.userPointLike = async function (userId, pointId) {
   }
 };
 
+// 회원 삭제
+exports.dltUserProfile = async function (userId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+  const deletedResult = userDao.deleteUserProfile(connection, userId);
+  connection.release();
+  return deletedResult;
+};
+
 exports.userPointLikeCancel = async function (userId, pointId) {
   // Users 테이블에 유저 존재 여부 확인
   const userRows = await userProvider.retrieveUser(userId);

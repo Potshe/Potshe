@@ -128,6 +128,19 @@ exports.getUserLike = async function (req, res) {
 };
 
 /**
+ * API No. ?
+ * API Name : 회원 탈퇴
+ * [DELETE] /user
+ */
+exports.deleteUserProfile = async function (req, res) {
+  const { userId } = req.body;
+
+  const deletedResult = await userService.dltUserProfile(userId);
+
+  res.send(response(baseResponse.USER_DELETE_SUCCESS, deletedResult));
+};
+
+/**
  * API No. 11
  * API Name : 특정 포인트에 좋아요 표시
  * [POST] /app/users/likes/:userId/:pointId
