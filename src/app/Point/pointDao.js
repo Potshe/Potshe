@@ -1,7 +1,7 @@
 // pointId 포인트 조회
-async function selectPointId(connection, pointId) {
+async function selectPointById(connection, pointId) {
     const selectUserIdQuery = `
-                 SELECT point_id, title 
+                 SELECT point_id, title, content, point_type, creature, point_date, location 
                  FROM Points
                  WHERE point_id = ?;
                  `;
@@ -94,7 +94,7 @@ async function selectLastInsertId(connection) {
 
 
 module.exports = {
-    selectPointId,
+    selectPointById,
     selectPoints,
     selectPointsByKeyword,
     insertPoint,

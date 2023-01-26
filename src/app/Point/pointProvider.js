@@ -27,6 +27,16 @@ exports.retrievePoint = async function (keyword) {
     }
 };
 
+exports.retrievePointById = async function (pointId) {
+
+    const connection = await pool.getConnection(async (conn) => conn);
+    const pointListResult = await pointDao.selectPointById(connection, pointId);
+    connection.release();
+
+    return pointListResult;
+
+};
+
 //포인트의 유저아이디 반환
 exports.getUserIdFromPoint = async function (pointId){
     const connection = await pool.getConnection(async (conn) => conn);

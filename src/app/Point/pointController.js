@@ -28,6 +28,29 @@ exports.getPoints = async function (req, res) {
 }
 
 /**
+ * API No. 15
+ * API Name : 특정 포인트 조회
+ * [GET] /app/points/:pointId
+ */
+exports.getPointById = async function (req, res) {
+
+    /**
+     * path variable: pointId
+     */
+
+    const { pointId } = req.params
+
+    if(!pointId){
+        return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
+    } else {
+        const pointResultById = await pointProvider.retrievePointById(pointId);
+        return res.send(response(baseResponse.SUCCESS, pointResultById));
+    }
+
+}
+
+
+/**
  * API No. 16
  * API Name : 포인트 등록
  * [POST] /app/points
