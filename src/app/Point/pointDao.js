@@ -86,20 +86,21 @@ async function selectUserIdFromPoint(connection, pointId) {
     return selectedUserIdRow[0];
 }
 
-async function selectLastInsertId(connection) {
-    const selectLastInsertIdQuery = `SELECT LAST_INSERT_ID();`;
-    const insertId = await connection.query(selectLastInsertIdQuery);
-    return insertId;
+async function deletePoint(connection, pointId){
+    const deletePointQuery = ` 
+        DELETE 
+        FROM Points
+        WHERE point_id = ?;`;
+    const deletePointRow = await connection.query(deletePointQuery, pointId);
+    return deletePointRow[0];
 }
-
 
 module.exports = {
     selectPointById,
     selectPoints,
     selectPointsByKeyword,
     insertPoint,
-    selectLastInsertId,
     selectUserIdFromPoint,
     insertPointImg,
-
+    deletePoint
 };

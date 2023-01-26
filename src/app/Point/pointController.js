@@ -1,5 +1,5 @@
-const pointProvider = require("../Point/pointProvider");
-const pointService = require("../../app/Point/pointService");
+const pointProvider = require("./pointProvider");
+const pointService = require("./pointService");
 const baseResponse = require("../../../config/baseResponseStatus");
 const {response, errResponse} = require("../../../config/response");
 const {post} = require("axios");
@@ -19,10 +19,10 @@ exports.getPoints = async function (req, res) {
 
     if(!keyword){
         const pointsResult = await pointProvider.retrievePoint();
-        return res.send(pointsResult);
+        return res.send(response(baseResponse.SUCCESS, pointsResult));
     } else {
         const pointsResultWithKeyword = await pointProvider.retrievePoint(keyword);
-        return res.send(pointsResultWithKeyword);
+        return res.send(response(baseResponse.SUCCESS, pointsResultWithKeyword));
     }
 
 }
@@ -40,7 +40,7 @@ exports.getPointById = async function (req, res) {
 
     const { pointId } = req.params
 
-    if(!pointId){
+    if(!pointId || pointId === ':pointId'){
         return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
     } else {
         const pointResultById = await pointProvider.retrievePointById(pointId);
@@ -126,5 +126,25 @@ exports.putPoint = async function (req, res) {
     // }
     const editPointInfo = await pointService.editPoint({pointId}, {title, content, type, location, creature, date});
 
+
+}
+
+/**
+ * API No. 18
+ * API Name : 특정 포인트 삭제
+ * [DELETE] /app/points/:pointId
+ * path variable : pointId
+ */
+exports.deletePoint = async function (req, res) {
+    
+    const { pointId } = req.params;
+
+    // pointId 입력안했을때
+    if(!pointId || pointId === ':pointId'){
+        return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
+    }
+
+    const deletePointResponse = pointService.deletePoint(pointId);
+    return res.send(deletePointResponse);
 
 }

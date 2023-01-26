@@ -68,7 +68,7 @@ exports.userPointLike = async function (userId, pointId) {
     return errResponse(baseResponse.USER_USERID_NOT_EXIST);
 
   // Points 테이블에 포인트 존재 여부 확인
-  const pointRows = await pointProvider.retrievePoint(pointId);
+  const pointRows = await pointProvider.retrievePointById(pointId);
   console.log("pointRows", pointRows);
   if (pointRows.length < 1)
     return errResponse(baseResponse.POINT_POINTID_NOT_EXIST);
@@ -114,7 +114,7 @@ exports.userPointLikeCancel = async function (userId, pointId) {
     return errResponse(baseResponse.USER_USERID_NOT_EXIST);
 
   // Points 테이블에 포인트 존재 여부 확인
-  const pointRows = await pointProvider.retrievePoint(pointId);
+  const pointRows = await pointProvider.retrievePointById(pointId);
   console.log("pointRows", pointRows);
   if (pointRows.length < 1)
     return errResponse(baseResponse.POINT_POINTID_NOT_EXIST);

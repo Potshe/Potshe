@@ -87,3 +87,33 @@ exports.createPointImg = async function (pointId, imgUrl) {
 exports.editPoint = async function({pointId}, {title, content, type, location, creature, date}){
     
 }
+
+exports.deletePoint = async function(pointId) {
+    // Points 테이블에 존재하는 point인지 판별
+    const pointRows = await pointProvider.retrievePointById(pointId);
+    console.log("pointRows", pointRows);
+    if (pointRows.length < 1){
+        return errResponse(baseResponse.POINT_POINTID_NOT_EXIST);
+        // errResponse를 return 해줬는데도 그냥 {} 뜸..
+    }
+
+        try{
+
+            const connection = await pool.getConnection(async (conn) => conn);
+
+            const deletePointResult = await pointDao.deletePoint(
+                connection,
+                pointId,
+            );
+
+            connection.release();
+
+            return response(baseResponse.SUCCESS);
+
+        } catch(err) {
+            logger.error(`App - createPointImg Service error\n: ${err.message}`);
+            return errResponse(baseResponse.DB_ERROR);//왜인지 데이터베이스 에러가 뜨지만 추가는 됩니다... 뭘까용..
+        }
+
+
+}
