@@ -12,7 +12,7 @@ async function selectPointId(connection, pointId) {
 // 전체 포인트 조회
 async function selectPoints(connection) {
     const selectPointsQuery = `
-        select p.point_id as pointId, p.title, p.content, p.type, p.creature, p.date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList
+        select p.point_id as pointId, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList
         from Points as p left outer join (
             select point_id
             from User_point_likes
@@ -35,7 +35,7 @@ async function selectPoints(connection) {
 // 키워드 기반 포인트 조회
 async function selectPointsByKeyword(connection, keywordParams) {
     const selectPointsByKeywordQuery = `
-        select p.point_id as pointId, p.title, p.content, p.type, p.creature, p.date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList
+        select p.point_id as pointId, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList
         from Points as p left outer join (
             select point_id
             from User_point_likes
@@ -51,7 +51,7 @@ async function selectPointsByKeyword(connection, keywordParams) {
         ) as pi on pi.point_id = p.point_id
         where p.title like concat('%', ? , '%')
            or p.content like concat('%', ?, '%')
-           or p.type like concat('%', ?, '%')
+           or p.point_type like concat('%', ?, '%')
            or p.creature like concat('%', ?, '%')
            or p.location like concat('%', ?, '%')
         group by p.point_id`;
@@ -60,10 +60,22 @@ async function selectPointsByKeyword(connection, keywordParams) {
 }
 async function insertPoint(connection, insertPointParams) {
     const insertPointQuery = `
-    INSERT INTO Points(user_id, title, content, type, location, creature, date)
+    INSERT INTO Points(user_id, title, content, point_type, location, creature, point_date)
         VALUES (?, ?, ?, ?, ?, ?, ?);
     `;
     const updatePointRow = await connection.query(insertPointQuery, insertPointParams);
+    const lastInsertId = await connection.query(
+        `select point_id from Points order by created_at DESC limit 1;`
+    );
+    return lastInsertId[0];
+}
+
+async function insertPointImg(connection, insertPointImgParams) {
+    const insertPointImgQuery = `
+    INSERT INTO Point_images(point_id, image_url)
+        VALUES (?, ?);
+    `;
+    const updatePointRow = await connection.query(insertPointImgQuery, insertPointImgParams);
     return updatePointRow[0];
 }
 async function selectUserIdFromPoint(connection, pointId) {
@@ -74,11 +86,20 @@ async function selectUserIdFromPoint(connection, pointId) {
     return selectedUserIdRow[0];
 }
 
+async function selectLastInsertId(connection) {
+    const selectLastInsertIdQuery = `SELECT LAST_INSERT_ID();`;
+    const insertId = await connection.query(selectLastInsertIdQuery);
+    return insertId;
+}
+
 
 module.exports = {
     selectPointId,
     selectPoints,
     selectPointsByKeyword,
     insertPoint,
+    selectLastInsertId,
     selectUserIdFromPoint,
+    insertPointImg,
+
 };

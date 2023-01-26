@@ -26,6 +26,9 @@ const upload = multer({
       if (req_path.indexOf("users") != -1) {
         cb(null, `user/${Date.now()}_${file.originalname}`);
       }
+      else if(req_path.indexOf("points") != -1){
+        cb(null, `point/${Date.now()}_${file.originalname}`);
+      }
     },
     acl: "public-read-write",
   }),

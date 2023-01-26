@@ -2,33 +2,7 @@ const pointProvider = require("../Point/pointProvider");
 const pointService = require("../../app/Point/pointService");
 const baseResponse = require("../../../config/baseResponseStatus");
 const {response, errResponse} = require("../../../config/response");
-/**
- * API No. 1
- * API Name : 포인트 이미지 파일 업로드
- * [POST] /app/points/fileUpload
- * path variable : pointId
- * body : file
- */
-exports.postImage = async function (req, res) {
-
-    const { pointId } = req.params;
-    const filePath = req.file.location;
-
-    // 빈 값 체크
-    if (!pointId)
-        return res.send(response(baseResponse.POINT_POINTID_EMPTY));
-
-    if (!filePath)
-        return res.send(response(baseResponse.POINT_FILE_EMPTY));
-
-    const fileUploadResponse = await pointService.createImage(
-        pointId, filePath
-    );
-
-    return res.send(fileUploadResponse);
-};
-
-
+const {post} = require("axios");
 
 /**
  * API No. 16
@@ -44,12 +18,10 @@ exports.postImage = async function (req, res) {
  */
 exports.postPoints = async function (req, res) {
     /**
-     * Body : userId, title, content, type, location, creature, date
+     * Body : userId, title, content, point_type, location, creature, point_date
      */
-    const { title, content, type, location, creature, date} = req.body;
+    const { title, content, point_type, location, creature, point_date} = req.body;
     const userId = "c0997af2-96ff-11ed-931f-069e6ea2831c" //테스트할때 사용 아직 jwt 부분 없어서.. jwt 부분에 user_id 정보 남기기*/req.verifiedToken.userId;
-
-
 
     //빈 값 체크
     if (!title)
@@ -57,20 +29,34 @@ exports.postPoints = async function (req, res) {
     
     if(!content)
         return res.send(response(baseResponse.POINT_CONTENT_EMPTY));
-    if (!type)
+    if (!point_type)
         return res.send(response(baseResponse.POINT_TYPE_EMPTY));
     if(!location)
         return res.send(response(baseResponse.POINT_LOCATION_EMPTY));
     if (!creature)
         return res.send(response(baseResponse.POINT_CREATURE_EMPTY));
-    // if (!date)
-    //     return res.send(response(baseResponse.POINT_DATE_EMPTY));
+    if (!point_date)
+        return res.send(response(baseResponse.POINT_DATE_EMPTY));
 
-    const postResponse = await pointService.createPoint(
-        userId, title, content, type, location, creature, date
+
+    const postPointResponse = await pointService.createPoint(
+        userId, title, content, point_type, location, creature, point_date
     );
-    return res.send(postResponse);
+
+    console.log('req.files', req.files)
+
+    // 사용자가 포인트 등록할 때, image 까지 업로드 했을 경우에만
+    if(req.files){
+        req.files.map((item) => {
+            pointService.createPointImg(
+                postPointResponse.result.pointId, item.location
+            )
+        })
+    }
+
+    return res.send(postPointResponse)
 }
+
 /**
  * API No. 17
  * API Name : 특정 포인트 수정
