@@ -5,23 +5,26 @@ module.exports = function (app) {
   const user = require("./userController");
   const jwtMiddleware = require("../../../config/jwtMiddleware");
 
-  // 5. GET 모든 사용자 조회 API && 10. GET 닉네임 중복 여부 확인
+  // GET 모든 사용자 조회 API && GET 닉네임 중복 여부 확인
   app.get("/app/users", user.getUserProfile);
 
-  // 6. GET 특정 사용자 프로필 조회 API
+  // GET 특정 사용자 프로필 조회 API
   app.get("/app/users/:userId", user.getUserProfileById);
 
-  // 7. PUT 특정 사용자 프로필 수정 API
+  // PUT 특정 사용자 프로필 수정 API
   app.put(
     "/app/users/:userId",
     imageUploader.single("image"),
     user.editUserProfile
   );
 
-  // 8. POST 회원가입 시 사용자 프로필 생성 API
+  // POST 회원가입 시 사용자 프로필 생성 API
   app.post("/app/users", imageUploader.single("image"), user.createUserProfile);
 
-  // 9. GET 특정 사용자가 좋아요한 포인트 조회 API
+  // DELETE 회원 탈퇴
+  app.delete("/app/users", user.deleteUserProfile);
+
+  // GET 특정 사용자가 좋아요한 포인트 조회 API
   app.get("/app/users/:userId/likes", user.getUserLike);
 
   // 11. POST 특정 포인트에 좋아요 표시

@@ -42,8 +42,6 @@ exports.retrieveUser = async function (userId) {
   return userProfileResult;
 };
 
-// 닉네임 중복 여부 확인
-
 // 사용자가 좋아요한 포인트 결과 반환
 exports.retrieveUserLikeList = async function (userId) {
   const connection = await pool.getConnection(async (conn) => conn);
