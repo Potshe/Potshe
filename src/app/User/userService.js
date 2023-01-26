@@ -13,13 +13,13 @@ const crypto = require("crypto");
 const { connect } = require("http2");
 
 // Service: Create, Update, Delete 비즈니스 로직 처리
-
 exports.editUserProfile = async function (userId, nickname, imageUrl) {
-  // 존재하지 않는 유저면 error 메세지 return
+  // 사용자가 userId를 제공했으나, DB에서 유효하지 않은 userId인 경우 에러 처리
   const userRows = await userProvider.retrieveUser(userId);
   console.log("userRows", userRows);
-  if (userRows.length < 1)
+  if (userRows.length < 1) {
     return errResponse(baseResponse.USER_USERID_NOT_EXIST);
+  }
 
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -32,7 +32,7 @@ exports.editUserProfile = async function (userId, nickname, imageUrl) {
 
     connection.release();
 
-    return response(baseResponse.SUCCESS);
+    return response(baseResponse.SUCCESS, editUserProfileResult);
   } catch (err) {
     logger.error(`App - editUserProfile Service error\n: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
