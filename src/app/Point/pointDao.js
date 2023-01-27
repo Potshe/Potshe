@@ -63,8 +63,8 @@ async function insertPoint(connection, insertPointParams) {
     INSERT INTO Points(user_id, title, content, type, location, creature, date)
         VALUES (?, ?, ?, ?, ?, ?, ?);
     `;
-    const updatePointRow = await connection.query(insertPointQuery, insertPointParams);
-    return updatePointRow[0];
+    const insertPointRow = await connection.query(insertPointQuery, insertPointParams);
+    return insertPointRow[0];
 }
 async function selectUserIdFromPoint(connection, pointId) {
     const selectUserIdFromPointQuery = ` SELECT user_id
@@ -72,6 +72,13 @@ async function selectUserIdFromPoint(connection, pointId) {
     WHERE point_id = ?;`;
     const selectedUserIdRow = await connection.query(selectUserIdFromPointQuery, pointId);
     return selectedUserIdRow[0];
+}
+async function updatePoint(connection, editPointParams) {
+    const updatePointQuery = `UPDATE Points
+    SET title = ? ,content = ?, point_type = ?, location = ?, creature = ?, point_date = ?
+    WHERE point_id = ?`;
+    const updatePointRow = await connection.query(updatePointQuery, editPointParams);
+    return updatePointRow[0];
 }
 
 
@@ -81,4 +88,5 @@ module.exports = {
     selectPointsByKeyword,
     insertPoint,
     selectUserIdFromPoint,
+    updatePoint,
 };
