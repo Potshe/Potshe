@@ -32,20 +32,28 @@ exports.getPoints = async function (req, res) {
  * API Name : 특정 포인트 조회
  * [GET] /app/points/:pointId
  */
-exports.getPointById = async function (req, res) {
+exports.getPointByPointId = async function (req, res) {
 
     /**
      * path variable: pointId
      */
-
     const { pointId } = req.params
 
     if(!pointId || pointId === ':pointId'){
+
         return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
-    } else {
-        const pointResultById = await pointProvider.retrievePointById(pointId);
-        return res.send(response(baseResponse.SUCCESS, pointResultById));
     }
+    const pointResultById = await pointProvider.retrievePointById(pointId);
+    console.log('pointResultById')
+    console.log(pointResultById)
+
+    // 만약, 존재하지 않는 포인트면?
+    if(pointResultById.length === 0){
+        return res.send(errResponse(baseResponse.POINT_POINTID_NOT_EXIST));
+    }
+
+    return res.send(response(baseResponse.SUCCESS, pointResultById));
+
 
 }
 
@@ -148,3 +156,4 @@ exports.deletePoint = async function (req, res) {
     return res.send(deletePointResponse);
 
 }
+

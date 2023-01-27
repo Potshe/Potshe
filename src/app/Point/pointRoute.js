@@ -9,7 +9,9 @@ module.exports = function(app){
     app.get('/app/points', point.getPoints)
 
     // 15. 특정 포인트 조회 API
-    app.get('/app/points/:pointId', point.getPointById)
+    app.get('/app/points/:pointId', point.getPointByPointId)
+
+
 
     // 16. 포인트 생성 API
      app.post('/app/points', imageUploader.array("images", 5), point.postPoints);
@@ -19,6 +21,7 @@ module.exports = function(app){
 
     // 18. 포인트 삭제 API
     app.delete('/app/points/:pointId', point.deletePoint)
+
 
 
 

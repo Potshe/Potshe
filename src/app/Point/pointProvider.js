@@ -2,7 +2,7 @@ const { pool } = require("../../../config/database");
 const { logger } = require("../../../config/winston");
 const { response, errResponse} = require("../../../config/response");
 const baseResponse = require("../../../config/baseResponseStatus");
-
+const userProvider = require("../User/userProvider")
 
 const pointDao = require("./pointDao");
 
@@ -35,6 +35,8 @@ exports.retrievePointById = async function (pointId) {
     return pointListResult;
 
 };
+
+
 
 //포인트의 유저아이디 반환
 exports.getUserIdFromPoint = async function (pointId){

@@ -1,13 +1,15 @@
 // pointId 포인트 조회
 async function selectPointById(connection, pointId) {
-    const selectUserIdQuery = `
+    const selectPointIdQuery = `
                  SELECT point_id, title, content, point_type, creature, point_date, location 
                  FROM Points
                  WHERE point_id = ?;
                  `;
-    const [pointRow] = await connection.query(selectUserIdQuery, pointId);
+    const [pointRow] = await connection.query(selectPointIdQuery, pointId);
     return pointRow;
 }
+
+
 
 // 전체 포인트 조회
 async function selectPoints(connection) {
@@ -102,5 +104,5 @@ module.exports = {
     insertPoint,
     selectUserIdFromPoint,
     insertPointImg,
-    deletePoint
+    deletePoint,
 };

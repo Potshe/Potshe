@@ -6,6 +6,7 @@ const { response, errResponse } = require("../../../config/response");
 
 const regexEmail = require("regex-email");
 const { emit } = require("nodemon");
+const pointProvider = require("../Point/pointProvider");
 
 /**
  * API No. 5 & 10
@@ -215,6 +216,36 @@ exports.updateImage = async function (req, res) {
 
   return res.send(userImageUpdateResponse);
 };
+/**
+ * API No. 19
+ * API Name : 유저가 올린 포인트 조회
+ * [GET] /app/points/:userId
+ */
+exports.getPointByUserId = async function (req, res) {
+
+  /**
+   * path variable: userId
+   */
+
+  const { userId } = req.params
+
+  if(!userId || userId === ':userId'){
+    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+  }
+  else {
+    const pointResultByUserId = await userProvider.retrievePointByUserId(userId);
+
+    if(pointResultByUserId.length === 0){
+      return res.send(errResponse(baseResponse.USER_NOT_EXIST))
+    }
+
+    return res.send(response(baseResponse.SUCCESS, pointResultByUserId));
+  }
+
+
+
+}
+
 
 /** JWT 토큰 검증 API
  * [GET] /app/auto-login

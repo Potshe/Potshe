@@ -94,6 +94,7 @@ exports.deletePoint = async function(pointId) {
     console.log("pointRows", pointRows);
     if (pointRows.length < 1){
         return errResponse(baseResponse.POINT_POINTID_NOT_EXIST);
+        /* TODO */
         // errResponse를 return 해줬는데도 그냥 {} 뜸..
     }
 
