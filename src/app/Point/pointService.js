@@ -45,13 +45,17 @@ exports.createPoint = async function (userId, title, content, type, location, cr
     }
 }
 
-exports.editPoint = async function(pointId, title, content, pointType, location, creature, pointDate){
+exports.editPoint = async function(pointId, title, content, point_type, location, creature, point_date){
     try{
 
-    const connection = await pool.getConnection(async (conn) => conn);
-    const editPointParams = [title, content, pointType, location, creature, pointDate, pointId]
-    const editPointResult = await userDao.updatePoint(connection, editPointParams);
-    console.log(editPointResult);
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        const editPointParams = [title, content, point_type, location, creature, point_date, pointId]
+
+        const editPointResult = await pointDao.updatePoint(connection, editPointParams);
+        connection.release();
+  
+      return response(baseResponse.SUCCESS);
 
     } catch(err) {
         logger.error(`App - edtiPoint Service Error\n : ${error.message}`);

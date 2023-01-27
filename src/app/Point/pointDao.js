@@ -73,9 +73,10 @@ async function selectUserIdFromPoint(connection, pointId) {
     const selectedUserIdRow = await connection.query(selectUserIdFromPointQuery, pointId);
     return selectedUserIdRow[0];
 }
+
 async function updatePoint(connection, editPointParams) {
     const updatePointQuery = `UPDATE Points
-    SET title = ? ,content = ?, point_type = ?, location = ?, creature = ?, point_date = ?
+    SET title = ?, content = ?, point_type = ?, location = ?, creature = ?, point_date = ?
     WHERE point_id = ?`;
     const updatePointRow = await connection.query(updatePointQuery, editPointParams);
     return updatePointRow[0];

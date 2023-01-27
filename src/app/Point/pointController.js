@@ -79,20 +79,22 @@ exports.postPoints = async function (req, res) {
  * body : 
  */
 exports.putPoint = async function (req, res) {
-    const { title, content, pointType, location, creature, pointDate} = req.body;
-    //포인트의 userId와 jwt에 userId가 같은지 확인
-    const userIdFromUserInfo = req.user.id;
+    const { title, content, point_type, location, creature, point_date} = req.body;
+
+    //포인트의 userId와 req에 userId가 같은지 확인
+    //const userIdFromUserInfo = req.user.id;
     const pointId = req.params.pointId;
     console.log(pointId);
     const userIdFromPoint = pointProvider.getUserIdFromPoint(pointId);
     console.log(userIdFromPoint);
-    return res.send(userIdFromPoint);
-    // if (userIdFromUserInfo != userIdFromPoint) {
+
+    // if (userIdFromUserInfo != userIdFromPoint) {  //로그인한 유저와 포인트의 유저가 같지 않을 때 에러
     //     res.send(errResponse());
     // } else {
-    //     const editPointInfo = await pointService.editPoint(userIdFromJwt,pointId);
+    //     const editPointInfo = await pointService.editPoint(pointId, title, content, point_type, location, creature, point_date);
+    //           return res.send(editPointInfo)
     // }
-    const editPointInfo = await pointService.editPoint(pointId, title, content, pointType, location, creature, pointDate);
-
+    const editPointInfo = await pointService.editPoint(pointId, title, content, point_type, location, creature, point_date);//나중에 지우고 주석해제
+    return res.send(editPointInfo);
 
 }
