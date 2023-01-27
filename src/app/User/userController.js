@@ -18,11 +18,14 @@ exports.getUserProfile = async function (req, res) {
   if (!nickname) {
     // 모든 사용자 조회
     const userList = await userProvider.retrieveUserList();
-    return res.send(response(baseResponse.SUCCESS, userList));
+    return res.send(response(baseResponse.USER_PROFILE_SUCEESS, userList));
   } else {
     // 닉네임 중복 여부 확인
     const userListByNickname = await userProvider.retrieveUserList(nickname);
-    return res.send(response(baseResponse.SUCCESS, userListByNickname));
+    if (userListByNickname.length > 0) {
+      return res.send(errResponse(baseResponse.USER_NICKNAME_EXIST));
+    }
+    return res.send(response(baseResponse.USER_NICKNAME_SUCCESS));
   }
 };
 
@@ -45,7 +48,9 @@ exports.getUserProfileById = async function (req, res) {
     return res.send(errResponse(baseResponse.USER_NOT_EXIST));
   }
 
-  return res.send(response(baseResponse.SUCCESS, userByUserId));
+  return res.send(
+    response(baseResponse.USER_PROFILE_SUCCESS_BY_USERID, userByUserId)
+  );
 };
 
 /**
@@ -57,6 +62,9 @@ exports.editUserProfile = async function (req, res) {
   const userId = req.params.userId;
   const { nickname } = req.body;
   const filePath = req.file.location;
+
+  console.log(userId);
+  console.log(nickname);
 
   // userId가 없는 경우
   if (userId === ":userId") {
@@ -73,13 +81,13 @@ exports.editUserProfile = async function (req, res) {
     return res.send(baseResponse.FILE_INVALID_PATH);
   }
 
-  const editUserProfileInfo = await userService.editUserProfile(
+  const editUserProfileResult = await userService.editUserProfile(
     userId,
     nickname,
     filePath
   );
 
-  return res.send(editUserProfileInfo);
+  return res.send(editUserProfileResult);
 };
 
 /**

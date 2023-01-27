@@ -32,6 +32,31 @@ module.exports = {
     message: "포인트 수정 성공",
   },
   USER_DELETE_SUCCESS: { isSuccess: true, code: 17, message: "회원 탈퇴 완료" },
+  USER_PROFILE_SUCEESS: {
+    isSuccess: true,
+    code: 18,
+    message: "모든 사용자 정보 조회 성공",
+  },
+  USER_PROFILE_SUCCESS_BY_USERID: {
+    isSuccess: true,
+    code: 19,
+    message: "사용자 정보 조회 성공",
+  },
+  USER_PROFILE_SUCCESS_BY_USERID: {
+    isSuccess: true,
+    code: 19,
+    message: "사용자 정보 조회 성공",
+  },
+  USER_NICKNAME_SUCCESS: {
+    isSuccess: true,
+    code: 20,
+    message: "닉네임이 중복되지 않습니다.",
+  },
+  USER_PROFILE_UPDATE_SUCCESS: {
+    isSuccess: true,
+    code: 21,
+    message: "회원 정보 수정이 완료되었습니다.",
+  },
 
   // TOKEN
   TOKEN_EMPTY: {
@@ -48,39 +73,6 @@ module.exports = {
     isSuccess: true,
     code: 1001,
     message: "JWT 토큰 검증 성공",
-  },
-
-  // Success
-  SUCCESS: { isSuccess: true, code: 1000, message: "성공" },
-  USER_POINT_LIKE_SUCCESS: {
-    isSuccess: true,
-    code: 11,
-    message: "포인트에 좋아요 누르기 성공",
-  },
-  USER_POINT_LIKE_CANCEL_SUCCESS: {
-    isSuccess: true,
-    code: 12,
-    message: "포인트 좋아요 취소 성공",
-  },
-  POINT_SUCCESS: {
-    isSuccess: true,
-    code: 13,
-    message: "모든 포인트 조회 성공",
-  },
-  POINT_SUCCESS_BY_KEYWORD: {
-    isSuccess: true,
-    code: 14,
-    message: "특정 포인트 키워드 기반 검색 성공",
-  },
-  USER_PROFILE_IMAGE_SUCCESS: {
-    isSuccess: true,
-    code: 15,
-    message: "유저 이미지 수정 완료",
-  },
-  POINT_EDIT_SUCCESS: {
-    isSuccess: true,
-    code: 16,
-    message: "포인트 수정 성공",
   },
 
   // Common
@@ -188,6 +180,11 @@ module.exports = {
     isSuccess: false,
     code: 2017,
     message: "변경할 닉네임 값을 입력해주세요",
+  },
+  USER_NICKNAME_EXIST: {
+    isSuccess: false,
+    code: 2018,
+    message: "닉네임이 중복됩니다.",
   },
 
   USER_STATUS_EMPTY: {
