@@ -23,6 +23,17 @@ async function selectUserProfileById(connection, userId) {
   return userRows;
 }
 
+// userId로 포인트 조회
+async function selectPointByUserId(connection, userId) {
+  const selectUserIdQuery = `
+                 SELECT point_id, title, content, point_type, creature, point_date, location 
+                 FROM Points
+                 WHERE user_id = ?;
+                 `;
+  const [pointRow] = await connection.query(selectUserIdQuery, userId);
+  return pointRow;
+}
+
 //
 async function updateUserProfile(connection, userId, nickname, imageUrl) {
   const updateUserProfileQuery = `UPDATE Users SET nickname = ?, image_url = ? WHERE user_id=?;`;
@@ -53,7 +64,7 @@ async function deleteUserProfile(connection, userId) {
 
 async function selectUserLike(connection, userId) {
   const selectUserLikeQuery = `
-  SELECT Points.title, Points.content, Points.location, Points.creature, Points.date, Points.created_at 
+  SELECT Points.title, Points.content, Points.location, Points.creature, Points.point_date, Points.created_at 
   from Points 
   LEFT JOIN User_point_likes 
   on Points.point_id=User_point_likes.point_id 
@@ -126,5 +137,7 @@ module.exports = {
   insertUserPointLike,
   selectUserPointLike,
   deleteUserPointLike,
+  selectPointByUserId,
   updateUserPointLike,
+
 };

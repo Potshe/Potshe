@@ -1,5 +1,6 @@
 const user = require("./userController");
 const imageUploader = require("../../../config/imageUploader");
+const point = require("../Point/pointController");
 
 module.exports = function (app) {
   const user = require("./userController");
@@ -39,6 +40,9 @@ module.exports = function (app) {
     imageUploader.single("image"),
     user.updateImage
   );
+
+  // 19. 유저가 올린 포인트 조회 API
+  app.get('/app/users/:userId/points', user.getPointByUserId)
 
   // // TODO: After 로그인 인증 방법 (JWT)
   // // 로그인 하기 API (JWT 생성)

@@ -4,6 +4,7 @@ const { logger } = require("../../../config/winston");
 const userDao = require("./userDao");
 const { errResponse } = require("../../../config/response");
 const baseResponse = require("../../../config/baseResponseStatus");
+const pointDao = require("../Point/pointDao");
 
 // Provider: Read 비즈니스 로직 처리
 
@@ -64,4 +65,14 @@ exports.retrieveUserPointLike = async function (userId, pointId) {
   connection.release();
 
   return userPointLikeResult;
+};
+
+// 유저아이디 기반 포인트 반환
+exports.retrievePointByUserId = async function (userId) {
+
+  const connection = await pool.getConnection(async (conn) => conn);
+  const pointListResult = await userDao.selectPointByUserId(connection, userId);
+  connection.release();
+  return pointListResult;
+
 };
