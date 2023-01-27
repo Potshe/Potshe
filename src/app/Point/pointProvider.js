@@ -1,8 +1,8 @@
 const { pool } = require("../../../config/database");
 const { logger } = require("../../../config/winston");
-const { response } = require("../../../config/response");
+const { response, errResponse} = require("../../../config/response");
 const baseResponse = require("../../../config/baseResponseStatus");
-
+const userProvider = require("../User/userProvider")
 
 const pointDao = require("./pointDao");
 
@@ -15,7 +15,7 @@ exports.retrievePoint = async function (keyword) {
         const pointListResult = await pointDao.selectPoints(connection);
         connection.release();
 
-        return response(baseResponse.POINT_SUCCESS, pointListResult);
+        return pointListResult;
 
     } else {
         const connection = await pool.getConnection(async (conn) => conn);
@@ -23,9 +23,20 @@ exports.retrievePoint = async function (keyword) {
         const pointListResultByKeyword = await pointDao.selectPointsByKeyword(connection, keywordParams);
         connection.release();
 
-        return response(baseResponse.POINT_SUCCESS_BY_KEYWORD, pointListResultByKeyword);
+        return pointListResultByKeyword;
     }
 };
+
+exports.retrievePointById = async function (pointId) {
+
+    const connection = await pool.getConnection(async (conn) => conn);
+    const pointListResult = await pointDao.selectPointById(connection, pointId);
+    connection.release();
+    return pointListResult;
+
+};
+
+
 
 //포인트의 유저아이디 반환
 exports.getUserIdFromPoint = async function (pointId){
