@@ -1,5 +1,30 @@
+/*
+1. POINT
+SUCCESS
+FAILURE
+
+2. USER
+SUCCESS
+FAILURE
+
+3. 회원 가입
+SUCCESS
+FAILURE
+
+4. 로그인
+SUCCESS
+FAILURE
+
+- TOKEN
+SUCCESS
+FAILURE
+
+5. Connection, Transaction 등의 서버 오류
+
+*/
+
 module.exports = {
-  // SUCCESS
+  // POINT - SUCCESS
   SUCCESS: { isSuccess: true, code: 1000, message: "성공" },
   USER_POINT_LIKE_SUCCESS: {
     isSuccess: true,
@@ -21,178 +46,13 @@ module.exports = {
     code: 14,
     message: "특정 포인트 키워드 기반 검색 성공",
   },
-  USER_PROFILE_IMAGE_SUCCESS: {
-    isSuccess: true,
-    code: 15,
-    message: "유저 이미지 수정 완료",
-  },
   POINT_EDIT_SUCCESS: {
     isSuccess: true,
-    code: 16,
+    code: 15,
     message: "포인트 수정 성공",
   },
-  USER_DELETE_SUCCESS: { isSuccess: true, code: 17, message: "회원 탈퇴 완료" },
-  USER_PROFILE_SUCEESS: {
-    isSuccess: true,
-    code: 18,
-    message: "모든 사용자 정보 조회 성공",
-  },
-  USER_PROFILE_SUCCESS_BY_USERID: {
-    isSuccess: true,
-    code: 19,
-    message: "사용자 정보 조회 성공",
-  },
-  USER_PROFILE_SUCCESS_BY_USERID: {
-    isSuccess: true,
-    code: 19,
-    message: "사용자 정보 조회 성공",
-  },
-  USER_NICKNAME_SUCCESS: {
-    isSuccess: true,
-    code: 20,
-    message: "닉네임이 중복되지 않습니다.",
-  },
-  USER_PROFILE_UPDATE_SUCCESS: {
-    isSuccess: true,
-    code: 21,
-    message: "회원 정보 수정이 완료되었습니다.",
-  },
 
-  // TOKEN
-  TOKEN_EMPTY: {
-    isSuccess: false,
-    code: 2000,
-    message: "JWT 토큰을 입력해주세요.",
-  },
-  TOKEN_VERIFICATION_FAILURE: {
-    isSuccess: false,
-    code: 3000,
-    message: "JWT 토큰 검증 실패",
-  },
-  TOKEN_VERIFICATION_SUCCESS: {
-    isSuccess: true,
-    code: 1001,
-    message: "JWT 토큰 검증 성공",
-  },
-
-  // Common
-  TOKEN_EMPTY: {
-    isSuccess: false,
-    code: 2000,
-    message: "JWT 토큰을 입력해주세요.",
-  },
-  TOKEN_VERIFICATION_FAILURE: {
-    isSuccess: false,
-    code: 3000,
-    message: "JWT 토큰 검증 실패",
-  },
-  TOKEN_VERIFICATION_SUCCESS: {
-    isSuccess: true,
-    code: 1001,
-    message: "JWT 토큰 검증 성공",
-  }, // ?
-
-  // Request Error
-  SIGNUP_EMAIL_EMPTY: {
-    isSuccess: false,
-    code: 2001,
-    message: "이메일을 입력해주세요",
-  },
-  SIGNUP_EMAIL_LENGTH: {
-    isSuccess: false,
-    code: 2002,
-    message: "이메일은 30자리 미만으로 입력해주세요.",
-  },
-  SIGNUP_EMAIL_ERROR_TYPE: {
-    isSuccess: false,
-    code: 2003,
-    message: "이메일을 형식을 정확하게 입력해주세요.",
-  },
-  SIGNUP_PASSWORD_EMPTY: {
-    isSuccess: false,
-    code: 2004,
-    message: "비밀번호를 입력 해주세요.",
-  },
-  SIGNUP_PASSWORD_LENGTH: {
-    isSuccess: false,
-    code: 2005,
-    message: "비밀번호는 6~20자리를 입력해주세요.",
-  },
-  SIGNUP_NICKNAME_EMPTY: {
-    isSuccess: false,
-    code: 2006,
-    message: "닉네임을 입력 해주세요.",
-  },
-  SIGNUP_NICKNAME_LENGTH: {
-    isSuccess: false,
-    code: 2007,
-    message: "닉네임은 최대 20자리를 입력해주세요.",
-  },
-
-  SIGNIN_EMAIL_EMPTY: {
-    isSuccess: false,
-    code: 2008,
-    message: "이메일을 입력해주세요",
-  },
-  SIGNIN_EMAIL_LENGTH: {
-    isSuccess: false,
-    code: 2009,
-    message: "이메일은 30자리 미만으로 입력해주세요.",
-  },
-  SIGNIN_EMAIL_ERROR_TYPE: {
-    isSuccess: false,
-    code: 2010,
-    message: "이메일을 형식을 정확하게 입력해주세요.",
-  },
-  SIGNIN_PASSWORD_EMPTY: {
-    isSuccess: false,
-    code: 2011,
-    message: "비밀번호를 입력 해주세요.",
-  },
-
-  USER_USERID_EMPTY: {
-    isSuccess: false,
-    code: 2012,
-    message: "userId를 입력해주세요.",
-  },
-  USER_USERID_NOT_EXIST: {
-    isSuccess: false,
-    code: 2013,
-    message: "해당 회원이 존재하지 않습니다.",
-  },
-
-  USER_USEREMAIL_EMPTY: {
-    isSuccess: false,
-    code: 2014,
-    message: "이메일을 입력해주세요.",
-  },
-  USER_USEREMAIL_NOT_EXIST: {
-    isSuccess: false,
-    code: 2015,
-    message: "해당 이메일을 가진 회원이 존재하지 않습니다.",
-  },
-  USER_ID_NOT_MATCH: {
-    isSuccess: false,
-    code: 2016,
-    message: "유저 아이디 값을 확인해주세요",
-  },
-  USER_NICKNAME_EMPTY: {
-    isSuccess: false,
-    code: 2017,
-    message: "변경할 닉네임 값을 입력해주세요",
-  },
-  USER_NICKNAME_EXIST: {
-    isSuccess: false,
-    code: 2018,
-    message: "닉네임이 중복됩니다.",
-  },
-
-  USER_STATUS_EMPTY: {
-    isSuccess: false,
-    code: 2018,
-    message: "회원 상태값을 입력해주세요",
-  },
-
+  // POINT - FAILURE
   POINT_POINTID_EMPTY: {
     isSuccess: false,
     code: 2019,
@@ -250,14 +110,130 @@ module.exports = {
     code: 2029,
     message: "포인트에 해루질 한 날짜를 입력해주세요.",
   },
-
   FILE_INVALID_PATH: {
     isSuccess: false,
     code: 2030,
     message: "유효하지 않은 파일 경로 입니다.",
   },
 
-  // Response Error
+  // USER - SUCCESS
+  USER_PROFILES_SUCEESS: {
+    isSuccess: true,
+    code: 101,
+    message: "모든 사용자 정보 조회 성공",
+  },
+  USER_PROFILE_SUCCESS: {
+    isSuccess: true,
+    code: 104,
+    message: "사용자 정보 조회 성공",
+  },
+  USER_PROFILE_IMAGE_SUCCESS: {
+    isSuccess: true,
+    code: 101,
+    message: "유저 이미지 수정 완료",
+  },
+  USER_DELETE_SUCCESS: { isSuccess: true, code: 17, message: "회원 탈퇴 완료" },
+  USER_NICKNAME_SUCCESS: {
+    isSuccess: true,
+    code: 105,
+    message: "닉네임이 중복되지 않습니다.",
+  },
+  USER_PROFILE_UPDATE_SUCCESS: {
+    isSuccess: true,
+    code: 106,
+    message: "회원 정보 수정이 완료되었습니다.",
+  },
+
+  // USER - FAILURE
+  USER_USERID_EMPTY: {
+    isSuccess: false,
+    code: 151,
+    message: "userId를 입력해주세요.",
+  },
+  USER_USERID_NOT_EXIST: {
+    isSuccess: false,
+    code: 152,
+    message: "해당 회원이 존재하지 않습니다.",
+  },
+  USER_USEREMAIL_EMPTY: {
+    isSuccess: false,
+    code: 153,
+    message: "이메일을 입력해주세요.",
+  },
+  USER_USEREMAIL_NOT_EXIST: {
+    isSuccess: false,
+    code: 154,
+    message: "해당 이메일을 가진 회원이 존재하지 않습니다.",
+  },
+  USER_ID_NOT_MATCH: {
+    isSuccess: false,
+    code: 155,
+    message: "유저 아이디 값을 확인해주세요",
+  },
+  USER_NICKNAME_EMPTY: {
+    isSuccess: false,
+    code: 156,
+    message: "변경할 닉네임 값을 입력해주세요",
+  },
+  USER_NICKNAME_EXIST: {
+    isSuccess: false,
+    code: 157,
+    message: "닉네임이 중복됩니다.",
+  },
+  USER_STATUS_EMPTY: {
+    isSuccess: false,
+    code: 158,
+    message: "회원 상태값을 입력해주세요",
+  },
+  USER_NOT_EXIST: {
+    isSuccess: false,
+    code: 159,
+    message: "존재하지 않는 유저입니다.",
+  },
+
+  // 회원가입 - SUCCESS
+  SINGUP_SUCCESS: {
+    isSuccess: true,
+    code: 1901,
+    message: "회원가입이 완료되었습니다.",
+  },
+
+  // 회원가입 - FAILURE
+  SIGNUP_EMAIL_EMPTY: {
+    isSuccess: false,
+    code: 2001,
+    message: "이메일을 입력해주세요",
+  },
+  SIGNUP_EMAIL_LENGTH: {
+    isSuccess: false,
+    code: 2002,
+    message: "이메일은 30자리 미만으로 입력해주세요.",
+  },
+  SIGNUP_EMAIL_ERROR_TYPE: {
+    isSuccess: false,
+    code: 2003,
+    message: "이메일을 형식을 정확하게 입력해주세요.",
+  },
+  SIGNUP_PASSWORD_EMPTY: {
+    isSuccess: false,
+    code: 2004,
+    message: "비밀번호를 입력 해주세요.",
+  },
+  SIGNUP_PASSWORD_LENGTH: {
+    isSuccess: false,
+    code: 2005,
+    message: "비밀번호는 6~20자리를 입력해주세요.",
+  },
+  SIGNUP_NICKNAME_EMPTY: {
+    isSuccess: false,
+    code: 2006,
+    message: "닉네임을 입력 해주세요.",
+  },
+  SIGNUP_NICKNAME_LENGTH: {
+    isSuccess: false,
+    code: 2007,
+    message: "닉네임은 최대 20자리를 입력해주세요.",
+  },
   SIGNUP_REDUNDANT_EMAIL: {
     isSuccess: false,
     code: 3001,
@@ -269,6 +245,7 @@ module.exports = {
     message: "중복된 닉네임입니다.",
   },
 
+  // 로그인 - FAILURE
   SIGNIN_EMAIL_WRONG: {
     isSuccess: false,
     code: 3003,
@@ -290,10 +267,21 @@ module.exports = {
     message: "탈퇴 된 계정입니다. 고객센터에 문의해주세요.",
   },
 
-  USER_NOT_EXIST: {
+  // TOKEN - SUCCESS
+  TOKEN_EMPTY: {
     isSuccess: false,
-    code: 3006,
-    message: "존재하지 않는 유저입니다.",
+    code: 2000,
+    message: "JWT 토큰을 입력해주세요.",
+  },
+  TOKEN_VERIFICATION_FAILURE: {
+    isSuccess: false,
+    code: 3000,
+    message: "JWT 토큰 검증 실패",
+  },
+  TOKEN_VERIFICATION_SUCCESS: {
+    isSuccess: true,
+    code: 1001,
+    message: "JWT 토큰 검증 성공",
   },
 
   // Connection, Transaction 등의 서버 오류

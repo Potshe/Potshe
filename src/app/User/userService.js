@@ -14,13 +14,6 @@ const { connect } = require("http2");
 
 // Service: Create, Update, Delete 비즈니스 로직 처리
 exports.editUserProfile = async function (userId, nickname, imageUrl) {
-  // 사용자가 userId를 제공했으나, DB에서 유효하지 않은 userId인 경우 에러 처리
-  const userRows = await userProvider.retrieveUser(userId);
-  console.log("userRows", userRows);
-  if (userRows.length < 1) {
-    return errResponse(baseResponse.USER_USERID_NOT_EXIST);
-  }
-
   try {
     const connection = await pool.getConnection(async (conn) => conn);
     const editUserProfileResult = await userDao.updateUserProfile(
@@ -48,12 +41,9 @@ exports.createUserProfile = async function (nickname, filePath) {
       insertUserProfileParams
     );
 
-    // console.log(userIdResult);
-    console.log(`추가된 회원 : ${createUserResult[0].affectedRows}`);
-
     connection.release();
 
-    return response(baseResponse.SUCCESS);
+    return createUserResult;
   } catch (err) {
     logger.error(`App - createUserProfile Service error\n: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
@@ -102,7 +92,9 @@ exports.userPointLike = async function (userId, pointId) {
 exports.dltUserProfile = async function (userId) {
   const connection = await pool.getConnection(async (conn) => conn);
   const deletedResult = userDao.deleteUserProfile(connection, userId);
+
   connection.release();
+
   return deletedResult;
 };
 

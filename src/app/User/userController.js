@@ -9,7 +9,7 @@ const { emit } = require("nodemon");
 const pointProvider = require("../Point/pointProvider");
 
 /**
- * API No. 5 & 10
+ * API No.
  * API Name : 모든 사용자 조회 & 닉네임 중복 여부 확인
  * [GET] /users + (/?nickname="?")
  */
@@ -19,11 +19,11 @@ exports.getUserProfile = async function (req, res) {
   if (!nickname) {
     // 모든 사용자 조회
     const userList = await userProvider.retrieveUserList();
-    return res.send(response(baseResponse.USER_PROFILE_SUCEESS, userList));
+    return res.send(response(baseResponse.USER_PROFILES_SUCEESS, userList));
   } else {
     // 닉네임 중복 여부 확인
-    const userListByNickname = await userProvider.retrieveUserList(nickname);
-    if (userListByNickname.length > 0) {
+    const userList = await userProvider.retrieveUserList(nickname);
+    if (userList.length > 0) {
       return res.send(errResponse(baseResponse.USER_NICKNAME_EXIST));
     }
     return res.send(response(baseResponse.USER_NICKNAME_SUCCESS));
@@ -31,45 +31,39 @@ exports.getUserProfile = async function (req, res) {
 };
 
 /**
- * API No. 6
+ * API No.
  * API Name : 사용자 프로필 조회
  * [GET] /users/:userId
  */
 exports.getUserProfileById = async function (req, res) {
   const userId = req.params.userId;
 
-  // userId가 없는 경우
-  if (userId === ":userId")
-    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+  const user = await userProvider.retrieveUser(userId);
 
-  const userByUserId = await userProvider.retrieveUser(userId);
+  console.log("user", user);
 
   // 찾고자 하는 유저가 없을 경우
-  if (!userByUserId) {
+  if (user.length === 0) {
     return res.send(errResponse(baseResponse.USER_NOT_EXIST));
   }
 
-  return res.send(
-    response(baseResponse.USER_PROFILE_SUCCESS_BY_USERID, userByUserId)
-  );
+  return res.send(response(baseResponse.USER_PROFILE_SUCCESS, user[0]));
 };
 
 /**
- * API No. 7
+ * API No.
  * API Name : 사용자 프로필 수정
  * [PUT] /users/:userId
  */
 exports.editUserProfile = async function (req, res) {
-  const userId = req.params.userId;
-  const { nickname } = req.body;
-  const filePath = req.file.location;
+  const userId = req.params.userId; // 유저 아이디
+  const { nickname } = req.body; // 닉네임
+  const filePath = req.file.location; // 파일 경로
 
-  console.log(userId);
-  console.log(nickname);
-
-  // userId가 없는 경우
-  if (userId === ":userId") {
-    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+  // 유효하지 않은 userId라면 에러 처리
+  const userRows = await userProvider.retrieveUser(userId);
+  if (userRows.length === 0) {
+    return res.send(errResponse(baseResponse.USER_USERID_NOT_EXIST));
   }
 
   // nickname이 없는 경우
@@ -82,17 +76,26 @@ exports.editUserProfile = async function (req, res) {
     return res.send(baseResponse.FILE_INVALID_PATH);
   }
 
-  const editUserProfileResult = await userService.editUserProfile(
+  const editedUser = await userService.editUserProfile(
     userId,
     nickname,
     filePath
   );
 
-  return res.send(editUserProfileResult);
+  console.log("editedUser", editedUser);
+
+  // 수정이 되지 않았을 경우
+  if (editedUser.affectedRows === 0) {
+    return res.send(errResponse(baseResponse.USER_NOT_EXIST));
+  }
+
+  return res.send(
+    response(baseResponse.USER_PROFILE_UPDATE_SUCCESS, editedUser)
+  );
 };
 
 /**
- * API No. 8
+ * API No.
  * API Name : 회원가입 시 사용자 프로필 생성
  * [POST] /users
  */
@@ -102,24 +105,50 @@ exports.createUserProfile = async function (req, res) {
 
   // nickname이 없는 경우
   if (!nickname) {
-    return res.send(baseResponse.SIGNUP_NICKNAME_EMPTY);
+    return res.send(errResponse(baseResponse.SIGNUP_NICKNAME_EMPTY));
   }
 
   // 유효하지 않은 파일 경로일 경우
   if (!filePath) {
-    return res.send(baseResponse.FILE_INVALID_PATH);
+    return res.send(errResponse(baseResponse.FILE_INVALID_PATH));
   }
 
-  const createUserResponse = await userService.createUserProfile(
-    nickname,
-    filePath
-  );
+  const createdUser = await userService.createUserProfile(nickname, filePath);
 
-  return res.send(response(createUserResponse));
+  // 회원가입이 완료되지 않았을 경우
+  if (createdUser.affectedRows === 0) {
+    return res.send(errResponse(baseResponse.USER_NOT_EXIST));
+  }
+
+  return res.send(response(baseResponse.SINGUP_SUCCESS, createdUser));
 };
 
 /**
- * API No. 9
+ * API No. ?
+ * API Name : 회원 탈퇴
+ * [DELETE] /user
+ */
+exports.deleteUserProfile = async function (req, res) {
+  const { userId } = req.body;
+
+  // 유효하지 않은 userId라면 에러 처리
+  const userRows = await userProvider.retrieveUser(userId);
+  if (userRows.length === 0) {
+    return res.send(errResponse(baseResponse.USER_USERID_NOT_EXIST));
+  }
+
+  const deletedUser = await userService.dltUserProfile(userId);
+
+  // 회원탈퇴가 완료되지 않은 경우
+  if (deletedUser.affectedRows === 0) {
+    return res.send(errResponse(baseResponse.USER_NOT_EXIST));
+  }
+
+  res.send(response(baseResponse.USER_DELETE_SUCCESS, deletedUser));
+};
+
+/**
+ * API No.
  * API Name : 사용자가 좋아요한 포인트 조회
  * [POST] /users/:userId/likes
  */
@@ -134,19 +163,6 @@ exports.getUserLike = async function (req, res) {
   const userLikeList = await userProvider.retrieveUserLikeList(userId);
 
   res.send(response(baseResponse.SUCCESS, userLikeList));
-};
-
-/**
- * API No. ?
- * API Name : 회원 탈퇴
- * [DELETE] /user
- */
-exports.deleteUserProfile = async function (req, res) {
-  const { userId } = req.body;
-
-  const deletedResult = await userService.dltUserProfile(userId);
-
-  res.send(response(baseResponse.USER_DELETE_SUCCESS, deletedResult));
 };
 
 /**
@@ -230,30 +246,26 @@ exports.updateImage = async function (req, res) {
  * [GET] /app/points/:userId
  */
 exports.getPointByUserId = async function (req, res) {
-
   /**
    * path variable: userId
    */
 
-  const { userId } = req.params
+  const { userId } = req.params;
 
-  if(!userId || userId === ':userId'){
+  if (!userId || userId === ":userId") {
     return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-  }
-  else {
-    const pointResultByUserId = await userProvider.retrievePointByUserId(userId);
+  } else {
+    const pointResultByUserId = await userProvider.retrievePointByUserId(
+      userId
+    );
 
-    if(pointResultByUserId.length === 0){
-      return res.send(errResponse(baseResponse.USER_NOT_EXIST))
+    if (pointResultByUserId.length === 0) {
+      return res.send(errResponse(baseResponse.USER_NOT_EXIST));
     }
 
     return res.send(response(baseResponse.SUCCESS, pointResultByUserId));
   }
-
-
-
-}
-
+};
 
 /** JWT 토큰 검증 API
  * [GET] /app/auto-login

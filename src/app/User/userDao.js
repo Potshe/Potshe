@@ -52,7 +52,7 @@ async function insertUserProfile(connection, insertUserProfileParams) {
     insertUserProfileParams
   );
 
-  return userRows;
+  return userRows[0];
 }
 
 // 유저 프로필 삭제
@@ -139,5 +139,4 @@ module.exports = {
   deleteUserPointLike,
   selectPointByUserId,
   updateUserPointLike,
-
 };
