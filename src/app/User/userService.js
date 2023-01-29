@@ -32,9 +32,9 @@ exports.editUserProfile = async function (userId, nickname, imageUrl) {
   }
 };
 
-exports.createUserProfile = async function (nickname, filePath) {
+exports.createUserProfile = async function ({ kakaoId, nickname, filePath }) {
   try {
-    const insertUserProfileParams = [nickname, filePath];
+    const insertUserProfileParams = [kakaoId, nickname, filePath];
     const connection = await pool.getConnection(async (conn) => conn);
     const createUserResult = await userDao.insertUserProfile(
       connection,

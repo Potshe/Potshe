@@ -3,7 +3,7 @@ exports.insertUserProfile = async function (
   connection,
   insertUserProfileParams
 ) {
-  const insertUserProfileQuery = `INSERT INTO Users(nickname, image_url) VALUES (?, ?);`;
+  const insertUserProfileQuery = `INSERT INTO Users(kakao_id, nickname, image_url) VALUES (?, ?, ?);`;
   const userRows = await connection.query(
     insertUserProfileQuery,
     insertUserProfileParams
@@ -34,6 +34,13 @@ exports.selectUserProfileByNickname = async function (connection, nickname) {
 exports.selectUserProfileById = async function (connection, userId) {
   const selectUserProfileByIdQuery = "SELECT * FROM Users WHERE user_id = ?";
   const [userRows] = await connection.query(selectUserProfileByIdQuery, userId);
+  return userRows;
+};
+
+// 카카오 아이디로 유저 프로필 조회
+exports.selectUserProfileByKakaoId = async function (connection, kakaoId) {
+  const query = "SELECT * FROM Users WHERE kakao_id = ?";
+  const [userRows] = await connection.query(query, kakaoId);
   return userRows;
 };
 

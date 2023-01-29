@@ -15,6 +15,7 @@ const pointProvider = require("../Point/pointProvider");
  */
 exports.getUserProfile = async function (req, res) {
   const nickname = req.query.nickname;
+  console.log("req.user -> ", req.user);
 
   if (!nickname) {
     // 모든 사용자 조회

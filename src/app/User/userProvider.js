@@ -43,6 +43,17 @@ exports.retrieveUser = async function (userId) {
   return userProfileResult;
 };
 
+// 카카오 아이디로 특정 사용자 프로필 조회 결과 반환
+exports.retrieveUserByKakaoId = async function (kakaoId) {
+  const connection = await pool.getConnection(async (conn) => conn);
+
+  const result = await userDao.selectUserProfileByKakaoId(connection, kakaoId);
+
+  connection.release();
+
+  return result;
+};
+
 // 사용자가 좋아요한 포인트 결과 반환
 exports.retrieveUserLikeList = async function (userId) {
   const connection = await pool.getConnection(async (conn) => conn);
