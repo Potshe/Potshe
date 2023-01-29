@@ -190,6 +190,11 @@ module.exports = {
     code: 159,
     message: "존재하지 않는 유저입니다.",
   },
+  USER_POINT_LIKE_NOT_EXIST: {
+    isSuccess: false,
+    code: 160,
+    message: "아직 좋아요한 포인트가 없네용.. ㅠ.ㅠ",
+  },
 
   // 회원가입 - SUCCESS
   SINGUP_SUCCESS: {

@@ -144,25 +144,30 @@ exports.deleteUserProfile = async function (req, res) {
     return res.send(errResponse(baseResponse.USER_NOT_EXIST));
   }
 
-  res.send(response(baseResponse.USER_DELETE_SUCCESS, deletedUser));
+  return res.send(response(baseResponse.USER_DELETE_SUCCESS, deletedUser));
 };
 
 /**
  * API No.
  * API Name : 사용자가 좋아요한 포인트 조회
- * [POST] /users/:userId/likes
+ * [GET] /users/:userId/likes
  */
 exports.getUserLike = async function (req, res) {
   const userId = req.params.userId;
 
-  // userId가 없는 경우
-  if (userId === ":userId") {
-    return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
+  // 유효하지 않은 userId라면 에러 처리
+  const userRows = await userProvider.retrieveUser(userId);
+  if (userRows.length === 0) {
+    return res.send(errResponse(baseResponse.USER_USERID_NOT_EXIST));
   }
 
   const userLikeList = await userProvider.retrieveUserLikeList(userId);
 
-  res.send(response(baseResponse.SUCCESS, userLikeList));
+  if (userLikeList.length === 0) {
+    return res.send(errResponse(baseResponse.USER_POINT_LIKE_NOT_EXIST));
+  }
+
+  return res.send(response(baseResponse.SUCCESS, userLikeList));
 };
 
 /**
