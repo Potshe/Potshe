@@ -6,6 +6,7 @@ module.exports = function () {
   const passport = require("passport");
   const cookieParser = require("cookie-parser");
   const session = require("express-session");
+  const path = require("path");
   var cors = require("cors");
   const dotenv = require("dotenv");
 
@@ -14,6 +15,9 @@ module.exports = function () {
   const app = express();
   const passportConfig = require("../passport");
   passportConfig();
+  app.set("views", path.join(__dirname, "..", "/views"));
+  app.set("view engine", "ejs");
+  app.engine("html", require("ejs").renderFile);
 
   app.use(morgan("dev"));
   app.use(compression());

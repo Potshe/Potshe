@@ -22,7 +22,7 @@ module.exports = () => {
             done(null, exUser[0]);
           } else {
             // 회원가입
-            const result = await userService.createUserProfile({
+            const result = await userService.createUserProfileInKakao({
               kakaoId: profile.id,
               nickname: profile.displayName,
               // 기본이미지

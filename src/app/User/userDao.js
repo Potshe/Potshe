@@ -3,7 +3,7 @@ exports.insertUserProfile = async function (
   connection,
   insertUserProfileParams
 ) {
-  const insertUserProfileQuery = `INSERT INTO Users(kakao_id, nickname, image_url) VALUES (?, ?, ?);`;
+  const insertUserProfileQuery = `INSERT INTO Users(nickname, image_url) VALUES (?, ?);`;
   const userRows = await connection.query(
     insertUserProfileQuery,
     insertUserProfileParams

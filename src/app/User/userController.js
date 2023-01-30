@@ -114,7 +114,10 @@ exports.createUserProfile = async function (req, res) {
     return res.send(errResponse(baseResponse.FILE_INVALID_PATH));
   }
 
-  const createdUser = await userService.createUserProfile(nickname, filePath);
+  const createdUser = await userService.createUserProfile({
+    nickname,
+    filePath,
+  });
 
   // 회원가입이 완료되지 않았을 경우
   if (createdUser.affectedRows === 0) {

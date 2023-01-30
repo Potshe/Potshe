@@ -13,6 +13,47 @@ const crypto = require("crypto");
 const { connect } = require("http2");
 
 // Service: Create, Update, Delete 비즈니스 로직 처리
+
+exports.createUserProfile = async function ({ nickname, filePath }) {
+  try {
+    const insertUserProfileParams = [nickname, filePath];
+    const connection = await pool.getConnection(async (conn) => conn);
+    const createUserResult = await userDao.insertUserProfile(
+      connection,
+      insertUserProfileParams
+    );
+
+    connection.release();
+
+    return createUserResult;
+  } catch (err) {
+    logger.error(`App - createUserProfile Service error\n: ${err.message}`);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};
+
+exports.createUserProfileInKakao = async function ({
+  kakaoId,
+  nickname,
+  filePath,
+}) {
+  try {
+    const params = [kakaoId, nickname, filePath];
+    const connection = await pool.getConnection(async (conn) => conn);
+    const query = `INSERT INTO Users(kakao_id, nickname, image_url) VALUES (?, ?, ?);`;
+    const result = await connection.query(query, params);
+
+    connection.release();
+
+    return result;
+  } catch (err) {
+    logger.error(
+      `App - createUserProfileInKakao Service error\n: ${err.message}`
+    );
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};
+
 exports.editUserProfile = async function (userId, nickname, imageUrl) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
@@ -28,24 +69,6 @@ exports.editUserProfile = async function (userId, nickname, imageUrl) {
     return response(baseResponse.SUCCESS, editUserProfileResult);
   } catch (err) {
     logger.error(`App - editUserProfile Service error\n: ${err.message}`);
-    return errResponse(baseResponse.DB_ERROR);
-  }
-};
-
-exports.createUserProfile = async function ({ kakaoId, nickname, filePath }) {
-  try {
-    const insertUserProfileParams = [kakaoId, nickname, filePath];
-    const connection = await pool.getConnection(async (conn) => conn);
-    const createUserResult = await userDao.insertUserProfile(
-      connection,
-      insertUserProfileParams
-    );
-
-    connection.release();
-
-    return createUserResult;
-  } catch (err) {
-    logger.error(`App - createUserProfile Service error\n: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);
   }
 };
