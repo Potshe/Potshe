@@ -13,13 +13,14 @@ module.exports = () => {
         callbackURL: "/auth/kakao/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
+        // profile : 카카오로부터 받은 사용자 정보
         console.log(
           `kakao profile : ${util.inspect(profile, false, null, true)}`
         );
         try {
-          const exUser = await userProvider.retrieveUserByKakaoId(profile.id);
+          const exUser = await userProvider.retrieveUserByKakaoId(profile.id); // Users 테이블의 kakao_id를 통해 가입 유무 확인
           if (exUser.length !== 0) {
-            done(null, exUser[0]);
+            done(null, exUser[0]); // -> serializeUser 호출
           } else {
             // 회원가입
             const result = await userService.createUserProfileInKakao({
@@ -33,7 +34,7 @@ module.exports = () => {
               profile.id
             );
             console.log(`newUser : ${util.inspect(newUser)}`);
-            done(null, newUser[0]);
+            done(null, newUser[0]); // -> serializeUser 호출
           }
         } catch (error) {
           console.error(error);

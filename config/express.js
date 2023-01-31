@@ -7,8 +7,9 @@ module.exports = function () {
   const cookieParser = require("cookie-parser");
   const session = require("express-session");
   const path = require("path");
-  var cors = require("cors");
   const dotenv = require("dotenv");
+  const nunjucks = require("nunjucks");
+  var cors = require("cors");
 
   dotenv.config();
 
@@ -16,8 +17,11 @@ module.exports = function () {
   const passportConfig = require("../passport");
   passportConfig();
   app.set("views", path.join(__dirname, "..", "/views"));
-  app.set("view engine", "ejs");
-  app.engine("html", require("ejs").renderFile);
+  app.set("view engine", "html");
+  nunjucks.configure("views", {
+    express: app,
+    watch: true,
+  });
 
   app.use(morgan("dev"));
   app.use(compression());

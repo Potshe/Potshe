@@ -14,7 +14,7 @@
       <input
         type="text"
         name="nickname"
-        value="<%= userData.nickname %>"
+        value="{{userData.nickname}}"
         placeholder="nickname"
       />
       <br />
@@ -22,7 +22,7 @@
       <input
         id="user_id"
         type="text"
-        value="<%= userData.user_id %>"
+        value="{{userData.user_id}}"
         style="width: 300px"
       />
       <br />
@@ -33,6 +33,7 @@
       formElem.onsubmit = async (e) => {
         e.preventDefault();
 
+        // 사용자 정보 수정
         let response = await fetch(
           "http://localhost:3000/app/users/" + user_id.value,
           {
