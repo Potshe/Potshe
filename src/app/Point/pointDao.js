@@ -96,7 +96,7 @@ async function updatePoint(connection, editPointParams) {
     return updatePointRow[0];
 }
 
-async function deletePoint(connection, pointId){
+async function deletePoint(connection, pointId) {
     const deletePointQuery = ` 
         DELETE 
         FROM Points
@@ -105,7 +105,23 @@ async function deletePoint(connection, pointId){
     return deletePointRow[0];
 }
 
+// 모든 map 조회
+async function selectMap(connection) {
+    const selectMapQuery = `SELECT * FROM Map_points`;
+    const [mapRows] = await connection.query(selectMapQuery);
+    return mapRows;
+}
+
+// point_id 로 map 조회
+async function selectMapId(connection, pointId) {
+    const selectMapIdQuery = `SELECT * FROM Map_points WHERE point_id = ?;`;
+    const [mapRows] = await connection.query(selectMapIdQuery, pointId);
+    return mapRows;
+}
+
 module.exports = {
+    selectMap,
+    selectMapId,
     selectPointById,
     selectPoints,
     selectPointsByKeyword,

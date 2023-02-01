@@ -292,4 +292,30 @@ module.exports = {
   // Connection, Transaction 등의 서버 오류
   DB_ERROR: { isSuccess: false, code: 4000, message: "데이터 베이스 에러" },
   SERVER_ERROR: { isSuccess: false, code: 4001, message: "서버 에러" },
+
+  //MAP - SUCCESS
+  MAP_PROFILES_SUCCESS: {
+    isSuccess: true,
+    code: 200,
+    message: "모든 포인트들의 위치정보 조회 성공",
+  },
+  MAP_PROFILE_SUCCESS: {
+    isSuccess: true,
+    code: 201,
+    message: "특정 포인트의 위치정보 조회 성공",
+  },
+
+  //MAP - FAILURE
+  MAP_PROFILE_EMPTY: {
+    isSuccess: false,
+    code: 5000,
+    message: "주소를 입력해주세요.",
+  },
+
+  MAP_PROFILE_NOT_EXIST: {
+    isSuccess: false,
+    code: 5001,
+    message: "해당 포인트의 위치정보가 존재하지 않습니다.",
+  },
 };
+

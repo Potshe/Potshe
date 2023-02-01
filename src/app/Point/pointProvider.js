@@ -1,6 +1,6 @@
 const { pool } = require("../../../config/database");
 const { logger } = require("../../../config/winston");
-const { response, errResponse} = require("../../../config/response");
+const { response, errResponse } = require("../../../config/response");
 const baseResponse = require("../../../config/baseResponseStatus");
 const userProvider = require("../User/userProvider")
 
@@ -39,9 +39,63 @@ exports.retrievePointById = async function (pointId) {
 
 
 //포인트의 유저아이디 반환
-exports.getUserIdFromPoint = async function (pointId){
+exports.getUserIdFromPoint = async function (pointId) {
     const connection = await pool.getConnection(async (conn) => conn);
     const userIdFromPointResult = await pointDao.selectUserIdFromPoint(connection, pointId);
     connection.release();
     return response(baseResponse, userIdFromPointResult);
 }
+
+// 모든 map 반환
+exports.retrieveMapList = async function (pointId) {
+    if (!pointId) {
+        const connection = await pool.getConnection(async (conn) => conn);
+        const mapListResult = await pointDao.selectMap(connection);
+        connection.release();
+
+        return mapListResult;
+    }
+
+    else {
+        const connection = await pool.getConnection(async (conn) => conn);
+        const mapListResult = await pointDao.selectMapId(connection, pointId);
+        connection.release();
+
+        return mapListResult;
+    }
+};
+
+
+// point_id 따른 특정 map 반환
+exports.retrieveMap = async function (pointId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const mapResult = await pointDao.selectMapId(
+        connection,
+        pointId
+    );
+    connection.release();
+    return response(mapResult);
+};
+
+// 모든 map 반환
+exports.retrieveMapList = async function () {
+
+    const connection = await pool.getConnection(async (conn) => conn);
+    const mapListResult = await pointDao.selectMapId(connection, pointId);
+    connection.release();
+
+    return mapListResult;
+
+};
+
+
+// point_id 따른 특정 map 반환
+exports.retrieveMap = async function (pointId) {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const mapResult = await pointDao.selectMapId(
+        connection,
+        pointId
+    );
+    connection.release();
+    return response(mapResult);
+};

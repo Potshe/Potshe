@@ -23,6 +23,12 @@ module.exports = function(app){
     app.delete('/app/points/:pointId', point.deletePoint)
 
 
+    // 20. GET 모든 Map 포인트 조회 API
+    app.get("/app/points/maps", point.getPointMaps);
 
+    // 21. GET 특정 Map 포인트 조회 API
+    app.get("/app/points/maps/:pointId", point.getPointMapByPointId);
+
+    app.get("/app/points/kakao", point.getKakaoMap);
 
 };
