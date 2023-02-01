@@ -11,18 +11,14 @@
       Profile Image : <input type="file" name="image" accept="image/*" />
       <br />
       nickname:
-      <input
-        type="text"
-        name="nickname"
-        value="{{userData.nickname}}"
-        placeholder="nickname"
-      />
+      <input type="text" name="nickname" placeholder="nickname" />
       <br />
-      user_id :
+      user_id("Do not modify") :
       <input
         id="user_id"
+        name="userId"
         type="text"
-        value="{{userData.user_id}}"
+        value="{{user_id}}"
         style="width: 300px"
       />
       <br />
@@ -34,13 +30,10 @@
         e.preventDefault();
 
         // 사용자 정보 수정
-        let response = await fetch(
-          "http://localhost:3000/app/users/" + user_id.value,
-          {
-            method: "PUT",
-            body: new FormData(formElem),
-          }
-        );
+        let response = await fetch("http://localhost:3000/app/users", {
+          method: "POST",
+          body: new FormData(formElem),
+        });
 
         let result = await response.json();
 
