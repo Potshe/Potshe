@@ -9,15 +9,15 @@ module.exports = function (app) {
   const passport = require('passport');
   
   // GET 카카오톡 로그인 페이지 이동
-  app.get('/auth/kakao', passport.authenticate('kakao-login'));               // 환경변수 수정 필요 
+  app.get('/app/auth/kakao', passport.authenticate('kakao-login'));               // 환경변수 수정 필요 
   // GET User 정보 수신
-  app.get('/auth/kakao/callback', passport.authenticate('kakao-login', {
+  app.get('/app/auth/kakao/callback', passport.authenticate('kakao-login', {
       failureRedirect: '/',
     }), user.kakaoLogin
   );
 
   // GET 로그아웃
-  app.get('/auth/kakao/logout', user.kakaoLogout);
+  app.get('/app/auth/kakao/logout', user.kakaoLogout);
 
   // GET 모든 사용자 조회 API && GET 닉네임 중복 여부 확인
   app.get("/app/users", user.getUserProfile);

@@ -1,14 +1,14 @@
 const passport = require('passport')
 const KakaoStrategy = require('passport-kakao').Strategy
 const userProvider = require('./userProvider');
+const secret = require('../../../config/secret');
 
 passport.use('kakao-login',
    new KakaoStrategy(
       {
-         clientID: '94be56c7057c88479c1d6554d5e6b5b0',                  // !!!!!!!!!!!! client ID 수정 필요 (.env에 저장하기)
-         clientSecret: 'tTcB3N0FObdRu4xQsimTn25xluxBpO8S',
+         clientID: secret.REST_API_KEY,
          prompt: 'login',
-         callbackURL: '/auth/kakao/callback',
+         callbackURL: secret.REDIRECT_URI,
       },
       async (accessToken, refreshToken, profile, done) => {
          const userToken = {
