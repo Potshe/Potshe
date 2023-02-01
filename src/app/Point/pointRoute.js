@@ -12,7 +12,6 @@ module.exports = function(app){
     app.get('/app/points/:pointId', point.getPointByPointId)
 
 
-
     // 16. 포인트 생성 API
      app.post('/app/points', imageUploader.array("images", 5), point.postPoints);
 
@@ -29,6 +28,7 @@ module.exports = function(app){
     // 21. GET 특정 Map 포인트 조회 API
     app.get("/app/points/maps/:pointId", point.getPointMapByPointId);
 
-    app.get("/app/points/kakao", point.getKakaoMap);
+    // 22. 위도, 경도 정보 조회 -> x : POST /points 랑 결합
+    //app.get("/app/map", point.getKakaoMap);
 
 };

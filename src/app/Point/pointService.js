@@ -13,6 +13,9 @@ const {connect} = require("http2");
 const { USER_ID_NOT_MATCH } = require("../../../config/baseResponseStatus");
 const { error } = require("winston");
 const userProvider = require("../User/userProvider");
+const fetch = require("node-fetch");
+const locationFinder = require('../../../config/locationFinder')
+
 
 exports.createPoint = async function (userId, title, content, point_type, location, creature, point_date) {
 
@@ -22,10 +25,14 @@ exports.createPoint = async function (userId, title, content, point_type, locati
     if (userRows.length < 1)
         return errResponse(baseResponse.USER_USERID_NOT_EXIST);
 
+
+    console.log('location')
+    console.log(location)
+
     try{
 
         const insertPointParams = [userId, title, content, point_type, location, creature, point_date];
-        
+
         const connection = await pool.getConnection(async (conn) => conn);
 
         console.log(insertPointParams);
@@ -37,14 +44,15 @@ exports.createPoint = async function (userId, title, content, point_type, locati
 
         console.log(`추가된 포인트 id : ${createPointResult[0].point_id}`);
 
-      connection.release();
-  
-      return response(baseResponse.SUCCESS, {pointId: createPointResult[0].point_id});
+        connection.release();
+
+        return response(baseResponse.SUCCESS, {pointId: createPointResult[0].point_id, location});
 
     } catch(err) {
         logger.error(`App - createPoint Service error\n: ${err.message}`);
         return errResponse(baseResponse.DB_ERROR);//왜인지 데이터베이스 에러가 뜨지만 추가는 됩니다... 뭘까용..
     }
+
 }
 
 exports.createPointImg = async function (pointId, imgUrl) {
@@ -81,6 +89,25 @@ exports.createPointImg = async function (pointId, imgUrl) {
         return errResponse(baseResponse.DB_ERROR);//왜인지 데이터베이스 에러가 뜨지만 추가는 됩니다... 뭘까용..
     }
 }
+
+exports.createPointLocation = async function(pointId, lat, long) {
+    try{
+
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        const createPointLocationParams = [pointId, lat, long]
+
+        const createPointLocationResponse = await pointDao.insertPointLocation(connection, createPointLocationParams);
+        connection.release();
+
+        //return response(baseResponse.SUCCESS);
+
+    } catch(err) {
+        logger.error(`App - createPointLocation Service Error\n : ${error.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+}
+
 
 exports.editPoint = async function(pointId, title, content, pointType, location, creature, pointDate){
     try{

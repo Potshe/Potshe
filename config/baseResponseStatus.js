@@ -317,5 +317,11 @@ module.exports = {
     code: 5001,
     message: "해당 포인트의 위치정보가 존재하지 않습니다.",
   },
+
+  MAP_LOCATION_NOT_EXIST: {
+    isSuccess: false,
+    code: 5002,
+    message: "존재하지 않는 도로명 주소입니다.",
+  }
 };
 
