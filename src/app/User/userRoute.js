@@ -5,6 +5,19 @@ const point = require("../Point/pointController");
 module.exports = function (app) {
   const user = require("./userController");
   const jwtMiddleware = require("../../../config/jwtMiddleware");
+  const auth = require("./auth");
+  const passport = require('passport');
+  
+  // GET 카카오톡 로그인 페이지 이동
+  app.get('/auth/kakao', passport.authenticate('kakao-login'));               // 환경변수 수정 필요 
+  // GET User 정보 수신
+  app.get('/auth/kakao/callback', passport.authenticate('kakao-login', {
+      failureRedirect: '/',
+    }), user.kakaoLogin
+  );
+
+  // GET 로그아웃
+  app.get('/auth/kakao/logout', user.kakaoLogout);
 
   // GET 모든 사용자 조회 API && GET 닉네임 중복 여부 확인
   app.get("/app/users", user.getUserProfile);
@@ -50,4 +63,15 @@ module.exports = function (app) {
   //
   // // 회원 정보 수정 API (JWT 검증 및 Validation - 메소드 체이닝 방식으로 jwtMiddleware 사용)
   // app.patch('/app/users/:userId', jwtMiddleware, user.patchUsers)
+
+
+    // 회원가입 페이지 연결
+    app.get("/join", (req, res, next) => {
+      res.render("join.html", { userData: req.user });
+    });
+  
+    // 로그인 성공 시 startPage 연결
+    app.get("/startPage", (req, res, next) => {
+      res.render("startPage.html", { userData: req.user });
+    });
 };

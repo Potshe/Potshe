@@ -14,8 +14,6 @@ module.exports = function () {
   dotenv.config();
 
   const app = express();
-  const passportConfig = require("../passport");
-  passportConfig();
   app.set("views", path.join(__dirname, "..", "/views"));
   app.set("view engine", "html");
   nunjucks.configure("views", {
@@ -48,7 +46,6 @@ module.exports = function () {
   // Back-End Routes
   require("../src/app/User/userRoute")(app);
   require("../src/app/Point/pointRoute")(app);
-  require("../src/app/Auth/authRoute")(app);
   // require('../src/app/Board/boardRoute')(app);
 
   return app;

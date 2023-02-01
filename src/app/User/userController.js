@@ -10,6 +10,39 @@ const pointProvider = require("../Point/pointProvider");
 
 /**
  * API No.
+ * API Name : 유저 정보 조회 및 회원가입/시작 페이지 연결
+ * [GET] /auth/kakao/callback
+ */
+exports.kakaoLogin = async function (req, res) {
+  // console.log(req.user);
+  console.log(req.session);
+  const userByUserId = await userProvider.retrieveUser(req.user.id);      // 기존 회원 찾기
+
+  if(!userByUserId[0])
+    return res.redirect('/join');       // 8번 수정 ???
+  
+  return res.redirect('/startPage');
+};
+
+/**
+ * API No.
+ * API Name : 로그아웃
+ * [GET] /auth/kakao/logout
+ */
+exports.kakaoLogout = async function (req, res) {
+
+  await req.logout(function(err) {
+    if (err) { 
+      console.log(err);
+    }
+    return res.redirect('/');
+  });
+};
+
+
+
+/**
+ * API No.
  * API Name : 모든 사용자 조회 & 닉네임 중복 여부 확인
  * [GET] /users + (/?nickname="?")
  */
