@@ -37,13 +37,6 @@ exports.selectUserProfileById = async function (connection, userId) {
   return userRows;
 };
 
-// 카카오 아이디로 유저 프로필 조회
-exports.selectUserProfileByKakaoId = async function (connection, kakaoId) {
-  const query = "SELECT * FROM Users WHERE kakao_id = ?";
-  const [userRows] = await connection.query(query, kakaoId);
-  return userRows;
-};
-
 // userId로 포인트 조회
 exports.selectPointByUserId = async function (connection, userId) {
   const selectUserIdQuery = `

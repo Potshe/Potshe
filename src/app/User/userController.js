@@ -20,7 +20,8 @@ exports.kakaoLogin = async function (req, res) {
 
   if(!userByUserId[0])
     return res.redirect('/join');       // 8번 수정 ???
-  
+
+  console.log(userByUserId[0].nickname);
   return res.redirect('/startPage');
 };
 
@@ -38,8 +39,6 @@ exports.kakaoLogout = async function (req, res) {
     return res.redirect('/');
   });
 };
-
-
 
 /**
  * API No.

@@ -32,28 +32,6 @@ exports.createUserProfile = async function ({ nickname, filePath }) {
   }
 };
 
-exports.createUserProfileInKakao = async function ({
-  kakaoId,
-  nickname,
-  filePath,
-}) {
-  try {
-    const params = [kakaoId, nickname, filePath];
-    const connection = await pool.getConnection(async (conn) => conn);
-    const query = `INSERT INTO Users(kakao_id, nickname, image_url) VALUES (?, ?, ?);`;
-    const result = await connection.query(query, params);
-
-    connection.release();
-
-    return result;
-  } catch (err) {
-    logger.error(
-      `App - createUserProfileInKakao Service error\n: ${err.message}`
-    );
-    return errResponse(baseResponse.DB_ERROR);
-  }
-};
-
 exports.editUserProfile = async function (userId, nickname, imageUrl) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
