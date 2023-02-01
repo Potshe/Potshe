@@ -9,12 +9,12 @@
   <body>
     <p>건강한 해루질 문화를 위해 다음과 같은 사항들을 꼭 지켜주세요.</p>
     <h2>최종 사용자 정보 확인</h2>
-    <div>user_id : {{user.user_id}}</div>
-    <div>nickname : {{ userData.nickname }}</div>
-    <div>image_url : {{ userData.image_url }}</div>
-    <div>status : {{ userData.status }}</div>
-    <div>cretead_at : {{ userData.created_at }}</div>
-    <div>update_at : {{ userData.updated_at }}</div>
+    <div>user_id : {{userProfile.user_id}}</div>
+    <div>nickname : {{ userProfile.nickname }}</div>
+    <div>image_url : {{ userProfile.image_url }}</div>
+    <div>status : {{ userProfile.status }}</div>
+    <div>cretead_at : {{ userProfile.created_at }}</div>
+    <div>update_at : {{ userProfile.updated_at }}</div>
     <div>
       <button type="button" onclick="location.href='/auth/kakao/logout' ">
         로그아웃

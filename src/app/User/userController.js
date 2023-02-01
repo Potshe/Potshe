@@ -16,13 +16,12 @@ const pointProvider = require("../Point/pointProvider");
 exports.kakaoLogin = async function (req, res) {
   // console.log(req.user);
   console.log(req.session);
-  const userByUserId = await userProvider.retrieveUser(req.user.id);      // 기존 회원 찾기
+  const userByUserId = await userProvider.retrieveUser(req.user.id); // 기존 회원 찾기
 
-  if(!userByUserId[0])
-    return res.redirect('/join');       // req.user.id에 카카오 아이디 저장
+  if (!userByUserId[0]) return res.redirect("/join"); // req.user.id에 카카오 아이디 저장
 
   console.log(userByUserId[0].nickname);
-  return res.redirect('/startPage');
+  return res.redirect("/startPage");
 };
 
 /**
@@ -31,12 +30,11 @@ exports.kakaoLogin = async function (req, res) {
  * [GET] /auth/kakao/logout
  */
 exports.kakaoLogout = async function (req, res) {
-
-  await req.logout(function(err) {
-    if (err) { 
+  await req.logout(function (err) {
+    if (err) {
       console.log(err);
     }
-    return res.redirect('/');
+    return res.redirect("/");
   });
 };
 
@@ -133,8 +131,7 @@ exports.editUserProfile = async function (req, res) {
  * [POST] /users
  */
 exports.createUserProfile = async function (req, res) {
-  const userId = req.user.id;
-  const { nickname } = req.body;
+  const { nickname, userId } = req.body;
   const filePath = req.file.location;
 
   // nickname이 없는 경우
