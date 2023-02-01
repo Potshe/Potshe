@@ -14,7 +14,7 @@ async function selectPointById(connection, pointId) {
 // 전체 포인트 조회
 async function selectPoints(connection) {
     const selectPointsQuery = `
-        select p.point_id as pointId, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list
+        select p.point_id as pointId, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
         from Points as p left outer join (
             select point_id
             from User_point_likes
@@ -28,6 +28,10 @@ async function selectPoints(connection) {
             from Point_images
             group by point_id
         ) as pi on pi.point_id = p.point_id
+                         left join (
+			select point_id, latitude, longitude
+            from Map_points
+		) as ll on ll.point_id = p.point_id
         group by p.point_id
                  `;
     const [pointRow] = await connection.query(selectPointsQuery);
