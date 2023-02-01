@@ -19,7 +19,7 @@ exports.kakaoLogin = async function (req, res) {
   const userByUserId = await userProvider.retrieveUser(req.user.id);      // 기존 회원 찾기
 
   if(!userByUserId[0])
-    return res.redirect('/join');       // 8번 수정 ???
+    return res.redirect('/join');       // req.user.id에 카카오 아이디 저장
 
   console.log(userByUserId[0].nickname);
   return res.redirect('/startPage');
@@ -133,6 +133,7 @@ exports.editUserProfile = async function (req, res) {
  * [POST] /users
  */
 exports.createUserProfile = async function (req, res) {
+  const userId = req.user.id;
   const { nickname } = req.body;
   const filePath = req.file.location;
 
@@ -147,6 +148,7 @@ exports.createUserProfile = async function (req, res) {
   }
 
   const createdUser = await userService.createUserProfile({
+    userId,
     nickname,
     filePath,
   });
@@ -165,7 +167,7 @@ exports.createUserProfile = async function (req, res) {
  * [DELETE] /user
  */
 exports.deleteUserProfile = async function (req, res) {
-  const { userId } = req.body;
+  const { userId } = req.user.id;
 
   // 유효하지 않은 userId라면 에러 처리
   const userRows = await userProvider.retrieveUser(userId);
