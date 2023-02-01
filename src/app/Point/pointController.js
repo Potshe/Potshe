@@ -4,6 +4,10 @@ const baseResponse = require("../../../config/baseResponseStatus");
 const { response, errResponse } = require("../../../config/response");
 const { post } = require("axios");
 const userProvider = require("../User/userProvider");
+const fetch = require("node-fetch");
+const locationFinder = require('../../../config/locationFinder')
+const secret_config = require("../../../config/secret");
+
 /**
  * API No. 14, 22
  * API Name : 모든 포인트 조회 + 키워드 기반 포인트 조회
@@ -81,15 +85,15 @@ exports.postPoints = async function (req, res) {
     if (!title)
         return res.send(response(baseResponse.POINT_TITLE_EMPTY));
 
-    if (!content)
+    else if (!content)
         return res.send(response(baseResponse.POINT_CONTENT_EMPTY));
-    if (!point_type)
+    else if (!point_type)
         return res.send(response(baseResponse.POINT_TYPE_EMPTY));
-    if (!location)
+    else if (!location)
         return res.send(response(baseResponse.POINT_LOCATION_EMPTY));
-    if (!creature)
+    else if (!creature)
         return res.send(response(baseResponse.POINT_CREATURE_EMPTY));
-    if (!point_date)
+    else if (!point_date)
         return res.send(response(baseResponse.POINT_DATE_EMPTY));
 
 
@@ -97,18 +101,52 @@ exports.postPoints = async function (req, res) {
         userId, title, content, point_type, location, creature, point_date
     );
 
-    console.log('req.files', req.files)
+    console.log(postPointResponse)
+    let isAddressComplete = false
 
-    // 사용자가 포인트 등록할 때, image 까지 업로드 했을 경우에만
-    if (req.files) {
-        req.files.map((item) => {
-            pointService.createPointImg(
-                postPointResponse.result.pointId, item.location
-            )
-        })
+    if(postPointResponse.isSuccess && !isAddressComplete) {
+        //location으로 위도, 경도 정보 반환
+        fetch('https://dapi.kakao.com/v2/local/search/address.json?query=' + encodeURIComponent(postPointResponse.result.location), {
+            method: 'GET',
+            headers: {'Authorization': 'KakaoAK 1831916d0f1ff0ab48b353121f57f96e'}
+        }).then(res => res.json())
+            .then(data => {
+                //map_result = JSON.stringify(data, null, '\t')
+
+                //const location_result = JSON.stringify(data, null, '\t')
+                const location_result = data;
+                console.log('inside result')
+                console.log(location_result)
+                if (data.documents.length === 0 || !data || data === undefined || data === "undefined") {
+                    console.log('location data error!')
+                    return res.send(errResponse(baseResponse.MAP_LOCATION_NOT_EXIST))
+                } else {
+                    const lat = location_result.documents[0].y // 위도
+                    const long = location_result.documents[0].x // 경도
+
+                    pointService.createPointLocation(postPointResponse.result.pointId, lat, long)
+                    isAddressComplete = true;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+
+        console.log('req.files', req.files)
+
+        // 사용자가 포인트 등록할 때, image 까지 업로드 했을 경우에만
+        if (req.files) {
+            req.files.map((item) => {
+                pointService.createPointImg(
+                    postPointResponse.result.pointId, item.location
+                )
+            })
+        }
+    }else if(isAddressComplete) {
+        return res.send(postPointResponse)
     }
 
-    return res.send(postPointResponse)
+
+
 }
 
 /**
@@ -195,12 +233,8 @@ exports.getPointMapByPointId = async function (req, res) {
 
 exports.getKakaoMap = async function (req, res) {
     const { addr } = req.body;
-    fetch('https://dapi.kakao.com/v2/local/search/address.json?query=' + encodeURIComponent(addr), {
-        method: 'GET',
-        headers: new Headers({ 'Authorization': 'KakaoAK 1831916d0f1ff0ab48b353121f57f96e' })
-    }).then(res => res.json())
-        .then(data => console.log(JSON.stringify(data, null, '\t')))
-        .catch(error => console.error('Error:', error));
+    console.log('addr')
+    console.log(addr)
 
-    return res.send(response(baseResponse.MAP_PROFILES_SUCCESS, data));
+    locationFinder(addr)
 }

@@ -68,6 +68,7 @@ async function insertPoint(connection, insertPointParams) {
     const insertPointQuery = `
     INSERT INTO Points(user_id, title, content, point_type, location, creature, point_date)
         VALUES (?, ?, ?, ?, ?, ?, ?);
+
     `;
     const updatePointRow = await connection.query(insertPointQuery, insertPointParams);
     const lastInsertId = await connection.query(
@@ -82,6 +83,15 @@ async function insertPointImg(connection, insertPointImgParams) {
         VALUES (?, ?);
     `;
     const updatePointRow = await connection.query(insertPointImgQuery, insertPointImgParams);
+    return updatePointRow[0];
+}
+
+async function insertPointLocation(connection, insertPointLocationParams) {
+    const insertPointLocationQuery = `
+    INSERT INTO Map_points(point_id, latitude, longitude)
+        VALUES (?, ?, ?);
+    `;
+    const updatePointRow = await connection.query(insertPointLocationQuery, insertPointLocationParams);
     return updatePointRow[0];
 }
 async function selectUserIdFromPoint(connection, pointId) {
@@ -133,4 +143,6 @@ module.exports = {
     selectUserIdFromPoint,
     insertPointImg,
     deletePoint,
+    insertPointLocation,
+    updatePoint,
 };
