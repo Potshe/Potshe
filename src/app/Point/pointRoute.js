@@ -5,28 +5,30 @@ module.exports = function(app){
     const point = require('./pointController');
     const jwtMiddleware = require('../../../config/jwtMiddleware');
 
-    // 14. 모든 포인트 조회 API + 22. 키워드로 포인트 검색 API
+    // GET 모든 포인트 조회 API + 키워드로 포인트 검색 API
     app.get('/app/points', point.getPoints)
 
-    // 15. 특정 포인트 조회 API
+    // GET 특정 포인트 조회 API
     app.get('/app/points/:pointId', point.getPointByPointId)
 
 
-    // 16. 포인트 생성 API
+    // POST 포인트 생성 API
      app.post('/app/points', imageUploader.array("images", 5), point.postPoints);
 
-    // 17. 포인트 수정
+    // PUT 포인트 수정
     app.put('/app/points/:pointId', point.putPoint);
 
-    // 18. 포인트 삭제 API
+    // DELETE 포인트 삭제 API
     app.delete('/app/points/:pointId', point.deletePoint)
 
+    // GET 위도, 경도로 포인트 조회 API
+    
 
-    // 20. GET 모든 Map 포인트 조회 API
-    app.get("/app/points/maps", point.getPointMaps);
+    // 20. GET 모든 Map 포인트 조회 API -> GET /points와 동일
+    // app.get("/app/maps", point.getPointMaps);
 
-    // 21. GET 특정 Map 포인트 조회 API
-    app.get("/app/points/maps/:pointId", point.getPointMapByPointId);
+    // 21. GET 특정 Map 포인트 조회 API -> GET /points/:pointId 와 동일
+    // app.get("/app/maps/:pointId", point.getPointMapByPointId);
 
     // 22. 위도, 경도 정보 조회 -> x : POST /points 랑 결합
     //app.get("/app/map", point.getKakaoMap);

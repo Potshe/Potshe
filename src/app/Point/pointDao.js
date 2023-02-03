@@ -59,7 +59,7 @@ async function selectPoints(connection) {
 // 키워드 기반 포인트 조회
 async function selectPointsByKeyword(connection, keywordParams) {
     const selectPointsByKeywordQuery = `
-        select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList
+        select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
         from Points as p left outer join (
             select point_id
             from User_point_likes
@@ -73,6 +73,10 @@ async function selectPointsByKeyword(connection, keywordParams) {
             from Point_images
             group by point_id
         ) as pi on pi.point_id = p.point_id
+                         left join (
+            select point_id, latitude, longitude
+            from Map_points
+        ) as ll on ll.point_id = p.point_id
         where p.title like concat('%', ? , '%')
            or p.content like concat('%', ?, '%')
            or p.point_type like concat('%', ?, '%')

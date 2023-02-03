@@ -47,20 +47,20 @@ module.exports = function (app) {
   // GET 특정 사용자가 좋아요한 포인트 조회 API
   app.get("/app/users/:userId/likes", user.getUserLike);
 
-  // 11. POST 특정 포인트에 좋아요 표시
+  // POST 특정 포인트에 좋아요 표시
   app.post("/app/users/:userId/likes/:pointId", user.postUserLike);
 
-  // 12. DELETE 포인트 좋아요 취소
+  // DELETE 포인트 좋아요 취소
   app.delete("/app/users/:userId/likes/:pointId", user.deleteUserLike);
 
-  // 13. POST 유저 프로필 이미지 수정 API
+  // POST 유저 프로필 이미지 수정 API
   app.post(
     "/app/users/:userId/image",
     imageUploader.single("image"),
     user.updateImage
   );
 
-  // 19. 유저가 올린 포인트 조회 API
+  // GET 유저가 올린 포인트 조회 API
   app.get("/app/users/:userId/points", user.getPointByUserId);
 
   // // TODO: After 로그인 인증 방법 (JWT)
@@ -70,12 +70,12 @@ module.exports = function (app) {
   // // 회원 정보 수정 API (JWT 검증 및 Validation - 메소드 체이닝 방식으로 jwtMiddleware 사용)
   // app.patch('/app/users/:userId', jwtMiddleware, user.patchUsers)
 
-  // 회원가입 페이지 연결
+  // GET 회원가입 페이지 연결
   app.get("/join", (req, res, next) => {
     res.render("join.html", { user_id: req.session.passport.user.id });
   });
 
-  // 로그인 성공 시 startPage 연결
+  // GET 로그인 성공 시 startPage 연결
   app.get("/startPage", async (req, res, next) => {
     console.log("req.session at startpage router", req.session);
     const userProfile = await userProvider.retrieveUser(
