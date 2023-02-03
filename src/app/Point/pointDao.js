@@ -14,7 +14,7 @@ async function selectPointById(connection, pointId) {
 // 전체 포인트 조회
 async function selectPoints(connection) {
     const selectPointsQuery = `
-        select p.point_id as pointId, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
+        select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
         from Points as p left outer join (
             select point_id
             from User_point_likes
@@ -41,7 +41,7 @@ async function selectPoints(connection) {
 // 키워드 기반 포인트 조회
 async function selectPointsByKeyword(connection, keywordParams) {
     const selectPointsByKeywordQuery = `
-        select p.point_id as pointId, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList
+        select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList
         from Points as p left outer join (
             select point_id
             from User_point_likes
