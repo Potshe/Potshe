@@ -121,7 +121,7 @@ exports.editUserProfile = async function (req, res) {
   }
 
   return res.send(
-    response(baseResponse.USER_PROFILE_UPDATE_SUCCESS, editedUser)
+    response(baseResponse.USER_PROFILE_UPDATE_SUCCESS, {userId, nickname, image_url: filePath})
   );
 };
 
