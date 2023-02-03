@@ -14,9 +14,9 @@ const { connect } = require("http2");
 
 // Service: Create, Update, Delete 비즈니스 로직 처리
 
-exports.createUserProfile = async function ({ userId, nickname, filePath }) {
+exports.createUserProfile = async function ({ nickname, filePath }) {
   try {
-    const insertUserProfileParams = [userId, nickname, filePath];
+    const insertUserProfileParams = [nickname, filePath];
     const connection = await pool.getConnection(async (conn) => conn);
     const createUserResult = await userDao.insertUserProfile(
       connection,

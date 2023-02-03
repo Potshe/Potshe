@@ -131,7 +131,7 @@ exports.editUserProfile = async function (req, res) {
  * [POST] /users
  */
 exports.createUserProfile = async function (req, res) {
-  const { nickname, userId } = req.body;
+  const { nickname } = req.body;
   const filePath = req.file.location;
 
   // nickname이 없는 경우
@@ -145,7 +145,6 @@ exports.createUserProfile = async function (req, res) {
   }
 
   const createdUser = await userService.createUserProfile({
-    userId,
     nickname,
     filePath,
   });

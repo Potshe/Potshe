@@ -29,6 +29,9 @@ module.exports = function (app) {
   // GET 특정 사용자 프로필 조회 API
   app.get("/app/users/:userId", user.getUserProfileById);
 
+  // POST 회원가입 시 사용자 프로필 생성 API
+  app.post("/app/users", imageUploader.single("image"), user.createUserProfile);
+
   // PUT 특정 사용자 프로필 수정 API
   app.put(
     "/app/users/:userId",
@@ -36,8 +39,7 @@ module.exports = function (app) {
     user.editUserProfile
   );
 
-  // POST 회원가입 시 사용자 프로필 생성 API
-  app.post("/app/users", imageUploader.single("image"), user.createUserProfile);
+
 
   // DELETE 회원 탈퇴
   app.delete("/app/users", user.deleteUserProfile);
