@@ -74,7 +74,7 @@ exports.deleteUserProfile = async function (connection, userId) {
 // 유저가 좋아요한 포인트 조회
 exports.selectUserLike = async function (connection, userId) {
   const selectUserLikeQuery = `
-  SELECT Points.title, Points.content, Points.location, Points.creature, Points.point_date, Points.created_at 
+  SELECT User_point_likes.user_id, Points.point_id, Points.title, Points.content, Points.point_type, Points.location, Points.creature, Points.point_date, Points.created_at 
   from Points 
   LEFT JOIN User_point_likes 
   on Points.point_id=User_point_likes.point_id 
@@ -85,7 +85,7 @@ exports.selectUserLike = async function (connection, userId) {
 };
 
 // 유저가 특정 포인트에 좋아요 표시
-exports.insertUserPointLikeasync = async function (
+exports.insertUserPointLike = async function (
   connection,
   userId,
   pointId
