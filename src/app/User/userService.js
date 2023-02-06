@@ -32,19 +32,18 @@ exports.createUserProfile = async function ({ nickname, filePath }) {
   }
 };
 
-exports.editUserProfile = async function (userId, nickname, imageUrl) {
+exports.editUserProfile = async function (userId, imageUrl) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
-    const editUserProfileResult = await userDao.updateUserProfile(
+    const editedUserProfileResult = await userDao.updateUserProfile(
       connection,
       userId,
-      nickname,
       imageUrl
     );
 
     connection.release();
 
-    return response(baseResponse.SUCCESS, editUserProfileResult);
+    return editedUserProfileResult;
   } catch (err) {
     logger.error(`App - editUserProfile Service error\n: ${err.message}`);
     return errResponse(baseResponse.DB_ERROR);

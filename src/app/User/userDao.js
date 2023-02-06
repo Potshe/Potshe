@@ -49,18 +49,13 @@ exports.selectPointByUserId = async function (connection, userId) {
 };
 
 // 유저 프로필 업데이트
-exports.updateUserProfile = async function (
-  connection,
-  userId,
-  nickname,
-  imageUrl
-) {
-  const updateUserProfileQuery = `UPDATE Users SET nickname = ?, image_url = ? WHERE user_id=?;`;
+exports.updateUserProfile = async function (connection, userId, imageUrl) {
+  const updateUserProfileQuery = `UPDATE Users SET image_url = ? WHERE user_id=?;`;
   const userRows = await connection.query(updateUserProfileQuery, [
-    nickname,
     imageUrl,
     userId,
   ]);
+  console.log("userRows[0]", userRows[0]);
   return userRows[0];
 };
 
@@ -85,11 +80,7 @@ exports.selectUserLike = async function (connection, userId) {
 };
 
 // 유저가 특정 포인트에 좋아요 표시
-exports.insertUserPointLike = async function (
-  connection,
-  userId,
-  pointId
-) {
+exports.insertUserPointLike = async function (connection, userId, pointId) {
   const insertUserPointQuery = `
   INSERT INTO User_point_likes(user_id, point_id)
       VALUES (?, ?);

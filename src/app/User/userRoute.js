@@ -9,8 +9,10 @@ module.exports = function (app) {
   const auth = require("./auth");
   const passport = require("passport");
 
+  // <----------------- 로그인 ----------------->
   // GET 카카오톡 로그인 페이지 이동
   app.get("/app/auth/kakao", passport.authenticate("kakao-login")); // 환경변수 수정 필요
+
   // GET User 정보 수신
   app.get(
     "/app/auth/kakao/callback",
@@ -20,9 +22,25 @@ module.exports = function (app) {
     user.kakaoLogin
   );
 
+  // GET 회원가입 페이지 연결
+  app.get("/join", (req, res, next) => {
+    res.render("join.html", { user_id: req.session.passport.user.id });
+  });
+
+  // GET 로그인 성공 시 startPage 연결
+  app.get("/startPage", async (req, res, next) => {
+    console.log("req.session at startpage router", req.session);
+    const userProfile = await userProvider.retrieveUser(
+      req.session.passport.user.id
+    );
+    console.log("userProfile", userProfile);
+    res.render("startPage.html", { userProfile: userProfile[0] });
+  });
+
   // GET 로그아웃
   app.get("/app/auth/kakao/logout", user.kakaoLogout);
 
+  // // <----------------- 회원 정보 ----------------->
   // GET 모든 사용자 조회 API && GET 닉네임 중복 여부 확인
   app.get("/app/users", user.getUserProfile);
 
@@ -38,8 +56,6 @@ module.exports = function (app) {
     imageUploader.single("image"),
     user.editUserProfile
   );
-
-
 
   // DELETE 회원 탈퇴
   app.delete("/app/users", user.deleteUserProfile);
@@ -62,26 +78,4 @@ module.exports = function (app) {
 
   // GET 유저가 올린 포인트 조회 API
   app.get("/app/users/:userId/points", user.getPointByUserId);
-
-  // // TODO: After 로그인 인증 방법 (JWT)
-  // // 로그인 하기 API (JWT 생성)
-  // app.post('/app/login', user.login);
-  //
-  // // 회원 정보 수정 API (JWT 검증 및 Validation - 메소드 체이닝 방식으로 jwtMiddleware 사용)
-  // app.patch('/app/users/:userId', jwtMiddleware, user.patchUsers)
-
-  // GET 회원가입 페이지 연결
-  app.get("/join", (req, res, next) => {
-    res.render("join.html", { user_id: req.session.passport.user.id });
-  });
-
-  // GET 로그인 성공 시 startPage 연결
-  app.get("/startPage", async (req, res, next) => {
-    console.log("req.session at startpage router", req.session);
-    const userProfile = await userProvider.retrieveUser(
-      req.session.passport.user.id
-    );
-    console.log("userProfile", userProfile);
-    res.render("startPage.html", { userProfile: userProfile[0] });
-  });
 };

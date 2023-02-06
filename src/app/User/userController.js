@@ -88,7 +88,6 @@ exports.getUserProfileById = async function (req, res) {
  */
 exports.editUserProfile = async function (req, res) {
   const userId = req.params.userId; // 유저 아이디
-  const { nickname } = req.body; // 닉네임
   const filePath = req.file.location; // 파일 경로
 
   // 유효하지 않은 userId라면 에러 처리
@@ -97,21 +96,12 @@ exports.editUserProfile = async function (req, res) {
     return res.send(errResponse(baseResponse.USER_USERID_NOT_EXIST));
   }
 
-  // nickname이 없는 경우
-  if (!nickname) {
-    return res.send(baseResponse.SIGNUP_NICKNAME_EMPTY);
-  }
-
   // 유효하지 않은 파일 경로일 경우
   if (!filePath) {
     return res.send(baseResponse.FILE_INVALID_PATH);
   }
 
-  const editedUser = await userService.editUserProfile(
-    userId,
-    nickname,
-    filePath
-  );
+  const editedUser = await userService.editUserProfile(userId, filePath);
 
   console.log("editedUser", editedUser);
 
@@ -121,7 +111,7 @@ exports.editUserProfile = async function (req, res) {
   }
 
   return res.send(
-    response(baseResponse.USER_PROFILE_UPDATE_SUCCESS, {userId, nickname, image_url: filePath})
+    response(baseResponse.USER_PROFILE_UPDATE_SUCCESS, { userId, filePath })
   );
 };
 
