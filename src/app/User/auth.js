@@ -13,10 +13,10 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       const userToken = {
-        id: profile.id,
+        id: profile.id, // 카카오 계정 식별 아이디 (10자리 숫자)
         accessToken: accessToken || "",
       };
-      return done(null, userToken); // 카카오 계정 식별 아이디 (10자리 숫자);
+      return done(null, userToken);
     }
   )
 );

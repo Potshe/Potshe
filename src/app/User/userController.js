@@ -14,11 +14,11 @@ const pointProvider = require("../Point/pointProvider");
  * [GET] /auth/kakao/callback
  */
 exports.kakaoLogin = async function (req, res) {
-  // console.log(req.user);
-  console.log(req.session);
+  console.log("req.user ->", req.user);
+  console.log("req.session ->", req.session);
   const userByUserId = await userProvider.retrieveUser(req.user.id); // 기존 회원 찾기
 
-  if (!userByUserId[0]) return res.redirect("/join"); // req.user.id에 카카오 아이디 저장
+  if (!userByUserId[0]) return res.redirect("/join");
 
   console.log(userByUserId[0].nickname);
   return res.redirect("/startPage");
@@ -54,10 +54,17 @@ exports.getUserProfile = async function (req, res) {
   } else {
     // 닉네임 중복 여부 확인
     const userList = await userProvider.retrieveUserList(nickname);
+    let nicknameError = false;
     if (userList.length > 0) {
-      return res.send(errResponse(baseResponse.USER_NICKNAME_EXIST));
+      let nicknameError = true;
+      return res.send(
+        response(baseResponse.USER_NICKNAME_EXIST, nicknameError)
+      );
+    } else {
+      return res.send(
+        response(baseResponse.USER_NICKNAME_NOT_EXIST, nicknameError)
+      );
     }
-    return res.send(response(baseResponse.USER_NICKNAME_SUCCESS));
   }
 };
 
@@ -78,7 +85,13 @@ exports.getUserProfileById = async function (req, res) {
     return res.send(errResponse(baseResponse.USER_NOT_EXIST));
   }
 
-  return res.send(response(baseResponse.USER_PROFILE_SUCCESS, user[0]));
+  return res.send(
+    response(baseResponse.USER_PROFILE_SUCCESS, {
+      user_id: user[0].user_id,
+      nickname: user[0].nickname,
+      image_url: user[0].image_url,
+    })
+  );
 };
 
 /**
@@ -121,7 +134,7 @@ exports.editUserProfile = async function (req, res) {
  * [POST] /users
  */
 exports.createUserProfile = async function (req, res) {
-  const { nickname } = req.body;
+  const { userId, nickname } = req.body;
   const filePath = req.file.location;
 
   // nickname이 없는 경우
@@ -134,17 +147,32 @@ exports.createUserProfile = async function (req, res) {
     return res.send(errResponse(baseResponse.FILE_INVALID_PATH));
   }
 
-  const createdUser = await userService.createUserProfile({
-    nickname,
-    filePath,
-  });
+  if (userId) {
+    // 카카오로 발급받은 id가 있을 경우
+    const createdUser = await userService.createUserProfileByKakaoId({
+      userId,
+      nickname,
+      filePath,
+    });
 
-  // 회원가입이 완료되지 않았을 경우
-  if (createdUser.affectedRows === 0) {
-    return res.send(errResponse(baseResponse.USER_NOT_EXIST));
+    if (createdUser.affectedRows === 0) {
+      return res.send(errResponse(baseResponse.USER_NOT_EXIST));
+    }
+
+    return res.send(response(baseResponse.SINGUP_SUCCESS, createdUser));
+  } else {
+    // 기존의 회원가입
+    const createdUser = await userService.createUserProfile({
+      nickname,
+      filePath,
+    });
+
+    if (createdUser.affectedRows === 0) {
+      return res.send(errResponse(baseResponse.USER_NOT_EXIST));
+    }
+
+    return res.send(response(baseResponse.SINGUP_SUCCESS, createdUser));
   }
-
-  return res.send(response(baseResponse.SINGUP_SUCCESS, createdUser));
 };
 
 /**

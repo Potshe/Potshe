@@ -124,16 +124,20 @@ module.exports = {
   },
   USER_PROFILE_SUCCESS: {
     isSuccess: true,
-    code: 104,
+    code: 102,
     message: "사용자 정보 조회 성공",
   },
   USER_PROFILE_IMAGE_SUCCESS: {
     isSuccess: true,
-    code: 101,
+    code: 103,
     message: "유저 이미지 수정 완료",
   },
-  USER_DELETE_SUCCESS: { isSuccess: true, code: 17, message: "회원 탈퇴 완료" },
-  USER_NICKNAME_SUCCESS: {
+  USER_NICKNAME_EXIST: {
+    isSuccess: true,
+    code: 104,
+    message: "닉네임이 중복됩니다.",
+  },
+  USER_NICKNAME_NOT_EXIST: {
     isSuccess: true,
     code: 105,
     message: "닉네임이 중복되지 않습니다.",
@@ -142,6 +146,11 @@ module.exports = {
     isSuccess: true,
     code: 106,
     message: "회원 정보 수정이 완료되었습니다.",
+  },
+  USER_DELETE_SUCCESS: {
+    isSuccess: true,
+    code: 107,
+    message: "회원 탈퇴 완료",
   },
 
   // USER - FAILURE
@@ -169,16 +178,6 @@ module.exports = {
     isSuccess: false,
     code: 155,
     message: "유저 아이디 값을 확인해주세요",
-  },
-  USER_NICKNAME_EMPTY: {
-    isSuccess: false,
-    code: 156,
-    message: "변경할 닉네임 값을 입력해주세요",
-  },
-  USER_NICKNAME_EXIST: {
-    isSuccess: false,
-    code: 157,
-    message: "닉네임이 중복됩니다.",
   },
   USER_STATUS_EMPTY: {
     isSuccess: false,
@@ -322,6 +321,5 @@ module.exports = {
     isSuccess: false,
     code: 5002,
     message: "존재하지 않는 도로명 주소입니다.",
-  }
+  },
 };
-

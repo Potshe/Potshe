@@ -12,6 +12,14 @@ exports.insertUserProfile = async function (
   return userRows[0];
 };
 
+// 카카오 아이디로 유저 프로필 생성
+exports.insertUserProfileByKakaoId = async function (connection, params) {
+  const query = `INSERT INTO Users(user_id, nickname, image_url) VALUES (?, ?, ?);`;
+  const userRows = await connection.query(query, params);
+
+  return userRows[0];
+};
+
 // 모든 유저 프로필 조회
 exports.selectUserProfile = async function (connection) {
   const selectUserProfileQuery = "SELECT * FROM Users";

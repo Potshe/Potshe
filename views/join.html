@@ -29,8 +29,7 @@
       formElem.onsubmit = async (e) => {
         e.preventDefault();
 
-        // 사용자 정보 수정
-        let response = await fetch("http://localhost:3000/app/users", {
+        let response = await fetch("/app/users", {
           method: "POST",
           body: new FormData(formElem),
         });

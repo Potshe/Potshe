@@ -32,6 +32,25 @@ exports.createUserProfile = async function ({ nickname, filePath }) {
   }
 };
 
+exports.createUserProfileByKakaoId = async function ({
+  userId,
+  nickname,
+  filePath,
+}) {
+  try {
+    const params = [userId, nickname, filePath];
+    const connection = await pool.getConnection(async (conn) => conn);
+    const result = await userDao.insertUserProfileByKakaoId(connection, params);
+
+    connection.release();
+
+    return result;
+  } catch (err) {
+    logger.error(`App - createUserProfile Service error\n: ${err.message}`);
+    return errResponse(baseResponse.DB_ERROR);
+  }
+};
+
 exports.editUserProfile = async function (userId, imageUrl) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);
