@@ -15,11 +15,15 @@ FAILURE
 SUCCESS
 FAILURE
 
+5. MAP
+SUCCESS
+FAILURE
+
 - TOKEN
 SUCCESS
 FAILURE
 
-5. Connection, Transaction 등의 서버 오류
+- Connection, Transaction 등의 서버 오류
 
 */
 
@@ -50,6 +54,11 @@ module.exports = {
     isSuccess: true,
     code: 15,
     message: "포인트 수정 성공",
+  },
+  USER_POINT_LIKE_LIST_SUCCESS: {
+    isSuccess: true,
+    code: 16,
+    message: "사용자가 좋아요한 포인트 조회 성공",
   },
 
   // POINT - FAILURE
@@ -271,27 +280,6 @@ module.exports = {
     message: "탈퇴 된 계정입니다. 고객센터에 문의해주세요.",
   },
 
-  // TOKEN - SUCCESS
-  TOKEN_EMPTY: {
-    isSuccess: false,
-    code: 2000,
-    message: "JWT 토큰을 입력해주세요.",
-  },
-  TOKEN_VERIFICATION_FAILURE: {
-    isSuccess: false,
-    code: 3000,
-    message: "JWT 토큰 검증 실패",
-  },
-  TOKEN_VERIFICATION_SUCCESS: {
-    isSuccess: true,
-    code: 1001,
-    message: "JWT 토큰 검증 성공",
-  },
-
-  // Connection, Transaction 등의 서버 오류
-  DB_ERROR: { isSuccess: false, code: 4000, message: "데이터 베이스 에러" },
-  SERVER_ERROR: { isSuccess: false, code: 4001, message: "서버 에러" },
-
   //MAP - SUCCESS
   MAP_PROFILES_SUCCESS: {
     isSuccess: true,
@@ -322,4 +310,25 @@ module.exports = {
     code: 5002,
     message: "존재하지 않는 도로명 주소입니다.",
   },
+
+  // TOKEN - SUCCESS
+  TOKEN_EMPTY: {
+    isSuccess: false,
+    code: 2000,
+    message: "JWT 토큰을 입력해주세요.",
+  },
+  TOKEN_VERIFICATION_FAILURE: {
+    isSuccess: false,
+    code: 3000,
+    message: "JWT 토큰 검증 실패",
+  },
+  TOKEN_VERIFICATION_SUCCESS: {
+    isSuccess: true,
+    code: 1001,
+    message: "JWT 토큰 검증 성공",
+  },
+
+  // Connection, Transaction 등의 서버 오류
+  DB_ERROR: { isSuccess: false, code: 4000, message: "데이터 베이스 에러" },
+  SERVER_ERROR: { isSuccess: false, code: 4001, message: "서버 에러" },
 };

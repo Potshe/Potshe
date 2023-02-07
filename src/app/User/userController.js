@@ -219,7 +219,9 @@ exports.getUserLike = async function (req, res) {
     return res.send(errResponse(baseResponse.USER_POINT_LIKE_NOT_EXIST));
   }
 
-  return res.send(response(baseResponse.SUCCESS, userLikeList));
+  return res.send(
+    response(baseResponse.USER_POINT_LIKE_LIST_SUCCESS, userLikeList)
+  );
 };
 
 /**
