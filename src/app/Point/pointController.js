@@ -19,13 +19,16 @@ exports.getPoints = async function (req, res) {
      * query string : keyword
      */
 
-    const { keyword } = req.query
+    const { keyword, order } = req.query
+    console.log(keyword)
 
-    if (!keyword) {
+    console.log(order)
+
+    if (!keyword && order !== "추천순" && order !== "최신순") {
         const pointsResult = await pointProvider.retrievePoint();
         return res.send(response(baseResponse.SUCCESS, pointsResult));
     } else {
-        const pointsResultWithKeyword = await pointProvider.retrievePoint(keyword);
+        const pointsResultWithKeyword = await pointProvider.retrievePoint(keyword, order);
         return res.send(response(baseResponse.SUCCESS, pointsResultWithKeyword));
     }
 
