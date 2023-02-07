@@ -8,19 +8,41 @@ const pointDao = require("./pointDao");
 
 // Provider: Read 비즈니스 로직 처리
 
-exports.retrievePoint = async function (keyword) {
+exports.retrievePoint = async function (keyword, order) {
 
     if (!keyword) {
+
         const connection = await pool.getConnection(async (conn) => conn);
-        const pointListResult = await pointDao.selectPoints(connection);
+        let pointListResult;
+
+        if(order !== "추천순" && order !== "최신순"){
+            pointListResult = await pointDao.selectPoints(connection);
+        } else if(order === "추천순") {
+            pointListResult = await pointDao.selectPointsOrderByLikes(connection);
+        } else if(order === "최신순") {
+            pointListResult = await pointDao.selectPointsOrderByTime(connection);
+        }
+
+
         connection.release();
 
         return pointListResult;
 
-    } else {
+    }
+    else if(keyword !== undefined){
         const connection = await pool.getConnection(async (conn) => conn);
-        const keywordParams = [keyword, keyword, keyword, keyword, keyword]
-        const pointListResultByKeyword = await pointDao.selectPointsByKeyword(connection, keywordParams);
+        let keywordParams = [keyword, keyword, keyword, keyword, keyword]
+        let pointListResultByKeyword;
+
+        if(order !== "추천순" && order !== "최신순"){
+            pointListResultByKeyword = await pointDao.selectPointsByKeyword(connection, keywordParams);
+        } else if(order === "추천순") {
+            pointListResultByKeyword = await pointDao.selectPointsByKeywordOrderByLikes(connection, keywordParams);
+        } else if(order === "최신순") {
+            pointListResultByKeyword = await pointDao.selectPointsByKeywordOrderByTime(connection, keywordParams);
+        }
+
+
         connection.release();
 
         return pointListResultByKeyword;
