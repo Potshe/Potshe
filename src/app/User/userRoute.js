@@ -54,7 +54,7 @@ module.exports = function (app) {
   app.post("/app/users", imageUploader.single("image"), user.createUserProfile);
 
   // DELETE 회원 탈퇴
-  app.delete("/app/users", user.deleteUserProfile);
+  app.delete("/app/users/:userId", user.deleteUserProfile);
 
   // <----------------- 회원 and 포인트 ----------------->
   // GET 특정 사용자가 좋아요한 포인트 조회 API

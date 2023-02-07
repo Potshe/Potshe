@@ -181,7 +181,7 @@ exports.createUserProfile = async function (req, res) {
  * [DELETE] /user
  */
 exports.deleteUserProfile = async function (req, res) {
-  const { userId } = req.user.id;
+  const userId = req.params.userId;
 
   // 유효하지 않은 userId라면 에러 처리
   const userRows = await userProvider.retrieveUser(userId);
