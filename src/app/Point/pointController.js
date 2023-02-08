@@ -309,6 +309,7 @@ exports.getMapMark = async function (req, res) {
         return res.send(response(baseResponse.POINT_LONG_EMPTY));
     }
 
-    const markResult = pointProvider.retrieveMapMark(latitude, longitude);
+    const markResult = await pointProvider.retrieveMapMark(latitude, longitude);
+
     return res.send(response(baseResponse.SUCCESS, markResult));
 }

@@ -329,7 +329,7 @@ async function selectMapMark(connection, locationParams) {
 
     const [markRow] = await connection.query(selectMarksQuery, locationParams);
     console.log(markRow);
-    return markRow[0];
+    return markRow;
 }
 
 module.exports = {
