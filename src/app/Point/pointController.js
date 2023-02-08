@@ -33,11 +33,11 @@ exports.getPoints = async function (req, res) {
   // }
 
   if (!keyword && order !== "추천순" && order !== "최신순") {
-    // keyword, order 둘 다 없을 때..
+    // keyword, order 둘 다 없을 때.. (pageId는 무조거 있다는 가정 하에..)
     const pointsResult = await pointProvider.retrievePoint(pageId);
     return res.send(response(baseResponse.SUCCESS, pointsResult));
   } else {
-    // keyword, order 둘 중 하나 있을 때..
+    // keyword, order 둘 중 하나 있을 때.. (pageId는 무조거 있다는 가정 하에..)
     const pointsResultWithKeyword = await pointProvider.retrievePoint(
       pageId,
       keyword,

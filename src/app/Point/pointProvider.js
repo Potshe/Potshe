@@ -11,19 +11,22 @@ const pointDao = require("./pointDao");
 exports.retrievePoint = async function (pageId, keyword, order) {
   if (!keyword) {
     const connection = await pool.getConnection(async (conn) => conn);
+
     let pointListResult;
+    const pointIndex = (pageId - 1) * 10;
+    const params = [pointIndex];
 
     if (order !== "추천순" && order !== "최신순") {
-      pointListResult = await pointDao.selectPoints(connection, pageId);
+      pointListResult = await pointDao.selectPoints(connection, params);
     } else if (order === "추천순") {
       pointListResult = await pointDao.selectPointsOrderByLikes(
         connection,
-        pageId
+        params
       );
     } else if (order === "최신순") {
       pointListResult = await pointDao.selectPointsOrderByTime(
         connection,
-        pageId
+        params
       );
     }
 
@@ -32,26 +35,22 @@ exports.retrievePoint = async function (pageId, keyword, order) {
     return pointListResult;
   } else if (keyword !== undefined) {
     const connection = await pool.getConnection(async (conn) => conn);
-    let keywordParams = [keyword, keyword, keyword, keyword, keyword];
+
+    const pointIndex = (pageId - 1) * 10;
+    let params = [keyword, keyword, keyword, keyword, keyword, pointIndex];
     let pointListResultByKeyword;
 
     if (order !== "추천순" && order !== "최신순") {
       pointListResultByKeyword = await pointDao.selectPointsByKeyword(
         connection,
-        keywordParams
+        params
       );
     } else if (order === "추천순") {
       pointListResultByKeyword =
-        await pointDao.selectPointsByKeywordOrderByLikes(
-          connection,
-          keywordParams
-        );
+        await pointDao.selectPointsByKeywordOrderByLikes(connection, params);
     } else if (order === "최신순") {
       pointListResultByKeyword =
-        await pointDao.selectPointsByKeywordOrderByTime(
-          connection,
-          keywordParams
-        );
+        await pointDao.selectPointsByKeywordOrderByTime(connection, params);
     }
 
     connection.release();
@@ -59,6 +58,7 @@ exports.retrievePoint = async function (pageId, keyword, order) {
     return pointListResultByKeyword;
   }
 };
+
 exports.retrievePointById = async function (pointId) {
   const connection = await pool.getConnection(async (conn) => conn);
   const pointListResult = await pointDao.selectPointById(connection, pointId);

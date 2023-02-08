@@ -28,7 +28,7 @@ async function selectPointById(connection, pointId) {
 }
 
 // 전체 포인트 조회
-async function selectPoints(connection, pageId) {
+async function selectPoints(connection, params) {
   const selectPointsQuery = `
           select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
           from Points as p left outer join (
@@ -51,14 +51,11 @@ async function selectPoints(connection, pageId) {
           group by p.point_id
           LIMIT ?, 10
                    `;
-  const [pointRow] = await connection.query(
-    selectPointsQuery,
-    (pageId - 1) * 10
-  );
+  const [pointRow] = await connection.query(selectPointsQuery, params);
   return pointRow;
 }
 // 전체 포인트 조회 + 추천순(좋아요순)
-async function selectPointsOrderByLikes(connection, pageId) {
+async function selectPointsOrderByLikes(connection, params) {
   const selectPointsQuery = `
           select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
           from Points as p left outer join (
@@ -82,14 +79,11 @@ async function selectPointsOrderByLikes(connection, pageId) {
           order by likes desc
           LIMIT ?, 10
                    `;
-  const [pointRow] = await connection.query(
-    selectPointsQuery,
-    (pageId - 1) * 10
-  );
+  const [pointRow] = await connection.query(selectPointsQuery, params);
   return pointRow;
 }
 // 전체 포인트 조회 + 최신순
-async function selectPointsOrderByTime(connection, pageId) {
+async function selectPointsOrderByTime(connection, params) {
   const selectPointsQuery = `
           select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
           from Points as p left outer join (
@@ -113,15 +107,12 @@ async function selectPointsOrderByTime(connection, pageId) {
           order by point_date desc
           LIMIT ?, 10
                    `;
-  const [pointRow] = await connection.query(
-    selectPointsQuery,
-    (pageId - 1) * 10
-  );
+  const [pointRow] = await connection.query(selectPointsQuery, params);
   return pointRow;
 }
 
 // 키워드 기반 포인트 조회
-async function selectPointsByKeyword(connection, keywordParams) {
+async function selectPointsByKeyword(connection, params) {
   const selectPointsByKeywordQuery = `
         select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
         from Points as p left outer join (
@@ -147,16 +138,17 @@ async function selectPointsByKeyword(connection, keywordParams) {
            or p.creature like concat('%', ?, '%')
            or p.location like concat('%', ?, '%')
         group by p.point_id
+        LIMIT ?, 10
        `;
   const [pointRowByKeyword] = await connection.query(
     selectPointsByKeywordQuery,
-    keywordParams
+    params
   );
   return pointRowByKeyword;
 }
 
 // 키워드 기반 포인트 조회 + 추천순
-async function selectPointsByKeywordOrderByLikes(connection, keywordParams) {
+async function selectPointsByKeywordOrderByLikes(connection, params) {
   const selectPointsByKeywordQuery = `
         select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
         from Points as p left outer join (
@@ -182,16 +174,17 @@ async function selectPointsByKeywordOrderByLikes(connection, keywordParams) {
            or p.creature like concat('%', ?, '%')
            or p.location like concat('%', ?, '%')
         group by p.point_id
-        order by likes desc`;
+        order by likes desc
+        LIMIT ?, 10`;
   const [pointRowByKeyword] = await connection.query(
     selectPointsByKeywordQuery,
-    keywordParams
+    params
   );
   return pointRowByKeyword;
 }
 
 // 키워드 기반 포인트 조회 + 추천순
-async function selectPointsByKeywordOrderByTime(connection, keywordParams) {
+async function selectPointsByKeywordOrderByTime(connection, params) {
   const selectPointsByKeywordQuery = `
         select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
         from Points as p left outer join (
@@ -220,7 +213,7 @@ async function selectPointsByKeywordOrderByTime(connection, keywordParams) {
         order by point_date desc`;
   const [pointRowByKeyword] = await connection.query(
     selectPointsByKeywordQuery,
-    keywordParams
+    params
   );
   return pointRowByKeyword;
 }
