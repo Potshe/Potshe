@@ -130,5 +130,7 @@ exports.retrieveMapMark = async function (latitude, longitude){
         locationParams
     );
     connection.release();
-    return response(mapResult);
+    console.log('map result')
+    console.log(mapResult)
+    return mapResult;
 }

@@ -19,7 +19,6 @@ module.exports = function(app){
     app.put('/app/points/:pointId', imageUploader.array("images", 5), point.putPoint);
 
     // DELETE 포인트 삭제 API
-    app.delete('/app/points/:pointId', point.deletePoint)
     app.delete('/app/points/:pointId', point.deletePoint);
 
     // GET 위도, 경도로 포인트 조회 API

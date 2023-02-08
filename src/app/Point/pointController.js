@@ -303,6 +303,12 @@ exports.getKakaoMap = async function (req, res) {
 
 exports.getMapMark = async function (req, res) {
     const { latitude, longitude } = req.body;
+    if(!latitude) {
+        return res.send(response(baseResponse.POINT_LAT_EMPTY));
+    } else if(!longitude) {
+        return res.send(response(baseResponse.POINT_LONG_EMPTY));
+    }
+
     const markResult = pointProvider.retrieveMapMark(latitude, longitude);
-    return markResult;
+    return res.send(response(baseResponse.SUCCESS, markResult));
 }

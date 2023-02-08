@@ -322,14 +322,14 @@ async function selectMapMark(connection, locationParams) {
 			select point_id, latitude, longitude
             from Map_points
 		) as ll on ll.point_id = p.point_id
-        where ll.latitude = '37.539182674872' and ll.longitude = '127.074711902268'
+        where ll.latitude = ? and ll.longitude = ?
         group by p.point_id
         order by point_date desc;
                  `;
 
     const [markRow] = await connection.query(selectMarksQuery, locationParams);
     console.log(markRow);
-    return markRow;
+    return markRow[0];
 }
 
 module.exports = {

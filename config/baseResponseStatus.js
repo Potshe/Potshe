@@ -125,6 +125,16 @@ module.exports = {
     code: 2029,
     message: "포인트에 해루질 한 날짜를 입력해주세요.",
   },
+  POINT_LAT_EMPTY: {
+    isSuccess: false,
+    code: 2029,
+    message: "포인트의 위도 정보를 입력해주세요.",
+  },
+  POINT_LONG_EMPTY: {
+    isSuccess: false,
+    code: 2029,
+    message: "포인트의 경도 정보를 입력해주세요.",
+  },
   FILE_INVALID_PATH: {
     isSuccess: false,
     code: 2030,
