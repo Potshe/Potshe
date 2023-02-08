@@ -16,7 +16,7 @@ module.exports = function(app){
      app.post('/app/points', imageUploader.array("images", 5), point.postPoints);
 
     // PUT 포인트 수정
-    app.put('/app/points/:pointId', point.putPoint);
+    app.put('/app/points/:pointId', imageUploader.array("images", 5), point.putPoint);
 
     // DELETE 포인트 삭제 API
     app.delete('/app/points/:pointId', point.deletePoint)
