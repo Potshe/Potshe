@@ -90,6 +90,64 @@ exports.createPointImg = async function (pointId, imgUrl) {
     }
 }
 
+exports.editPointImg = async function (pointId, imgUrl) {
+
+    console.log('createPointImg - pointId')
+    console.log(pointId)
+
+    console.log('createPointImg - imgUrl')
+    console.log(imgUrl)
+
+    // 존재하는 포인트의 id인지 판별
+    // const pointRows = await pointProvider.getUserIdFromPoint(pointId);
+    // console.log("pointRows", pointRows);
+    // if (pointRows.length < 1)
+    //     return errResponse(baseResponse.POINT_POINTID_NOT_EXIST);
+
+    try{
+
+        const insertPointImgParams = [pointId, imgUrl];
+
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        const createPointResult = await pointDao.updatePointImg(
+            connection,
+            insertPointImgParams,
+        );
+
+        connection.release();
+
+        return response(baseResponse.SUCCESS, {"img" : "성공"});
+
+    } catch(err) {
+        logger.error(`App - createPointImg Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);//왜인지 데이터베이스 에러가 뜨지만 추가는 됩니다... 뭘까용..
+    }
+}
+
+exports.deletePointImg  = async function (pointId) {
+
+    try{
+
+        const insertPointImgParams = [pointId];
+
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        const createPointResult = await pointDao.deletePointImg(
+            connection,
+            insertPointImgParams,
+        );
+
+        connection.release();
+
+        return response(baseResponse.SUCCESS, {"img" : "삭제 성공"});
+
+    } catch(err) {
+        logger.error(`App - createPointImg Service error\n: ${err.message}`);
+        return errResponse(baseResponse.DB_ERROR);//왜인지 데이터베이스 에러가 뜨지만 추가는 됩니다... 뭘까용..
+    }
+}
+
 exports.createPointLocation = async function(pointId, lat, long) {
     try{
 
@@ -108,8 +166,32 @@ exports.createPointLocation = async function(pointId, lat, long) {
     }
 }
 
+exports.editPointLocation = async function(pointId, lat, long) {
+    try{
+
+        const connection = await pool.getConnection(async (conn) => conn);
+
+        const createPointLocationParams = [lat, long, pointId]
+
+        const createPointLocationResponse = await pointDao.updatePointLocation(connection, createPointLocationParams);
+        connection.release();
+
+        //return response(baseResponse.SUCCESS);
+
+    } catch(err) {
+        logger.error(`App - createPointLocation Service Error\n : ${error.message}`);
+        return errResponse(baseResponse.DB_ERROR);
+    }
+}
 
 exports.editPoint = async function(pointId, title, content, point_type, location, creature, point_date){
+
+    const pointRows = await pointProvider.retrievePointById(pointId);
+    console.log("pointRows", pointRows);
+    if (pointRows.length < 1){
+        return errResponse(baseResponse.POINT_POINTID_NOT_EXIST);
+    }
+
     try{
 
         const connection = await pool.getConnection(async (conn) => conn);
@@ -127,6 +209,8 @@ exports.editPoint = async function(pointId, title, content, point_type, location
     }
 
 }
+
+
 
 exports.deletePoint = async function(pointId) {
     // Points 테이블에 존재하는 point인지 판별

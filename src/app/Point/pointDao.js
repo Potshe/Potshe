@@ -228,10 +228,36 @@ async function insertPointImg(connection, insertPointImgParams) {
     return updatePointRow[0];
 }
 
+async function updatePointImg(connection, insertPointImgParams) {
+    const insertPointImgQuery = `
+    INSERT INTO Point_images(point_id, image_url)
+        VALUES (?, ?);
+    `;
+    const updatePointRow = await connection.query(insertPointImgQuery, insertPointImgParams);
+    return updatePointRow[0];
+}
+
+async function deletePointImg(connection, insertPointImgParams) {
+    const insertPointImgQuery = `
+    DELETE FROM Point_images WHERE point_id = ?;
+    `;
+    const updatePointRow = await connection.query(insertPointImgQuery, insertPointImgParams);
+    return updatePointRow[0];
+}
+
 async function insertPointLocation(connection, insertPointLocationParams) {
     const insertPointLocationQuery = `
     INSERT INTO Map_points(point_id, latitude, longitude)
         VALUES (?, ?, ?);
+    `;
+    const updatePointRow = await connection.query(insertPointLocationQuery, insertPointLocationParams);
+    return updatePointRow[0];
+}
+
+async function updatePointLocation(connection, insertPointLocationParams) {
+    const insertPointLocationQuery = `UPDATE Map_points
+    SET latitude = ?, longitude = ?
+        WHERE point_id = ?;
     `;
     const updatePointRow = await connection.query(insertPointLocationQuery, insertPointLocationParams);
     return updatePointRow[0];
@@ -291,4 +317,7 @@ module.exports = {
     deletePoint,
     insertPointLocation,
     updatePoint,
+    updatePointLocation,
+    updatePointImg,
+    deletePointImg,
 };
