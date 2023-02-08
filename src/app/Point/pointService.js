@@ -167,6 +167,9 @@ exports.createPointLocation = async function(pointId, lat, long) {
 }
 
 exports.editPointLocation = async function(pointId, lat, long) {
+
+
+
     try{
 
         const connection = await pool.getConnection(async (conn) => conn);

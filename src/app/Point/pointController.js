@@ -192,6 +192,9 @@ exports.putPoint = async function (req, res) {
     //           return res.send(editPointInfo)
     // }
     const editPointInfo = await pointService.editPoint(pointId, title, content, point_type, location, creature, point_date);//나중에 지우고 주석해제
+    if(!editPointInfo.isSuccess){
+        return res.send(editPointInfo)
+    }
 
     //location으로 위도, 경도 정보 반환
     fetch('https://dapi.kakao.com/v2/local/search/address.json?query=' + encodeURIComponent(location), {
