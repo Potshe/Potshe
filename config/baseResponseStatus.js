@@ -66,6 +66,11 @@ module.exports = {
     code: 17,
     message: "포인트 추가 성공",
   },
+  POINT_DELETE_SUCCESS: {
+    isSuccess: true,
+    code: 18,
+    message: "포인트 삭제 성공",
+  },
 
   // POINT - FAILURE
   POINT_POINTID_EMPTY: {

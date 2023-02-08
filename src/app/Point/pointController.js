@@ -257,7 +257,8 @@ exports.deletePoint = async function (req, res) {
         return res.send(errResponse(baseResponse.POINT_POINTID_EMPTY));
     }
 
-    const deletePointResponse = pointService.deletePoint(pointId);
+    const deletePointResponse = await pointService.deletePoint(pointId);
+
     return res.send(deletePointResponse);
 
 }

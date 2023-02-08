@@ -221,22 +221,21 @@ exports.deletePoint = async function(pointId) {
     console.log("pointRows", pointRows);
     if (pointRows.length < 1){
         return errResponse(baseResponse.POINT_POINTID_NOT_EXIST);
-        /* TODO */
-        // errResponse를 return 해줬는데도 그냥 {} 뜸..
     }
 
         try{
 
             const connection = await pool.getConnection(async (conn) => conn);
+            const deletePointParms = [pointId, pointId, pointId]
 
             const deletePointResult = await pointDao.deletePoint(
                 connection,
-                pointId,
+                deletePointParms,
             );
 
             connection.release();
 
-            return response(baseResponse.SUCCESS);
+            return response(baseResponse.POINT_DELETE_SUCCESS);
 
         } catch(err) {
             logger.error(`App - createPointImg Service error\n: ${err.message}`);

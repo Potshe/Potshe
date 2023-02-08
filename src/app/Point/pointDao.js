@@ -278,12 +278,12 @@ async function updatePoint(connection, editPointParams) {
     return updatePointRow[0];
 }
 
-async function deletePoint(connection, pointId) {
+async function deletePoint(connection, deletePointParams) {
     const deletePointQuery = ` 
-        DELETE 
-        FROM Points
-        WHERE point_id = ?;`;
-    const deletePointRow = await connection.query(deletePointQuery, pointId);
+        DELETE p, mp, pi
+        FROM Points p, Map_points mp, Point_images pi
+        WHERE p.point_id = ? and mp.point_id = ? and pi.point_id = ?;`;
+    const deletePointRow = await connection.query(deletePointQuery, deletePointParams);
     return deletePointRow[0];
 }
 
