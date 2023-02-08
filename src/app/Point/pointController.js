@@ -64,7 +64,6 @@ exports.getPointByPointId = async function (req, res) {
 
 }
 
-
 /**
  * API No. 16
  * API Name : 포인트 등록
@@ -107,7 +106,6 @@ exports.postPoints = async function (req, res) {
     console.log(postPointResponse)
     let isAddressComplete = false
 
-    if(postPointResponse.isSuccess && !isAddressComplete) {
         //location으로 위도, 경도 정보 반환
         fetch('https://dapi.kakao.com/v2/local/search/address.json?query=' + encodeURIComponent(postPointResponse.result.location), {
             method: 'GET',
@@ -137,16 +135,15 @@ exports.postPoints = async function (req, res) {
         console.log('req.files', req.files)
 
         // 사용자가 포인트 등록할 때, image 까지 업로드 했을 경우에만
-        if (req.files) {
+        if (req.files.length > 0) {
             req.files.map((item) => {
                 pointService.createPointImg(
                     postPointResponse.result.pointId, item.location
                 )
             })
         }
-    }else if(isAddressComplete) {
-        return res.send(postPointResponse)
-    }
+
+        return res.send(response(baseResponse.POINT_ADD_SUCCESS))
 
 
 

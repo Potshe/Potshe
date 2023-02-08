@@ -22,7 +22,7 @@ module.exports = function(app){
     app.delete('/app/points/:pointId', point.deletePoint)
 
     // GET 위도, 경도로 포인트 조회 API
-    
+    // app.get("/app/maps/mark", point.getPointsByLatLong)
 
     // 20. GET 모든 Map 포인트 조회 API -> GET /points와 동일
     // app.get("/app/maps", point.getPointMaps);
@@ -31,6 +31,6 @@ module.exports = function(app){
     // app.get("/app/maps/:pointId", point.getPointMapByPointId);
 
     // 22. 위도, 경도 정보 조회 -> x : POST /points 랑 결합
-    //app.get("/app/map", point.getKakaoMap);
+    // app.get("/app/map", point.getKakaoMap);
 
 };

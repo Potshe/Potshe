@@ -50,6 +50,7 @@ module.exports = {
     code: 14,
     message: "특정 포인트 키워드 기반 검색 성공",
   },
+
   POINT_EDIT_SUCCESS: {
     isSuccess: true,
     code: 15,
@@ -59,6 +60,11 @@ module.exports = {
     isSuccess: true,
     code: 16,
     message: "사용자가 좋아요한 포인트 조회 성공",
+  },
+  POINT_ADD_SUCCESS: {
+    isSuccess: true,
+    code: 17,
+    message: "포인트 추가 성공",
   },
 
   // POINT - FAILURE
