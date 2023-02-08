@@ -67,11 +67,11 @@ module.exports = function (app) {
   app.delete("/app/users/:userId/likes/:pointId", user.deleteUserLike);
 
   // POST 유저 프로필 이미지 수정 API
-  app.post(
-    "/app/users/:userId/image",
-    imageUploader.single("image"),
-    user.updateImage
-  );
+  // app.post(
+  //   "/app/users/:userId/image",
+  //   imageUploader.single("image"),
+  //   user.updateImage
+  // );
 
   // GET 유저가 올린 포인트 조회 API
   app.get("/app/users/:userId/points", user.getPointByUserId);

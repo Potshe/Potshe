@@ -103,6 +103,7 @@ exports.editUserProfile = async function (req, res) {
   const userId = req.params.userId; // 유저 아이디
   const filePath = req.file.location; // 파일 경로
 
+
   // 유효하지 않은 userId라면 에러 처리
   const userRows = await userProvider.retrieveUser(userId);
   if (userRows.length === 0) {
