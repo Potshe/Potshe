@@ -323,7 +323,7 @@ exports.getPointByUserId = async function (req, res) {
       return res.send(errResponse(baseResponse.USER_NOT_EXIST));
     }
 
-    return res.send(response(baseResponse.SUCCESS, pointResultByUserId));
+    return res.send(response(baseResponse.USER_POINT_SUCCESS, pointResultByUserId));
   }
 };
 

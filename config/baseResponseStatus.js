@@ -50,6 +50,17 @@ module.exports = {
     code: 14,
     message: "특정 포인트 키워드 기반 검색 성공",
   },
+  POINT_SUCCESS_BY_ID: {
+    isSuccess: true,
+    code: 20,
+    message: "포인트 아이디로 포인트 검색 성공",
+  },
+  POINT_SUCCESS_BY_LAT_LONG: {
+    isSuccess: true,
+    code: 21,
+    message: "위도, 경도로 포인트 검색 성공",
+  },
+
 
   POINT_EDIT_SUCCESS: {
     isSuccess: true,
@@ -70,6 +81,11 @@ module.exports = {
     isSuccess: true,
     code: 18,
     message: "포인트 삭제 성공",
+  },
+  USER_POINT_SUCCESS : {
+    isSuccess: true,
+    code: 19,
+    message: "유저가 작성한 포인트 조회 성공",
   },
 
   // POINT - FAILURE

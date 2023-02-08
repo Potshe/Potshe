@@ -26,10 +26,10 @@ exports.getPoints = async function (req, res) {
 
     if (!keyword && order !== "추천순" && order !== "최신순") {
         const pointsResult = await pointProvider.retrievePoint();
-        return res.send(response(baseResponse.SUCCESS, pointsResult));
+        return res.send(response(baseResponse.POINT_SUCCESS, pointsResult));
     } else {
         const pointsResultWithKeyword = await pointProvider.retrievePoint(keyword, order);
-        return res.send(response(baseResponse.SUCCESS, pointsResultWithKeyword));
+        return res.send(response(baseResponse.POINT_SUCCESS_BY_KEYWORD, pointsResultWithKeyword));
     }
 
 }
@@ -59,7 +59,7 @@ exports.getPointByPointId = async function (req, res) {
         return res.send(errResponse(baseResponse.POINT_POINTID_NOT_EXIST));
     }
 
-    return res.send(response(baseResponse.SUCCESS, pointResultById));
+    return res.send(response(baseResponse.POINT_SUCCESS_BY_ID, pointResultById));
 
 
 }
@@ -315,5 +315,5 @@ exports.getMapMark = async function (req, res) {
 
     const markResult = await pointProvider.retrieveMapMark(latitude, longitude);
 
-    return res.send(response(baseResponse.SUCCESS, markResult));
+    return res.send(response(baseResponse.POINT_SUCCESS_BY_LAT_LONG, markResult));
 }
