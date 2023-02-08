@@ -109,7 +109,7 @@ exports.createPointLocation = async function(pointId, lat, long) {
 }
 
 
-exports.editPoint = async function(pointId, title, content, pointType, location, creature, pointDate){
+exports.editPoint = async function(pointId, title, content, point_type, location, creature, point_date){
     try{
 
         const connection = await pool.getConnection(async (conn) => conn);

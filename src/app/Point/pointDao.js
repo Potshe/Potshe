@@ -30,7 +30,7 @@ async function selectPointById(connection, pointId) {
 
 
 // 전체 포인트 조회
-async function selectPoints(connection, orderByParam) {
+async function selectPoints(connection) {
     const selectPointsQuery = `
         select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
         from Points as p left outer join (
@@ -52,7 +52,7 @@ async function selectPoints(connection, orderByParam) {
 		) as ll on ll.point_id = p.point_id
         group by p.point_id
                  `;
-    const [pointRow] = await connection.query(selectPointsQuery, orderByParam);
+    const [pointRow] = await connection.query(selectPointsQuery);
     return pointRow;
 }
 // 전체 포인트 조회 + 추천순(좋아요순)
