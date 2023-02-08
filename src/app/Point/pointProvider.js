@@ -121,3 +121,14 @@ exports.retrieveMap = async function (pointId) {
     connection.release();
     return response(mapResult);
 };
+
+exports.retrieveMapMark = async function (latitude, longitude){
+    const connection = await pool.getConnection(async (conn) => conn);
+    let locationParams = [latitude, longitude];
+    const mapResult = await pointDao.selectMapMark(
+        connection,
+        locationParams
+    );
+    connection.release();
+    return response(mapResult);
+}

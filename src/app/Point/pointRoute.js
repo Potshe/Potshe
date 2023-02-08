@@ -20,10 +20,12 @@ module.exports = function(app){
 
     // DELETE 포인트 삭제 API
     app.delete('/app/points/:pointId', point.deletePoint)
+    app.delete('/app/points/:pointId', point.deletePoint);
 
     // GET 위도, 경도로 포인트 조회 API
-    // app.get("/app/maps/mark", point.getPointsByLatLong)
+    app.get('/app/maps/mark', point.getMapMark);
 
+    // app.get("/app/maps/mark", point.getPointsByLatLong)
     // 20. GET 모든 Map 포인트 조회 API -> GET /points와 동일
     // app.get("/app/maps", point.getPointMaps);
 

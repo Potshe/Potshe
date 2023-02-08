@@ -238,3 +238,9 @@ exports.getKakaoMap = async function (req, res) {
 
     locationFinder(addr)
 }
+
+exports.getMapMark = async function (req, res) {
+    const { latitude, longitude } = req.body;
+    const markResult = pointProvider.retrieveMapMark(latitude, longitude);
+    return markResult;
+}

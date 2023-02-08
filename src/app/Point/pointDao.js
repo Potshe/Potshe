@@ -275,6 +275,37 @@ async function selectMapId(connection, pointId) {
     return mapRows;
 }
 
+async function selectMapMark(connection, locationParams) {
+    console.log(locationParams);
+    const selectMarksQuery = `
+    select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
+        from Points as p left outer join (
+            select point_id
+            from User_point_likes
+        ) as upl on p.point_id = upl.point_id
+                         left join (
+            select user_id, nickname
+            from Users
+        ) as u on p.user_id = u.user_id
+                         left join (
+            select point_id, group_concat(image_url) as imgList
+            from Point_images
+            group by point_id
+        ) as pi on pi.point_id = p.point_id
+                         left join (
+			select point_id, latitude, longitude
+            from Map_points
+		) as ll on ll.point_id = p.point_id
+        where ll.latitude = '37.539182674872' and ll.longitude = '127.074711902268'
+        group by p.point_id
+        order by point_date desc;
+                 `;
+
+    const [markRow] = await connection.query(selectMarksQuery, locationParams);
+    console.log(markRow);
+    return markRow;
+}
+
 module.exports = {
     selectMap,
     selectMapId,
@@ -291,4 +322,5 @@ module.exports = {
     deletePoint,
     insertPointLocation,
     updatePoint,
+    selectMapMark,
 };
