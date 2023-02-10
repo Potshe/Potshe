@@ -103,7 +103,6 @@ exports.editUserProfile = async function (req, res) {
   const userId = req.params.userId; // 유저 아이디
   const filePath = req.file.location; // 파일 경로
 
-
   // 유효하지 않은 userId라면 에러 처리
   const userRows = await userProvider.retrieveUser(userId);
   if (userRows.length === 0) {
@@ -207,6 +206,10 @@ exports.deleteUserProfile = async function (req, res) {
  */
 exports.getUserLike = async function (req, res) {
   const userId = req.params.userId;
+  const pageId = parseInt(req.query.pageId);
+
+  // console.log("userId ->", userId);
+  // console.log("pageId ->", pageId);
 
   // 유효하지 않은 userId라면 에러 처리
   const userRows = await userProvider.retrieveUser(userId);
@@ -214,10 +217,15 @@ exports.getUserLike = async function (req, res) {
     return res.send(errResponse(baseResponse.USER_USERID_NOT_EXIST));
   }
 
-  const userLikeList = await userProvider.retrieveUserLikeList(userId);
+  const userLikeList = await userProvider.retrieveUserLikeList(userId, pageId);
 
+  // 포인트가 존재하지 않을 때
   if (userLikeList.length === 0) {
-    return res.send(errResponse(baseResponse.USER_POINT_LIKE_NOT_EXIST));
+    if (pageId === 1) {
+      return res.send(errResponse(baseResponse.USER_POINT_LIKE_NOT_EXIST));
+    } else {
+      return res.send(errResponse(baseResponse.USER_POINT_LIKE_NOT_MORE_EXIST));
+    }
   }
 
   return res.send(
@@ -323,7 +331,9 @@ exports.getPointByUserId = async function (req, res) {
       return res.send(errResponse(baseResponse.USER_NOT_EXIST));
     }
 
-    return res.send(response(baseResponse.USER_POINT_SUCCESS, pointResultByUserId));
+    return res.send(
+      response(baseResponse.USER_POINT_SUCCESS, pointResultByUserId)
+    );
   }
 };
 
