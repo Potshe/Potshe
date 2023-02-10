@@ -1,7 +1,7 @@
 // pointId 포인트 조회
 async function selectPointById(connection, pointId) {
   const selectPointIdQuery = `
-        select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
+        select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
         from Points as p left outer join (
             select point_id
             from User_point_likes
@@ -114,7 +114,7 @@ async function selectPointsOrderByTime(connection, params) {
 // 키워드 기반 포인트 조회
 async function selectPointsByKeyword(connection, params) {
   const selectPointsByKeywordQuery = `
-        select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
+        select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
         from Points as p left outer join (
             select point_id
             from User_point_likes
@@ -150,7 +150,7 @@ async function selectPointsByKeyword(connection, params) {
 // 키워드 기반 포인트 조회 + 추천순
 async function selectPointsByKeywordOrderByLikes(connection, params) {
   const selectPointsByKeywordQuery = `
-        select p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
+        select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
         from Points as p left outer join (
             select point_id
             from User_point_likes
