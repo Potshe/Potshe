@@ -27,11 +27,6 @@ exports.getPoints = async function (req, res) {
     pageId = parseInt(pageId);
   }
 
-  // if (pageId) {
-  //   const pointsList = await pointProvider.retrievePointByPageId(pageId);
-  //   return res.send(response(baseResponse.SUCCESS, pointsList));
-  // }
-
   if (!keyword && order !== "추천순" && order !== "최신순") {
     // keyword, order 둘 다 없을 때.. (pageId는 무조거 있다는 가정 하에..)
     const pointsResult = await pointProvider.retrievePoint(pageId);

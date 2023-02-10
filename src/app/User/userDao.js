@@ -75,16 +75,17 @@ exports.deleteUserProfile = async function (connection, userId) {
 };
 
 // 유저가 좋아요한 포인트 조회
-exports.selectUserLike = async function (connection, userId) {
+exports.selectUserLike = async function (connection, params) {
   const selectUserLikeQuery = `
-  SELECT Points.point_id, Points.title, Points.created_at 
+  SELECT Points.point_id, Points.title, Points.point_date 
   FROM Points 
   LEFT JOIN User_point_likes 
   ON Points.point_id=User_point_likes.point_id
   WHERE User_point_likes.user_id = ?
-  ORDER BY Points.created_at DESC;
+  ORDER BY Points.point_date DESC
+  LIMIT ?, 10;
   `;
-  const [userLikeRows] = await connection.query(selectUserLikeQuery, userId);
+  const [userLikeRows] = await connection.query(selectUserLikeQuery, params);
   return userLikeRows;
 };
 

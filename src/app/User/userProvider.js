@@ -44,9 +44,12 @@ exports.retrieveUser = async function (userId) {
 };
 
 // 사용자가 좋아요한 포인트 결과 반환
-exports.retrieveUserLikeList = async function (userId) {
+exports.retrieveUserLikeList = async function (userId, pageId) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const userLikeListResult = await userDao.selectUserLike(connection, userId);
+
+  const pointIndex = (pageId - 1) * 10;
+  const params = [userId, pointIndex];
+  const userLikeListResult = await userDao.selectUserLike(connection, params);
 
   connection.release();
 

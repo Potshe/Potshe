@@ -61,7 +61,6 @@ module.exports = {
     message: "위도, 경도로 포인트 검색 성공",
   },
 
-
   POINT_EDIT_SUCCESS: {
     isSuccess: true,
     code: 15,
@@ -82,7 +81,7 @@ module.exports = {
     code: 18,
     message: "포인트 삭제 성공",
   },
-  USER_POINT_SUCCESS : {
+  USER_POINT_SUCCESS: {
     isSuccess: true,
     code: 19,
     message: "유저가 작성한 포인트 조회 성공",
@@ -238,7 +237,12 @@ module.exports = {
   USER_POINT_LIKE_NOT_EXIST: {
     isSuccess: false,
     code: 160,
-    message: "아직 좋아요한 포인트가 없네용.. ㅠ.ㅠ",
+    message: "아직 좋아요한 포인트가 없습니다.",
+  },
+  USER_POINT_LIKE_NOT_MORE_EXIST: {
+    isSuccess: false,
+    code: 161,
+    message: "좋아요한 포인트가 더 이상 존재하지 않습니다.",
   },
 
   // 회원가입 - SUCCESS
