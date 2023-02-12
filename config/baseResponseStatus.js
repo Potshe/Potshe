@@ -244,6 +244,16 @@ module.exports = {
     code: 161,
     message: "좋아요한 포인트가 더 이상 존재하지 않습니다.",
   },
+  USER_POINT_NOT_MORE_EXIST: {
+    isSuccess: false,
+    code: 161,
+    message: "사용자가 작성한 포인트가 더 이상 존재하지 않습니다.",
+  },
+  USER_POINT_NOT_WRITTEN: {
+    isSuccess: false,
+    code: 161,
+    message: "사용자가 아직 포인트를 작성하지 않았습니다.",
+  },
 
   // 회원가입 - SUCCESS
   SINGUP_SUCCESS: {

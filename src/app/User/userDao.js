@@ -46,7 +46,7 @@ exports.selectUserProfileById = async function (connection, userId) {
 };
 
 // userId로 포인트 조회
-exports.selectPointByUserId = async function (connection, userId) {
+exports.selectPointByUserId = async function (connection, params) {
   const selectUserIdQuery = `
                  SELECT p.point_id, title, content, point_type, creature, point_date, location, imgList as point_img_list
                  FROM Points p
@@ -57,7 +57,7 @@ exports.selectPointByUserId = async function (connection, userId) {
                  ) as pi on pi.point_id = p.point_id
                  WHERE user_id = ?;
                  `;
-  const [pointRow] = await connection.query(selectUserIdQuery, userId);
+  const [pointRow] = await connection.query(selectUserIdQuery, params);
   return pointRow;
 };
 

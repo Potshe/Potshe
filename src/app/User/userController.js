@@ -314,27 +314,39 @@ exports.updateImage = async function (req, res) {
  * [GET] /app/points/:userId
  */
 exports.getPointByUserId = async function (req, res) {
-  /**
-   * path variable: userId
-   */
+  // path variable: userId
+  // query string: pageId
 
   const { userId } = req.params;
+  let { pageId } = req.query;
+  pageId = parseInt(pageId);
 
+  // console.log("userId ->", userId);
+  // console.log("pageId ->", pageId);
+
+  // userId가 입력되었는지 검사
   if (!userId || userId === ":userId") {
     return res.send(errResponse(baseResponse.USER_USERID_EMPTY));
-  } else {
-    const pointResultByUserId = await userProvider.retrievePointByUserId(
-      userId
-    );
-
-    if (pointResultByUserId.length === 0) {
-      return res.send(errResponse(baseResponse.USER_NOT_EXIST));
-    }
-
-    return res.send(
-      response(baseResponse.USER_POINT_SUCCESS, pointResultByUserId)
-    );
   }
+
+  const pointResultByUserId = await userProvider.retrievePointByUserId(
+    userId,
+    pageId
+  );
+
+  if (pointResultByUserId.length === 0) {
+    if (pageId > 1) {
+      // 사용자가 작성한 포인트가 더 이상 존재하지 않습니다.
+      return res.send(errResponse(baseResponse.USER_POINT_NOT_MORE_EXIST));
+    } else {
+      // 사용자가 아직 포인트를 작성하지 않았습니다.
+      return res.send(errResponse(baseResponse.USER_POINT_NOT_WRITTEN));
+    }
+  }
+
+  return res.send(
+    response(baseResponse.USER_POINT_SUCCESS, pointResultByUserId)
+  );
 };
 
 /** JWT 토큰 검증 API
