@@ -71,9 +71,13 @@ exports.retrieveUserPointLike = async function (userId, pointId) {
 };
 
 // 유저아이디 기반 포인트 반환
-exports.retrievePointByUserId = async function (userId) {
+exports.retrievePointByUserId = async function (userId, pageId) {
   const connection = await pool.getConnection(async (conn) => conn);
-  const pointListResult = await userDao.selectPointByUserId(connection, userId);
+
+  const pointIndex = (pageId - 1) * 10;
+  const params = [userId, pointIndex];
+
+  const pointListResult = await userDao.selectPointByUserId(connection, params);
   connection.release();
   return pointListResult;
 };

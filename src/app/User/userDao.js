@@ -46,13 +46,14 @@ exports.selectUserProfileById = async function (connection, userId) {
 };
 
 // userId로 포인트 조회
-exports.selectPointByUserId = async function (connection, userId) {
+exports.selectPointByUserId = async function (connection, params) {
   const selectUserIdQuery = `
                  SELECT point_id, title, content, point_type, creature, point_date, location 
                  FROM Points
-                 WHERE user_id = ?;
+                 WHERE user_id = ?
+                 LIMIT ?, 10;
                  `;
-  const [pointRow] = await connection.query(selectUserIdQuery, userId);
+  const [pointRow] = await connection.query(selectUserIdQuery, params);
   return pointRow;
 };
 
