@@ -1,13 +1,13 @@
 // pointId 포인트 조회
 async function selectPointById(connection, pointId) {
   const selectPointIdQuery = `
-        select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
+        select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, u.image_url as user_img_url, imgList as point_image_list, ll.latitude, ll.longitude
         from Points as p left outer join (
             select point_id
             from User_point_likes
         ) as upl on p.point_id = upl.point_id
                          left join (
-            select user_id, nickname
+            select user_id, nickname, image_url
             from Users
         ) as u on p.user_id = u.user_id
                          left join (
@@ -30,13 +30,13 @@ async function selectPointById(connection, pointId) {
 // 전체 포인트 조회
 async function selectPoints(connection, params) {
   const selectPointsQuery = `
-          select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
+          select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, u.image_url as user_img_url, imgList as point_image_list, ll.latitude, ll.longitude
           from Points as p left outer join (
               select point_id
               from User_point_likes
           ) as upl on p.point_id = upl.point_id
                            left join (
-              select user_id, nickname
+              select user_id, nickname, image_url
               from Users
           ) as u on p.user_id = u.user_id
                            left join (
@@ -57,13 +57,13 @@ async function selectPoints(connection, params) {
 // 전체 포인트 조회 + 추천순(좋아요순)
 async function selectPointsOrderByLikes(connection, params) {
   const selectPointsQuery = `
-          select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
+          select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, u.image_url as user_img_url, imgList as point_image_list, ll.latitude, ll.longitude
           from Points as p left outer join (
               select point_id
               from User_point_likes
           ) as upl on p.point_id = upl.point_id
                            left join (
-              select user_id, nickname
+              select user_id, nickname, image_url
               from Users
           ) as u on p.user_id = u.user_id
                            left join (
@@ -85,13 +85,13 @@ async function selectPointsOrderByLikes(connection, params) {
 // 전체 포인트 조회 + 최신순
 async function selectPointsOrderByTime(connection, params) {
   const selectPointsQuery = `
-          select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, imgList as point_image_list, ll.latitude, ll.longitude
+          select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, u.image_url as user_img_url, imgList as point_image_list, ll.latitude, ll.longitude
           from Points as p left outer join (
               select point_id
               from User_point_likes
           ) as upl on p.point_id = upl.point_id
                            left join (
-              select user_id, nickname
+              select user_id, nickname, image_url
               from Users
           ) as u on p.user_id = u.user_id
                            left join (
@@ -114,13 +114,13 @@ async function selectPointsOrderByTime(connection, params) {
 // 키워드 기반 포인트 조회
 async function selectPointsByKeyword(connection, params) {
   const selectPointsByKeywordQuery = `
-        select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
+        select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date, p.location, count(upl.point_id) as likes, u.nickname, u.image_url as user_img_url, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
         from Points as p left outer join (
             select point_id
             from User_point_likes
         ) as upl on p.point_id = upl.point_id
                          left join (
-            select user_id, nickname
+            select user_id, nickname, image_url
             from Users
         ) as u on p.user_id = u.user_id
                          left join (
@@ -150,13 +150,13 @@ async function selectPointsByKeyword(connection, params) {
 // 키워드 기반 포인트 조회 + 추천순
 async function selectPointsByKeywordOrderByLikes(connection, params) {
   const selectPointsByKeywordQuery = `
-        select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
+        select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, u.image_url as user_img_url, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
         from Points as p left outer join (
             select point_id
             from User_point_likes
         ) as upl on p.point_id = upl.point_id
                          left join (
-            select user_id, nickname
+            select user_id, nickname, image_url
             from Users
         ) as u on p.user_id = u.user_id
                          left join (
@@ -186,13 +186,13 @@ async function selectPointsByKeywordOrderByLikes(connection, params) {
 // 키워드 기반 포인트 조회 + 추천순
 async function selectPointsByKeywordOrderByTime(connection, params) {
   const selectPointsByKeywordQuery = `
-        select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
+        select p.user_id, p.point_id, p.title, p.content, p.point_type, p.creature, p.point_date as point_date, p.location, count(upl.point_id) as likes, u.nickname, u.image_url as user_img_url, pointImageUrlList as point_img_list, ll.latitude, ll.longitude
         from Points as p left outer join (
             select point_id
             from User_point_likes
         ) as upl on p.point_id = upl.point_id
                          left join (
-            select user_id, nickname
+            select user_id, nickname, image_url
             from Users
         ) as u on p.user_id = u.user_id
                          left join (
