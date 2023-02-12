@@ -48,8 +48,13 @@ exports.selectUserProfileById = async function (connection, userId) {
 // userId로 포인트 조회
 exports.selectPointByUserId = async function (connection, userId) {
   const selectUserIdQuery = `
-                 SELECT point_id, title, content, point_type, creature, point_date, location 
-                 FROM Points
+                 SELECT p.point_id, title, content, point_type, creature, point_date, location, imgList as point_img_list
+                 FROM Points p
+                        left join (
+                   select point_id, group_concat(image_url) as imgList
+                   from Point_images
+                   group by point_id
+                 ) as pi on pi.point_id = p.point_id
                  WHERE user_id = ?;
                  `;
   const [pointRow] = await connection.query(selectUserIdQuery, userId);
@@ -77,12 +82,18 @@ exports.deleteUserProfile = async function (connection, userId) {
 // 유저가 좋아요한 포인트 조회
 exports.selectUserLike = async function (connection, params) {
   const selectUserLikeQuery = `
-  SELECT Points.point_id, Points.title, Points.point_date 
-  FROM Points 
-  LEFT JOIN User_point_likes 
-  ON Points.point_id=User_point_likes.point_id
-  WHERE User_point_likes.user_id = ?
-  ORDER BY Points.point_date DESC
+  SELECT p.point_id, p.title, p.point_date, pi.imgList as point_img_list
+  FROM Points p
+  LEFT JOIN (select user_id, point_id
+             from User_point_likes) as upl
+  ON p.point_id=upl.point_id
+  left join (
+    select point_id, group_concat(image_url) as imgList
+    from Point_images
+    group by point_id
+  ) as pi on pi.point_id = p.point_id
+  WHERE upl.user_id = ?
+  ORDER BY p.point_date DESC
   LIMIT ?, 10;
   `;
   const [userLikeRows] = await connection.query(selectUserLikeQuery, params);
