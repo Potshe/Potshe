@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.com:softsquared/template/api-server-node.git"
+    "url": "git+ssh://git@gitlab.com/softsquared/template/api-server-node.git"
   },
   "author": "",
   "license": "ISC",
@@ -40,5 +40,10 @@
     "regex-email": "^1.0.2",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.2.1"
-  }
+  },
+  "bugs": {
+    "url": "https://gitlab.com/softsquared/template/api-server-node/issues"
+  },
+  "homepage": "https://gitlab.com/softsquared/template/api-server-node#readme",
+  "devDependencies": {}
 }
