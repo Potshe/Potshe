@@ -235,7 +235,7 @@ exports.getUserLike = async function (req, res) {
 /**
  * API No. 11
  * API Name : 특정 포인트에 좋아요 표시
- * [POST] /app/users/likes/:userId/:pointId
+ * [POST] /app/users/:userId/likes/:pointId
  * path variable : userId, pointId
  */
 exports.postUserLike = async function (req, res) {
@@ -259,7 +259,7 @@ exports.postUserLike = async function (req, res) {
 /**
  * API No. 12
  * API Name : 특정 포인트에 좋아요 취소
- * [DELETE] /app/users/likes/:userId/:pointId
+ * [DELETE] /app/users/:userId/likes/:pointId
  * path variable : userId, pointId
  */
 exports.deleteUserLike = async function (req, res) {
@@ -346,13 +346,4 @@ exports.getPointByUserId = async function (req, res) {
   return res.send(
     response(baseResponse.USER_POINT_SUCCESS, pointResultByUserId)
   );
-};
-
-/** JWT 토큰 검증 API
- * [GET] /app/auto-login
- */
-exports.check = async function (req, res) {
-  const userIdResult = req.verifiedToken.userId;
-  console.log(userIdResult);
-  return res.send(response(baseResponse.TOKEN_VERIFICATION_SUCCESS));
 };
