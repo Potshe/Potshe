@@ -3,7 +3,6 @@ const point = require("./pointController");
 
 module.exports = function (app) {
   const point = require("./pointController");
-  const jwtMiddleware = require("../../../config/jwtMiddleware");
 
   // GET 모든 포인트 조회 API + 키워드로 포인트 검색 API
   app.get("/app/points", point.getPoints);

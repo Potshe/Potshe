@@ -1,6 +1,5 @@
 module.exports = function (app) {
   const user = require("./userController");
-  const jwtMiddleware = require("../../../config/jwtMiddleware");
   const auth = require("./auth");
   const passport = require("passport");
   const imageUploader = require("../../../config/imageUploader");

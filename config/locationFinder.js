@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const secret_config = require('./secret')
 
 const locationFinder = (addr) => {
 
@@ -6,7 +7,7 @@ const locationFinder = (addr) => {
 
     fetch('https://dapi.kakao.com/v2/local/search/address.json?query=' + encodeURIComponent(addr), {
         method: 'GET',
-        headers: {'Authorization': 'KakaoAK 1831916d0f1ff0ab48b353121f57f96e'}
+        headers: {'Authorization': `KakaoAK ${secret_config["kakaomap-secret-key"]}`}
     }).then(res => res.json())
         .then(data => {
             // map_result = JSON.stringify(data, null, '\t')
