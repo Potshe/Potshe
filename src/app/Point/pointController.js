@@ -120,7 +120,9 @@ exports.postPoints = async function (req, res) {
     {
       method: "GET",
       // headers: { Authorization: "KakaoAK 1831916d0f1ff0ab48b353121f57f96e" },
-      headers: {Authorization: `KakaoAK ${secret_config["kakaomap-secret-key"]}`}
+      headers: {
+        Authorization: `KakaoAK ${secret_config["kakaomap-secret-key"]}`,
+      },
     }
   )
     .then((res) => res.json())
@@ -229,7 +231,9 @@ exports.putPoint = async function (req, res) {
       encodeURIComponent(location),
     {
       method: "GET",
-      headers: {Authorization: `KakaoAK ${secret_config["kakaomap-secret-key"]}`}
+      headers: {
+        Authorization: `KakaoAK ${secret_config["kakaomap-secret-key"]}`,
+      },
     }
   )
     .then((res) => res.json())
@@ -329,7 +333,7 @@ exports.getKakaoMap = async function (req, res) {
 };
 
 exports.getMapMark = async function (req, res) {
-  const { latitude, longitude } = req.body;
+  const { latitude, longitude } = req.query;
   if (!latitude) {
     return res.send(response(baseResponse.POINT_LAT_EMPTY));
   } else if (!longitude) {
